@@ -1,9 +1,28 @@
 ﻿@page "/"
 
-<PageTitle>Index</PageTitle>
+<PageTitle>Apresentação</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>Apresentação</h1>
 
-Welcome to your new app.
-
-<SurveyPrompt Title="How is Blazor working for you?" />
+<RadzenCard Style="height:calc(100vh - 11rem) ">
+    <RadzenStack AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Orientation="Orientation.Horizontal">
+        <RadzenStack>
+            <RadzenText TextStyle="TextStyle.DisplayH4">
+                Bem-vindo à nossa Plataforma de Jogos Educativos de História!
+            </RadzenText>
+            <RadzenText TextStyle="TextStyle.DisplayH4">
+                É com imensa alegria que recebemos você em nosso universo de conhecimento e diversão!
+            </RadzenText>
+            <RadzenText TextStyle="TextStyle.DisplayH4">
+                Aqui, a História ganha vida de uma forma única e cativante, através de jogos educativos especialmente desenvolvidos para tornar o aprendizado uma experiência empolgante.
+            </RadzenText>
+            <RadzenText TextStyle="TextStyle.DisplayH4">
+                Acreditamos que o aprendizado pode ser uma jornada emocionante e recompensadora, e nossos jogos educativos de História estão aqui para provar isso.
+            </RadzenText>
+            <RadzenText TextStyle="TextStyle.DisplayH4">
+                Prepare-se para embarcar em uma viagem fascinante pelo passado e desvendar os mistérios e lições que ele nos reserva!
+            </RadzenText>
+        </RadzenStack>
+        <RadzenImage Path="/images/historia-pirata.png" Style="height:37rem" />
+    </RadzenStack>
+</RadzenCard>

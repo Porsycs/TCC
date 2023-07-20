@@ -1,35 +1,22 @@
-﻿@using Microsoft.AspNetCore.Components.Web
-@namespace SiteJogos.Pages
-@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+﻿<style>
+    body {
+        margin-bottom: 0;
+    }
 
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <base href="~/" />
-    <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
-    <link href="css/site.css" rel="stylesheet" />
-    <link href="SiteJogos.styles.css" rel="stylesheet" />
-    <link rel="stylesheet" href="_content/Radzen.Blazor/css/material-base.css">
-    <component type="typeof(HeadOutlet)" render-mode="ServerPrerendered" />
-</head>
-<body>
-    @RenderBody()
+    #gameContainer {
+        display: flex
+    }
+</style>
 
-    <div id="blazor-error-ui">
-        <environment include="Staging,Production">
-            An error has occurred. This application may no longer respond until reloaded.
-        </environment>
-        <environment include="Development">
-            An unhandled exception has occurred. See browser dev tools for details.
-        </environment>
-        <a href="" class="reload">Reload</a>
-        <a class="dismiss">🗙</a>
+<div id="gameContainer">
+    <canvas id="gameBoard" style='background:green;' width="600" height="600"></canvas>
+    <div style="margin-left:2rem">
+        <div id="scoreText" style='color:black;'>0</div>
+        <button id="resetBtn">Recomeçar</button>
     </div>
+</div>
 
-    <script src="_framework/blazor.server.js"></script>
-    <script>
+<script>
         const gameBoard = document.querySelector("#gameBoard");
         const ctx = gameBoard.getContext("2d");
         const scoreText = document.querySelector("#scoreText");
@@ -54,10 +41,10 @@
             { x: unitSize, y: 0 },
             { x: 0, y: 0 }
         ];
-        var addRow = function () {
-            getGridInstance().addRow();
-            getGridInstance().deselectAll();
-        }
+        var addRow = function() {
+        getGridInstance().addRow();
+        getGridInstance().deselectAll();
+    }
 
         window.addEventListener("keydown", changeDirection);
         resetBtn.addEventListener("click", resetGame);
@@ -201,6 +188,4 @@
             ];
             gameStart();
         };
-    </script>
-</body>
-</html>
+</script>

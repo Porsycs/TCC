@@ -1,0 +1,27 @@
+﻿@page "/Snake"
+@inject NavigationManager nav;
+<PageTitle>Snake</PageTitle>
+
+<h1>Snake</h1>
+
+<style>
+    body {
+        margin-bottom: 0;
+    }
+
+    #gameContainer {
+        display: flex
+    }
+</style>
+
+<div id="gameContainer">
+    <canvas id="gameBoard" style='background:green;' width="600" height="600"></canvas>
+    <div style="margin-left:2rem">
+        <div id="scoreText" style='color:black;'>0</div>
+        <button id="resetBtn">Recomeçar</button>
+    </div>
+</div>
+
+@code {
+
+}

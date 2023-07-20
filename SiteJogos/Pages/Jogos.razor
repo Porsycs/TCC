@@ -1,0 +1,88 @@
+﻿@page "/Jogos"
+@inject NavigationManager nav;
+
+<PageTitle>Jogos</PageTitle>
+
+<h1>Jogos</h1>
+
+<style>
+
+    .card-home:hover {
+        background-color: var(--rz-secondary) !important;
+        cursor: pointer !important;
+    }
+</style>
+
+<RadzenStack Style="margin-top:1.5rem; padding: 0 6rem">
+    <RadzenRow Gap="2rem" Class="rz-p-0 rz-p-lg-4">
+        <RadzenColumn Size="12" SizeMD="4">
+            <div @onclick='(args) => redirecionaTela("/Quiz")'>
+                <RadzenCard Style="width: 100%;" Class="rz-border-radius-3 text-center card-home">
+                    <RadzenIcon Icon="quiz" Style="font-size: 2.5rem; color: var(--rz-text-color)" />
+                    <RadzenText TextStyle="TextStyle.Subtitle1">Quiz</RadzenText>
+                </RadzenCard>
+            </div>
+        </RadzenColumn>
+        <RadzenColumn Size="12" SizeMD="4">
+            <div @onclick='(args) => redirecionaTela("/Snake")'>
+                <RadzenCard Style="width: 100%;" Class="rz-border-radius-3 text-center card-home">
+                    <RadzenIcon Icon="show_chart" Style="font-size: 2.5rem; color: var(--rz-text-color)" />
+                    <RadzenText TextStyle="TextStyle.Subtitle1">Snake</RadzenText>
+                </RadzenCard>
+            </div>
+        </RadzenColumn>
+        <RadzenColumn Size="12" SizeMD="4">
+            <div @onclick='(args) => redirecionaTela("/")'>
+                <RadzenCard Style="width: 100%;" Class="rz-border-radius-3 text-center card-home">
+                    <RadzenIcon Icon="assignment" Style="font-size: 2.5rem; color: var(--rz-text-color)" />
+                    <RadzenText TextStyle="TextStyle.Subtitle1">Caça ao Tesouro</RadzenText>
+                </RadzenCard>
+            </div>
+        </RadzenColumn>
+    </RadzenRow>
+    <RadzenRow Gap="2rem" Class="rz-p-0 rz-p-lg-4">
+        <RadzenColumn Size="12" SizeMD="4">
+            <div @onclick='(args) => redirecionaTela("/")'>
+                <RadzenCard Style="width: 100%;" Class="rz-border-radius-3 text-center card-home">
+                    <RadzenIcon Icon="quiz" Style="font-size: 2.5rem; color: var(--rz-text-color)" />
+                    <RadzenText TextStyle="TextStyle.Subtitle1">Forca</RadzenText>
+                </RadzenCard>
+            </div>
+        </RadzenColumn>
+        <RadzenColumn Size="12" SizeMD="4">
+            <div @onclick='(args) => redirecionaTela("/")'>
+                <RadzenCard Style="width: 100%;" Class="rz-border-radius-3 text-center card-home">
+                    <RadzenIcon Icon="extension" Style="font-size: 2.5rem; color: var(--rz-text-color)" />
+                    <RadzenText TextStyle="TextStyle.Subtitle1">Quebra-Cabeça</RadzenText>
+                </RadzenCard>
+            </div>
+        </RadzenColumn>
+        <RadzenColumn Size="12" SizeMD="4">
+            <div @onclick='(args) => redirecionaTela("/")'>
+                <RadzenCard Style="width: 100%;" Class="rz-border-radius-3 text-center card-home">
+                    <RadzenIcon Icon="tips_and_updates" Style="font-size: 2.5rem; color: var(--rz-text-color)" />
+                    <RadzenText TextStyle="TextStyle.Subtitle1">Jogo da Memória</RadzenText>
+                </RadzenCard>
+            </div>
+        </RadzenColumn>
+    </RadzenRow>
+    <RadzenRow Gap="2rem" Class="rz-p-0 rz-p-lg-4">
+        <RadzenColumn Size="12" SizeMD="4">
+            <div @onclick='(args) => redirecionaTela("/")'>
+                <RadzenCard Style="width: 100%;" Class="rz-border-radius-3 text-center card-home">
+                    <RadzenIcon Icon="visibility" Style="font-size: 2.5rem; color: var(--rz-text-color)" />
+                    <RadzenText TextStyle="TextStyle.Subtitle1">Ache o Erro</RadzenText>
+                </RadzenCard>
+            </div>
+        </RadzenColumn>
+    </RadzenRow>
+</RadzenStack>
+
+@code {
+
+    async Task redirecionaTela(string url)
+    {
+        nav.NavigateTo(url);
+    }
+
+}
