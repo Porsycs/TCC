@@ -7,6 +7,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Pages\Snake.cshtml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Pages\Counter.razor" />
+    <Content Remove="Pages\FetchData.razor" />
+    <Content Remove="Pages\Jogos.razor" />
+    <Content Remove="Pages\Missao.razor" />
+    <Content Remove="Pages\Quiz.razor" />
+    <Content Remove="Pages\Snake.cshtml" />
+    <Content Remove="Pages\Snake.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Shared\style.css" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />

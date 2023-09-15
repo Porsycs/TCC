@@ -2,15 +2,9 @@
 @inject NavigationManager nav;
 
 <RadzenLayout>
-    <RadzenHeader>
-        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Style="height:100%;padding-left:3rem">
-            <RadzenButton Text="Apresentação" ButtonStyle="ButtonStyle.Primary" Click="ClickInicio" />
-            <RadzenButton Text="Nossa Missão" ButtonStyle="ButtonStyle.Primary" Click="ClickMissao" />
-            <RadzenButton Text="Jogos" ButtonStyle="ButtonStyle.Primary" Click="ClickJogos" />
-        </RadzenStack>
-    </RadzenHeader>
+
     <RadzenBody>
-        <div id="corpo-principal" class="rz-p-4">
+        <div>
             @Body
         </div>
     </RadzenBody>
@@ -22,30 +16,4 @@
     {
         nav.NavigateTo("/");
     }
-
-    void ClickMissao()
-    {
-        nav.NavigateTo("/Missao");
-    }
-
-    void ClickJogos()
-    {
-        nav.NavigateTo("/Jogos");
-    }
 }
-
-@*<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
-
-    <main>
-        <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
-
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>*@
