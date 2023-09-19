@@ -15,6 +15,18 @@
     <link href="css/site.css" rel="stylesheet" />
     <link href="SiteJogos.styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="_content/Radzen.Blazor/css/material-base.css">
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="shortcut icon" href="https://image.flaticon.com/icons/svg/3132/3132772.svg" type="image/x-icon" />
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/JogoDaMemoria/main.css" />
+    <link rel="stylesheet" href="/css/JogoDaMemoria/card.css" />
+    <link rel="stylesheet" href="/css/JogoDaMemoria/win.css" /><!--Estilo da tela de vitória-->
+    <link rel="stylesheet" href="/css/JogoDaMemoria/responsive.css" />
+
     <component type="typeof(HeadOutlet)" render-mode="ServerPrerendered" />
 </head>
 <body>
@@ -32,6 +44,7 @@
     </div>
 
     <script src="_framework/blazor.server.js"></script>
+    <script src="/js/JogoDaMemoria.js"></script>
     <script>
 
     </script>
@@ -43,9 +56,13 @@
     body {
         padding: 0 !important;
     }
+    h4 {
+        font-family: 'Zeyada', cursive !important;
+    }
 
     h1 {
         font-family: 'Zeyada', cursive !important;
+        font-weight: bold
     }
 
     .rz-body {
