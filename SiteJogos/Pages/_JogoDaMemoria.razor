@@ -49,19 +49,21 @@
             <button id="btn-reiniciar">Reiniciar</button> -->
         <a href="/">Reiniciar</a>
     </section>
-    <section class="jogo">
-        @foreach(var itens in cartasMemoria) 
-        {
-            <div class="card" data-nome=@itens.dataNome>
-                <img class="frente"
-                        src=@itens.nomeCarta
-                        alt="card" />
-                <img class="verso"
-                        src=@itens.nomeVerso
-                        alt="card" />
-            </div>
-        }
-    </section>
-    <section id="dir"></section>
+<section class="jogo">
+    @foreach(var itens in cartasMemoria) 
+    {
+        <div class="card" data-nome=@itens.dataNome>
+            <img class="frente"
+                    src=@itens.nomeCarta
+                    alt="card" />
+            <img class="verso"
+                    src=@itens.nomeVerso
+                    alt="card" />
+        </div>
+    }
+</section>
+
+<section id="dir"></section>
+
 </div>
 
