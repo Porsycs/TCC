@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33712.159
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiteJogos.Console", "SiteJogos.Console\SiteJogos.Console.csproj", "{736783B4-FE5D-4939-8FB9-FD03F51AEB12}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BBCACFE2-B594-4697-9910-0C45A5278508} = {BBCACFE2-B594-4697-9910-0C45A5278508}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - Core", "1 - Core", "{EFFDB598-E5E3-4A72-A45A-7DC4E7248385}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - Console", "2 - Console", "{1B46EA08-94F5-43CF-BF45-929027DD7DDB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiteJogos.Core", "SiteJogos.Core\SiteJogos.Core.csproj", "{BBCACFE2-B594-4697-9910-0C45A5278508}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{736783B4-FE5D-4939-8FB9-FD03F51AEB12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{736783B4-FE5D-4939-8FB9-FD03F51AEB12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{736783B4-FE5D-4939-8FB9-FD03F51AEB12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{736783B4-FE5D-4939-8FB9-FD03F51AEB12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBCACFE2-B594-4697-9910-0C45A5278508}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBCACFE2-B594-4697-9910-0C45A5278508}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBCACFE2-B594-4697-9910-0C45A5278508}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBCACFE2-B594-4697-9910-0C45A5278508}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{736783B4-FE5D-4939-8FB9-FD03F51AEB12} = {1B46EA08-94F5-43CF-BF45-929027DD7DDB}
+		{BBCACFE2-B594-4697-9910-0C45A5278508} = {EFFDB598-E5E3-4A72-A45A-7DC4E7248385}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {16D2CEA8-112C-42BF-BE2D-95C34D3B5B17}
+	EndGlobalSection
+EndGlobal
