@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -8,16 +7,17 @@ using System.Threading.Tasks;
 
 namespace SiteJogos.Core.Entities
 {
-    public class Usuario : IdentityUser<Guid>
+    public class BaseEntity
     {
-        public string? Nome { get; set; }
+        public Guid Id { get; set; } = new Guid();
         public bool Excluido { get; set; } = false;
         public DateTime Inclusao { get; set; } = DateTime.Now;
         public DateTime? Alteracao { get; set; }
-        [ForeignKey("User")]
+        [ForeignKey("Usuario")]
         public Guid UsuarioInclusao { get; set; }
-        [ForeignKey("User")]
+        [ForeignKey("Usuario")]
         public Guid? UsuarioAlteracao { get; set; }
-        public virtual Usuario? User { get; set; }
+        public virtual Usuario? Usuario { get; set; }
 
     }
+}
