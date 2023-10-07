@@ -8,6 +8,12 @@
     <link rel="stylesheet" href="_content/Radzen.Blazor/css/material-base.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/SiteJogos.Console.styles.css" asp-append-version="true" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="shortcut icon" href="https://image.flaticon.com/icons/svg/3132/3132772.svg" type="image/x-icon" />
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet" />
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
@@ -34,18 +40,44 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div>
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2023 - SiteJogos.Console - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
+    <footer>
+
     </footer>
     <script src="_framework/blazor.server.js"></script>
     <script src="_content/Radzen.Blazor/Radzen.Blazor.js" asp-append-version="true"></script>
 </body>
 </html>
+
+
+<style>
+    body {
+        padding: 0 !important;
+    }
+
+    h4 {
+        font-family: 'Zeyada', cursive !important;
+    }
+
+    h1 {
+        font-family: 'Zeyada', cursive !important;
+        font-weight: bold
+    }
+
+    .rz-body {
+        padding: 0 !important;
+    }
+
+    .alinha-centro {
+        display: grid;
+        margin: 0 auto;
+        justify-content: center;
+        align-content: center;
+        align-items: center;
+    }
+</style>
