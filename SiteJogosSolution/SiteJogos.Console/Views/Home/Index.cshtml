@@ -1,54 +1,71 @@
 ﻿@{
-    ViewData["Title"] = "Historiando - Onde você cria história com seus jogos!";
+    ViewData["Title"] = "Login";
 }
-
-<section style="height: 100vh; background:#3a3a3a ">
-    <div style="align-items: center; justify-content:center; display:inline-block">
-        <div>
-            @await Html.PartialAsync("../Jogo/JogoDaMemoria.cshtml")
+<section>
+    <div class="container-parent">
+        <div class="container">
+            <h2>Login</h2>
+            <form id="loginForm" method="post" action="@Url.Action("Login", "Autenticacao")">
+                <div class="form-group">
+                    <label for="Email">Email:</label>
+                    <input type="email" class="form-control" id="Email" name="Email" required>
+                </div>
+                <div class="form-group">
+                    <label for="Password">Senha:</label>
+                    <input type="password" class="form-control" id="Password" name="Password" required>
+                </div>
+                <button type="submit" id="btnEntrar" class="btn btn-primary">Entrar</button>
+            </form>
         </div>
     </div>
 </section>
 
-<section style="height:100vh; background:black; color:white !important " class="alinha-centro">
-    <h1>Seja bem-vindo ao Historiando!</h1>
-    <div style="align-items: center; justify-content:center; display:flex">
-        <div>
-            <h4 style="color: white">
-                Bem-vindo à nossa Plataforma de Jogos Educativos!
-            </h4>
-            <h4 style="color: white">
-                É com imensa alegria que recebemos você em nosso universo de conhecimento e diversão!
-            </h4>
-            <h4 style="color: white">
-                Aqui, a História ganha vida de uma forma única e cativante, com nossa criação de jogos personalizados, você pode ser o desenvolvedor e protagonista desse site!
-            </h4>
-            <h4 style="color: white">
-                Acreditamos que o aprendizado pode ser uma jornada emocionante e recompensadora, e nossos jogos estão aqui para provar isso.
-            </h4>
-            <h4 style="color: white">
-                Prepare-se para embarcar em uma viagem fascinante de aprendizado e contos!
-            </h4>
-        </div>
-        <img src="/images/historia-pirata.png" style="height:37rem" />
-    </div>
-</section>
+<style>
 
-<section style="height: 100vh; background-color:white; color:black" class="alinha-centro">
-    <h1>Nossa Missão</h1>
-    <div style="align-items: center; justify-content:center; display:flex;">
-        <div>
-            <h4>
-                Nossa missão é proporcionar uma plataforma onde você é o protagonista, customize nossos jogos do seu próprio jeito!
-            </h4>
-            <h4>
-                Nossos jogos estimulam o pensamento crítico, a solução de problemas e a tomada de decisões, tudo isso enquanto se diverte e aprende de forma dinâmica.
-            </h4>
-            <h4>
-                Além disso, nossa plataforma é voltada para aqueles que ainda estão no seu inicio de desenvolvimento, porém com a customização livre, você pode deixar os jogos cada vez mais desafiadores, desafie e se desafie a dar o melhor!
-            </h4>
-        </div>
-        <img src="/images/crianca-livro.jpg" style="height:37rem" />
-    </div>
+    .container {
+        width: 300px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    }
 
-</section>
+    h2 {
+        text-align: center;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+    }
+
+    .btn-primary {
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+    .container-parent {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+</style>
+
