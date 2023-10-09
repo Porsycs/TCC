@@ -1,0 +1,140 @@
+﻿@using SiteJogos.Core.Entities.ViewModel;
+@{
+    ViewData["Title"] = "Login";
+
+    var listaCadastro = new List<FormCadastroViewModel>()
+    {
+        new FormCadastroViewModel{type="name", classe="form-control", id="nome", name="Nome", placeholder="Nome"},
+        new FormCadastroViewModel{type="email", classe="form-control", id="email", name="Email", placeholder="Email"},
+        new FormCadastroViewModel{type="senha", classe="form-control", id="senha", name="Senha", placeholder="Senha"},
+        new FormCadastroViewModel{type="confirmaSenha", classe="form-control", id="confirmaSenha", name="Confirmar", placeholder="Confirmar"}
+    };
+
+}
+<section style="background:black">
+    <div class="container-parent">
+        <div>
+            <img src="~/images/piratacontrato3.png" />
+        </div>
+        <div class="container">
+            <h1 style="text-align:center; padding:30px">Embarque nessa aventura em apenas alguns passos!</h1>
+            <h2>Digite os dados a seguir</h2>
+            <form id="loginForm" method="post">
+                @foreach (var item in listaCadastro)
+                {
+                    <div class="form-group">
+                        <input type=@item.type class=@item.classe id=@item.id name=@item.name placeholder=@item.placeholder required>
+                    </div>
+                }
+                <button type="button" id="btnCadastrar" class="btn btn-primary">Cadastrar</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+
+<script>
+    $(document).ready(function () {
+        $('#btnCadastrar').click(async function (e) { // Make the function async
+            e.preventDefault(); // Prevent the default form submission
+
+            var formViewModel = $('#loginForm').serialize();
+
+            try {
+                // Use await here for the AJAX request
+                const result = await $.ajax({
+                    url: '@Url.Action("CadastrarUsuario", "Autenticacao")',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        formViewModel,
+                    },
+                });
+
+                notifica(result.titulo, result.mensagem, result.sucesso);
+                await sleep(3000);
+                window.location.href = '@Url.Action("Index", "Autenticacao")';
+            } catch (error) {
+                // Handle errors here
+                console.error(error);
+            }
+        });
+    });
+</script>
+
+<style>
+
+    .container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    h2 {
+        text-align: center;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+    }
+
+    .btn-primary {
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+    .container-parent {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    #email, #nome, #senha, #confirmaSenha {
+        border: none; /* Remove a borda padrão */
+        border-bottom: 1px solid #ccc; /* Adiciona um risco na parte inferior */
+        background: none; /* Remove o fundo */
+        padding: 5px; /* Adiciona um pequeno espaçamento entre o risco e o texto */
+        width: 100%;
+        outline: none; /* Remove a borda de foco ao clicar no campo */
+    }
+
+    .link {
+        text-align: center; /* Alinha o texto ao centro horizontalmente */
+        display: inline-block; /* Permite definir largura e altura no elemento */
+        padding: 10px; /* Adiciona espaço em torno do texto para facilitar a interação */
+        text-decoration: none; /* Remove a sublinhado padrão de links */
+        color: darkblue; /* Define a cor do texto */
+        cursor: pointer; /* Altera o cursor para uma mão quando passar o mouse sobre o link */
+    }
+
+        .link:hover {
+            text-decoration: underline; /* Adiciona sublinhado ao passar o mouse sobre o link */
+        }
+</style>
+

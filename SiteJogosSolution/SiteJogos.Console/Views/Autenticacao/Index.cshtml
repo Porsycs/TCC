@@ -1,0 +1,117 @@
+﻿@using SiteJogos.Core.Entities.ViewModel;
+@{
+    ViewData["Title"] = "Login";
+
+    var listaCadastro = new List<FormCadastroViewModel>()
+    {
+        new FormCadastroViewModel{type="email", classe="form-control", id="email", name="Email", placeholder="Email"},
+        new FormCadastroViewModel{type="senha", classe="form-control", id="senha", name="Senha", placeholder="Senha"},
+    };
+}
+<section style="background:black">
+    <div class="container-parent">
+        <div>
+            <img src="~/images/piratalogin5.png" />
+        </div>
+        <div class="container">
+            <h1 style="text-align:center; padding:30px">Junte se a nós e nos ajude a criar uma nova história!</h1>
+            <h2>Informe seus Dados</h2>
+            <form id="loginForm" method="post" action="@Url.Action("Login", "Autenticacao")">
+                @foreach (var item in listaCadastro)
+                {
+                    <div class="form-group">
+                        <input type=@item.type class=@item.classe id=@item.id name=@item.name placeholder=@item.placeholder required>
+                    </div>
+                }
+                <button type="submit" id="btnEntrar" class="btn btn-primary">Entrar</button>
+            </form>
+            <a class="link" href="@Url.Action("Cadastrar", "Autenticacao")">Novo aqui? Cadastre-se já!</a>
+        </div>
+    </div>
+</section>
+
+<style>
+
+    .container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    h2 {
+        text-align: center;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+    }
+
+    .btn-primary {
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+    .container-parent {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    #email, #senha {
+        border: none; /* Remove a borda padrão */
+        border-bottom: 1px solid #ccc; /* Adiciona um risco na parte inferior */
+        background: none; /* Remove o fundo */
+        padding: 5px; /* Adiciona um pequeno espaçamento entre o risco e o texto */
+        width: 100%;
+        outline: none; /* Remove a borda de foco ao clicar no campo */
+    }
+
+    #Password {
+        border: none; /* Remove a borda padrão */
+        border-bottom: 1px solid #ccc; /* Adiciona um risco na parte inferior */
+        background: none; /* Remove o fundo */
+        padding: 5px; /* Adiciona um pequeno espaçamento entre o risco e o texto */
+        width: 100%;
+        outline: none; /* Remove a borda de foco ao clicar no campo */
+    }
+
+    .link {
+        text-align: center; /* Alinha o texto ao centro horizontalmente */
+        display: inline-block; /* Permite definir largura e altura no elemento */
+        padding: 10px; /* Adiciona espaço em torno do texto para facilitar a interação */
+        text-decoration: none; /* Remove a sublinhado padrão de links */
+        color: darkblue; /* Define a cor do texto */
+        cursor: pointer; /* Altera o cursor para uma mão quando passar o mouse sobre o link */
+    }
+
+        .link:hover {
+            text-decoration: underline; /* Adiciona sublinhado ao passar o mouse sobre o link */
+        }
+</style>
+

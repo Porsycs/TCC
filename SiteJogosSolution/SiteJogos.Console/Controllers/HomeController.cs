@@ -14,11 +14,6 @@ namespace SiteJogos.Console.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
-
         [Route("/Jogo")]
         public IActionResult Jogo()
         {

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - SiteJogos.Console</title>
+    <title>@ViewData["Title"] - Historiando, Onde você cria história com seus jogos</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="_content/Radzen.Blazor/css/material-base.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -13,32 +13,19 @@
     <link rel="shortcut icon" href="https://image.flaticon.com/icons/svg/3132/3132772.svg" type="image/x-icon" />
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/dist/notifications.css">
+    <script src="~/dist/notifications.js"></script>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Historiando</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-            </div>
-        </nav>
-    </header>
     <div>
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
-
-    <footer>
-
-    </footer>
     <script src="_framework/blazor.server.js"></script>
     <script src="_content/Radzen.Blazor/Radzen.Blazor.js" asp-append-version="true"></script>
 </body>
@@ -58,11 +45,6 @@
         font-family: 'Zeyada', cursive !important;
         font-weight: bold
     }
-
-    .rz-body {
-        padding: 0 !important;
-    }
-
     .alinha-centro {
         display: grid;
         margin: 0 auto;
@@ -70,4 +52,5 @@
         align-content: center;
         align-items: center;
     }
+
 </style>
