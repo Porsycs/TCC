@@ -8,7 +8,7 @@ namespace SiteJogos.Core.Entities.ViewModel
 {
     public class RetornoViewModel
     {
-        public string? Sucesso { get; set; }
+        public bool Sucesso { get; set; }
         public string? Titulo { get; set; }
         public string? Mensagem { get; set; }
         public int? Codigo { get; set; }

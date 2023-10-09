@@ -51,7 +51,7 @@
                     },
                 });
 
-                notifica(result.titulo, result.mensagem, result.sucesso);
+                notifica(result.codigo, result.mensagem, result.sucesso);
                 await sleep(3000);
                 window.location.href = '@Url.Action("Index", "Autenticacao")';
             } catch (error) {
