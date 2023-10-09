@@ -1,18 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SiteJogos.Core.Entities.ViewModel;
+using SiteJogos.Core.Services.Interface;
 
 namespace SiteJogos.Console.Controllers
 {
     public class AutenticacaoController : Controller
     {
-        [Route("/")]
-        public IActionResult Index()
+        private readonly IAutenticacaoRepository _autenticacaoRepository;
+        public AutenticacaoController(IAutenticacaoRepository autenticacaoRepository)
         {
-            return View();
+            _autenticacaoRepository = autenticacaoRepository;
         }
 
-        [Route("/Cadastrar")]
-        public IActionResult Cadastrar()
+        [Route("/")]
+        public IActionResult Index()
         {
             return View();
         }
@@ -20,27 +21,12 @@ namespace SiteJogos.Console.Controllers
         [HttpPost]
         public IActionResult Login(FormCadastroViewModel formViewModel)
         {
-            if (formViewModel.email != null && formViewModel.senha != null)
-            {
+            var loginSucesso = _autenticacaoRepository.Login(formViewModel.email, formViewModel.senha);
+
+            if (loginSucesso)
                 return RedirectToAction("Jogo", "Home");
-            }
-
             else
-            {
                 return BadRequest();
-            }
-        }
-
-        [HttpPost]
-        public RetornoViewModel CadastrarUsuario(FormCadastroViewModel formViewModel)
-        {
-            return  new RetornoViewModel 
-            {
-                Sucesso = true,
-                Codigo = "info",
-                Titulo = "Sucesso!",
-                Mensagem = "Usuário cadastrado com sucesso",
-            };
         }
     }
 }

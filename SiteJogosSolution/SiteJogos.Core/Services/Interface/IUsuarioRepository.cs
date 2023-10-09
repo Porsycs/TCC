@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SiteJogos.Core.ViewModels
+namespace SiteJogos.Core.Services.Interface
 {
-    public class ErrorViewModel
+    public interface IUsuarioRepository
     {
-        public int Codigo { get; set; } = 400;
+        bool CadastrarUsuario();
     }
 }

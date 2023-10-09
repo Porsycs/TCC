@@ -3,6 +3,7 @@ using SiteJogos.Core.Entities;
 using Radzen;
 using SiteJogos.Core.Context;
 using Microsoft.EntityFrameworkCore;
+using SiteJogos.Core.Services.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 

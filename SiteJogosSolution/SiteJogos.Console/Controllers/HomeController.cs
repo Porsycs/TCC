@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SiteJogos.Core.Entities.ViewModel;
-using SiteJogos.Core.ViewModels;
-using System.Diagnostics;
 
 namespace SiteJogos.Console.Controllers
 {

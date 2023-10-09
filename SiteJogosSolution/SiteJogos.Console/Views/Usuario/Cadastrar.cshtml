@@ -37,25 +37,24 @@
     $(document).ready(function () {
         $('#btnCadastrar').click(async function (e) { // Make the function async
             e.preventDefault(); // Prevent the default form submission
-
+            exibeLoadPanel()
             var formViewModel = $('#loginForm').serialize();
 
             try {
                 // Use await here for the AJAX request
                 const result = await $.ajax({
-                    url: '@Url.Action("CadastrarUsuario", "Autenticacao")',
+                    url: '@Url.Action("CadastrarUsuario", "Usuario")',
                     type: 'POST',
                     dataType: 'json',
                     data: {
                         formViewModel,
                     },
                 });
-
                 notifica(result.codigo, result.mensagem, result.sucesso);
                 await sleep(3000);
+                escondeLoadPanel();
                 window.location.href = '@Url.Action("Index", "Autenticacao")';
             } catch (error) {
-                // Handle errors here
                 console.error(error);
             }
         });
