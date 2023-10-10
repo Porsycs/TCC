@@ -28,7 +28,7 @@ namespace SiteJogos.Core.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Excluido = table.Column<bool>(type: "bit", nullable: false),
                     Inclusao = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Alteracao = table.Column<DateTime>(type: "datetime2", nullable: true),

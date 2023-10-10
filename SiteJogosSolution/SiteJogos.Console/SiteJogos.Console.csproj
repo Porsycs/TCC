@@ -24,8 +24,4 @@
     <ProjectReference Include="..\SiteJogos.Core\SiteJogos.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Components\" />
-  </ItemGroup>
-
 </Project>

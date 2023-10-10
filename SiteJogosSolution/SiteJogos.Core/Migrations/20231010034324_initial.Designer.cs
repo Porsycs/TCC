@@ -12,7 +12,7 @@ using SiteJogos.Core.Context;
 namespace SiteJogos.Core.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231007024447_initial")]
+    [Migration("20231010034324_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -195,7 +195,6 @@ namespace SiteJogos.Core.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Nome")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")

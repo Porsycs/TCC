@@ -6,12 +6,6 @@ namespace SiteJogos.Console.Controllers
     public class UsuarioController : Controller
     {
 
-        [Route("/Cadastrar")]
-        public IActionResult Cadastrar()
-        {
-            return View();
-        }
-
         [HttpPost]
         public RetornoViewModel CadastrarUsuario(FormCadastroViewModel formViewModel)
         {

@@ -4,6 +4,7 @@ using Radzen;
 using SiteJogos.Core.Context;
 using Microsoft.EntityFrameworkCore;
 using SiteJogos.Core.Services.Interface;
+using SiteJogos.Core.Services.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,6 +43,7 @@ builder.Services.AddScoped<DialogService>();
 builder.Services.AddScoped<NotificationService>();
 builder.Services.AddScoped<TooltipService>();
 builder.Services.AddScoped<ContextMenuService>();
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
 builder.Services.AddServerSideBlazor();
 builder.Services.AddHttpClient();

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33712.159
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiteJogos.Console", "SiteJogos.Console\SiteJogos.Console.csproj", "{736783B4-FE5D-4939-8FB9-FD03F51AEB12}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SiteJogos.Console", "SiteJogos.Console\SiteJogos.Console.csproj", "{736783B4-FE5D-4939-8FB9-FD03F51AEB12}"
 	ProjectSection(ProjectDependencies) = postProject
 		{BBCACFE2-B594-4697-9910-0C45A5278508} = {BBCACFE2-B594-4697-9910-0C45A5278508}
 	EndProjectSection
@@ -12,7 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - Core", "1 - Core", "{EF
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - Console", "2 - Console", "{1B46EA08-94F5-43CF-BF45-929027DD7DDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiteJogos.Core", "SiteJogos.Core\SiteJogos.Core.csproj", "{BBCACFE2-B594-4697-9910-0C45A5278508}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SiteJogos.Core", "SiteJogos.Core\SiteJogos.Core.csproj", "{BBCACFE2-B594-4697-9910-0C45A5278508}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

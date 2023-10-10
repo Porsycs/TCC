@@ -1,6 +1,6 @@
 ﻿@{
     Layout = "";
-    ViewData["Title"] = "Login";
+    ViewData["Title"] = "Cadastrar";
 }
 
 <!DOCTYPE html>
@@ -128,37 +128,37 @@
 
 </head>
 <body>
-    
-    <component type="typeof(SiteJogos.Console.Components.Autenticacao.Login)" render-mode="Server">
+
+    <component type="typeof(SiteJogos.Console.Components.Autenticacao.Cadastrar)" render-mode="Server">
 
     <script src="_framework/blazor.server.js"></script>
     <script src="_content/Radzen.Blazor/Radzen.Blazor.js" asp-append-version="true"></script>
 
     <script>
-            function realizaLogin(args) {
-                var retorno = null
-                $.ajax({
-                    method: 'POST',
-                    url: "@(Url.Action("RealizaLogin", "Autenticacao"))",
-                    data: args,
-                    dataType: 'json',
-                    async: false,
-                    success: function (data) {
-                        retorno = data;
-                    },
-                    error: function (e) {
-                        return {
-                            Sucesso: false,
-                            Mensagem: e.errorText
-                        };
-                    }
-                });
-                return retorno;
-            }
+        function realizaLogin(args) {
+            var retorno = null
+            $.ajax({
+                method: 'POST',
+                url: "@(Url.Action("RealizaLogin", "Autenticacao"))",
+                data: args,
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+                    retorno = data;
+                },
+                error: function (e) {
+                    return {
+                        Sucesso: false,
+                        Mensagem: e.errorText
+                    };
+                }
+            });
+            return retorno;
+        }
 
-            function redirecionaHome() {
-                window.location.href = '@(ViewBag.ReturnUrl)';
-            }
+        function redirecionaHome() {
+            window.location.href = '@(ViewBag.ReturnUrl)';
+        }
     </script>
 </body>
 </html>

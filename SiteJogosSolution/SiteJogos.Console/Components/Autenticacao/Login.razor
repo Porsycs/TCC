@@ -1,0 +1,79 @@
+﻿@inject IJSRuntime JsRuntime;
+@inject HttpClient httpClient;
+@inject NotificationService notificationService;
+
+<RadzenDialog />
+<RadzenNotification />
+<RadzenContextMenu />
+<RadzenTooltip />
+
+<RadzenRow JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" Gap="0" Class="rz-my-12 rz-mx-auto rz-border-radius-6 rz-shadow-10" Style="width: 100%; max-width: 90vw; height: 90vh;overflow: hidden;margin: 0">
+    <RadzenColumn Size="12" SizeMD="6" SizeSM="0" class="painel">
+        <RadzenCard Class="rz-shadow-0 rz-border-radius-0 rz-text-align-center rz-p-12" Style="height: 100%; background: no-repeat url('/images/piratalogin5.png'); background-size: cover; background-position: center;">
+        </RadzenCard>
+    </RadzenColumn>
+    <RadzenColumn Size="12" SizeMD="6" SizeSM="12">
+        <RadzenCard Class="rz-shadow-0 rz-border-radius-0 rz-p-12">
+            <RadzenText TextStyle="TextStyle.DisplayH5" TagName="TagName.H2" Class="rz-mb-6">
+                Junte se a nós e nos ajude a criar uma nova história!
+            </RadzenText>
+            <RadzenText TextStyle="TextStyle.DisplayH6" TagName="TagName.H2" Class="rz-mb-6">
+                Informe seus Dados
+            </RadzenText>
+            <RadzenLogin AllowRegister="true" AllowResetPassword="false" UserText="E-mail" PasswordText="Senha" RememberMeText="Lembrar" AllowRememberMe="true" RegisterMessageText="Novo aqui? Cadastre-se já!" RegisterText="Cadastrar" Register="@(args => Cadastrar())" RememberMe="false" Login=@(args => OnLogin(args)) />
+        </RadzenCard>
+    </RadzenColumn>
+</RadzenRow>
+
+@*<section style="background:black">
+    <div class="container-parent">
+        <div>
+            <img src="/images/piratalogin5.png" />
+        </div>
+        <RadzenCard class="rz-my-12 rz-mx-auto rz-p-4 rz-p-md-12" style="max-width: 600px; margin-left: 3rem; margin-right: 3rem">
+            <h1 style="text-align:center; padding:30px">Junte se a nós e nos ajude a criar uma nova história!</h1>
+            <h2>Informe seus Dados</h2>
+            <RadzenLogin AllowRegister="false" AllowResetPassword="false" UserText="Login" PasswordText="Senha" RememberMeText="Lembrar" AllowRememberMe="true" RememberMe="false" Login=@(args => OnLogin(args)) />
+        </RadzenCard>
+        <div class="container">
+            <h1 style="text-align:center; padding:30px">Junte se a nós e nos ajude a criar uma nova história!</h1>
+            <h2>Informe seus Dados</h2>
+            <form id="loginForm" method="post" action="Url.Action("Login", "Autenticacao")">
+                @foreach (var item in listaCadastro)
+                {
+                    <div class="form-group">
+                        <input type=@item.type class=@item.classe id=@item.id name=@item.name placeholder=@item.placeholder required>
+                    </div>
+                }
+                <button type="submit" id="btnEntrar" class="btn btn-primary">Entrar</button>
+            </form>
+            <a class="link">Novo aqui? Cadastre-se já!</a>
+        </div>
+    </div>
+</section>*@
+
+@code {
+    async void OnLogin(LoginArgs args)
+    {
+        var retorno = await JsRuntime.InvokeAsync<RetornoViewModel>("realizaLogin", new AutenticacaoViewModel()
+        {
+            Login = args.Username,
+            Senha = args.Password,
+            Lembrar = args.RememberMe,
+        });
+        if (retorno.Sucesso)
+        {
+            //await JsRuntime.InvokeVoidAsync("redirecionaHome");
+            await JsRuntime.InvokeVoidAsync("redirecionaTela", "/Jogo");
+        }
+        else
+        {
+            await JsRuntime.InvokeVoidAsync("notificaIziToast", "Erro:", retorno.Mensagem, false);
+        }
+    }
+
+    async void Cadastrar()
+    {
+        await JsRuntime.InvokeVoidAsync("redirecionaTela", "/Cadastrar");
+    }
+}
