@@ -34,7 +34,7 @@
                             <RadzenColumn Size="12" SizeMD="12">
                                 <RadzenLabel Text="E-mail" />
                                 <RadzenTextBox Name="Email" @bind-Value=@model.Email Style="display: block; width: 100%" />
-                                <RadzenRequiredValidator Component="SenhaAtual" Text="Preencha a E-mail" Popup="true" Style="position: absolute" />
+                                <RadzenRequiredValidator Component="SenhaAtual" Text="Preencha o E-mail" Popup="true" Style="position: absolute" />
                             </RadzenColumn>
                         </RadzenRow>
                         <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
@@ -53,7 +53,10 @@
                             </RadzenColumn>
                         </RadzenRow>
                         <RadzenRow AlignItems="AlignItems.Center" Class="rz-mt-4">
-                            <RadzenColumn Size="12" SizeMD="12" Style="text-align:center">
+                            <RadzenColumn Size="12" SizeMD="6" Style="text-align:center">
+                                <RadzenButton ButtonStyle="ButtonStyle.Danger" Text="Voltar" Click="retornaHome"></RadzenButton>
+                            </RadzenColumn>
+                            <RadzenColumn Size="12" SizeMD="6" Style="text-align:center">
                                 <RadzenButton ButtonType="ButtonType.Submit" Text="Cadastrar"></RadzenButton>
                             </RadzenColumn>
                         </RadzenRow>
@@ -73,10 +76,13 @@
         var retorno = await JsRuntime.InvokeAsync<RetornoViewModel>("getDados", "/Autenticacao/CadastraUsuario", model, "POST");
         if (retorno.Sucesso)
         {
-            await JsRuntime.InvokeVoidAsync("redirecionaTela", "/");
+            retornaHome();
         }
         await JsRuntime.InvokeVoidAsync("notificaIziToast", retorno.Sucesso ? "" : "Erro", retorno.Mensagem, retorno.Sucesso);
     }
 
-
+    async void retornaHome()
+    {
+        await JsRuntime.InvokeVoidAsync("redirecionaTela", "/");
+    }
 }
