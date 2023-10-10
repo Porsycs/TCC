@@ -18,7 +18,7 @@ namespace SiteJogos.Console.Controllers
             return new RetornoViewModel
             {
                 Sucesso = true,
-                Codigo = "info",
+                Codigo = "success",
                 Titulo = "Sucesso!",
                 Mensagem = "Usuário cadastrado com sucesso",
             };

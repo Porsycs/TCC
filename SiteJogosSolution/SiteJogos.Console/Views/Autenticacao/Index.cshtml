@@ -11,7 +11,7 @@
 <section style="background:black">
     <div class="container-parent">
         <div>
-            <img src="~/images/piratalogin5.png" />
+            <img src="~/images/piratalogin5.png" style="width:100vh" />
         </div>
         <div class="container">
             <h1 style="text-align:center; padding:30px">Junte se a nós e nos ajude a criar uma nova história!</h1>
@@ -26,11 +26,92 @@
                 <button type="submit" id="btnEntrar" class="btn btn-primary">Entrar</button>
             </form>
             <a class="link" href="@Url.Action("Cadastrar", "Usuario")">Novo aqui? Cadastre-se já!</a>
+            <a id="esqueceuSenhaBtn" class="link">Esqueceu a senha?</a>
+        </div>
+    </div>
+
+
+    <!--Popup de recuperação de senha-->
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <span class="close" id="fecharPopup">&times;</span>
+            <h2>Recuperar Senha</h2>
+            <p>Por favor, insira seu endereço de email abaixo:</p>
+            <input type="email" id="email" placeholder="Seu email">
+            <button id="enviarEmail" class="btn btn-primary">Enviar</button>
         </div>
     </div>
 </section>
 
+
+<script>
+    const esqueceuSenhaBtn = document.getElementById("esqueceuSenhaBtn");
+    const popup = document.getElementById("popup");
+    const fecharPopup = document.getElementById("fecharPopup");
+
+    esqueceuSenhaBtn.addEventListener("click", () => {
+        popup.style.display = "block";
+    });
+
+    fecharPopup.addEventListener("click", () => {
+        popup.style.display = "none";
+    });
+
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+            popup.style.display = "none";
+        }
+    });
+
+    const enviarEmailBtn = document.getElementById("enviarEmail");
+    enviarEmailBtn.addEventListener("click", () => {
+        const email = document.getElementById("email").value;
+        if(email == "") {
+            return notifica("Atenção!", "Preencha seu endereço de email para continuar!", "warning")
+        }
+        notifica("Email Enviado", "Um email para recuperação de senha foi enviado!", "success")
+        popup.style.display = "none";
+    });
+</script>
+
 <style>
+
+    .popup {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    .popup-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+    }
+
+    .close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    input[type="email"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
 
     .container {
         width: 100%;

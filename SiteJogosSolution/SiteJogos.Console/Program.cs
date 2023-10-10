@@ -4,6 +4,7 @@ using Radzen;
 using SiteJogos.Core.Context;
 using Microsoft.EntityFrameworkCore;
 using SiteJogos.Core.Services.Interface;
+using SiteJogos.Core.Services.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +38,12 @@ builder.Services.AddAuthorization(auth =>
 {
     auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build());
 });
+
+#region Interfaces
+builder.Services.AddScoped<IAutenticacaoRepository, AutenticacaoRepository>();
+builder.Services.AddSingleton(typeof(ICommonRepository<>), typeof(CommonRepository<>));
+#endregion
+
 
 builder.Services.AddScoped<DialogService>();
 builder.Services.AddScoped<NotificationService>();
