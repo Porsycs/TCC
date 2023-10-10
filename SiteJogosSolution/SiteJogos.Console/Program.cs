@@ -39,11 +39,16 @@ builder.Services.AddAuthorization(auth =>
     auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build());
 });
 
+#region Interfaces
+builder.Services.AddSingleton(typeof(ICommonRepository<>), typeof(CommonRepository<>));
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+#endregion
+
+
 builder.Services.AddScoped<DialogService>();
 builder.Services.AddScoped<NotificationService>();
 builder.Services.AddScoped<TooltipService>();
 builder.Services.AddScoped<ContextMenuService>();
-builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
 builder.Services.AddServerSideBlazor();
 builder.Services.AddHttpClient();

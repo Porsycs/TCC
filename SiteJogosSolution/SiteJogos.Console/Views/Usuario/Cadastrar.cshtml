@@ -14,7 +14,7 @@
 <section style="background:black">
     <div class="container-parent">
         <div>
-            <img src="~/images/piratacontrato3.png" />
+            <img src="~/images/piratacontrato3.png" style="width:100vh" />
         </div>
         <div class="container">
             <h1 style="text-align:center; padding:30px">Embarque nessa aventura em apenas alguns passos!</h1>
@@ -50,7 +50,7 @@
                         formViewModel,
                     },
                 });
-                notifica(result.codigo, result.mensagem, result.sucesso);
+                notifica(result.titulo, result.mensagem, result.codigo);
                 await sleep(3000);
                 escondeLoadPanel();
                 window.location.href = '@Url.Action("Index", "Autenticacao")';

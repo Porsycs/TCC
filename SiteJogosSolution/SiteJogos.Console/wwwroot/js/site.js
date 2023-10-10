@@ -1,7 +1,10 @@
 ﻿function notifica(titulo, mensagem, tema, posicao = 'nfc-bottom-right')
 {
     var myNotification = window.createNotification({
-
+        title: titulo,
+        message: mensagem,
+        theme: tema, //success, info, warning, error, and none
+        positionClass: posicao
     });
 
     myNotification({
