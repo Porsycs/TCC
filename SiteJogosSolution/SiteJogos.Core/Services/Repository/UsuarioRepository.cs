@@ -78,7 +78,8 @@ namespace SiteJogos.Core.Services.Repository
 
         public bool VerificaUsuarios()
         {
-            return _dbContext.Usuarios.Any();
+            return true;
+            //return _dbContext.Usuarios.Any();
         }
     }
 }

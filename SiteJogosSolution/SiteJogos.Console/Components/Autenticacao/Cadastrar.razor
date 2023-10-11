@@ -76,9 +76,13 @@
         var retorno = await JsRuntime.InvokeAsync<RetornoViewModel>("getDados", "/Autenticacao/CadastraUsuario", model, "POST");
         if (retorno.Sucesso)
         {
+
+            await JsRuntime.InvokeVoidAsync("notifica", retorno.Titulo, retorno.Mensagem, retorno.Codigo);
+            await Task.Delay(1500);
             retornaHome();
         }
-        await JsRuntime.InvokeVoidAsync("notificaIziToast", retorno.Sucesso ? "" : "Erro", retorno.Mensagem, retorno.Sucesso);
+        else
+            await JsRuntime.InvokeVoidAsync("notifica", retorno.Titulo, retorno.Mensagem, retorno.Codigo);
     }
 
     async void retornaHome()

@@ -179,100 +179,86 @@
 
 </head>
 <body>
-    
+
     <component type="typeof(SiteJogos.Console.Components.Autenticacao.Login)" render-mode="Server">
 
-        @*<section style="background:black">
-            <div class="container-parent">
-                <div>
-                    <img src="~/images/piratalogin5.png" style="width:100vh" />
-                </div>
-                <div class="container">
-                    <h1 style="text-align:center; padding:30px">Junte se a nós e nos ajude a criar uma nova história!</h1>
-                    <h2>Informe seus Dados</h2>
-                    <form id="loginForm" method="post" action="@Url.Action("Login", "Autenticacao")">
-                        @foreach (var item in listaCadastro)
-                        {
-                            <div class="form-group">
-                                <input type=@item.type class=@item.classe id=@item.id name=@item.name placeholder=@item.placeholder required>
-                            </div>
-                        }
-                        <button type="submit" id="btnEntrar" class="btn btn-primary">Entrar</button>
-                    </form>
-                    <a class="link" href="@Url.Action("Cadastrar", "Usuario")">Novo aqui? Cadastre-se já!</a>
-                    <a id="esqueceuSenhaBtn" class="link">Esqueceu a senha?</a>
-                </div>
-            </div>
+        <script src="_framework/blazor.server.js"></script>
+        <script src="_content/Radzen.Blazor/Radzen.Blazor.js" asp-append-version="true"></script>
 
-
-            Popup de recuperação de senha
-            <div id="popup" class="popup">
-                <div class="popup-content">
-                    <span class="close" id="fecharPopup">&times;</span>
-                    <h2>Recuperar Senha</h2>
-                    <p>Por favor, insira seu endereço de email abaixo:</p>
-                    <input type="email" id="email" placeholder="Seu email">
-                    <button id="enviarEmail" class="btn btn-primary">Enviar</button>
-                </div>
-            </div>
-        </section>*@
-
-    <script src="_framework/blazor.server.js"></script>
-    <script src="_content/Radzen.Blazor/Radzen.Blazor.js" asp-append-version="true"></script>
-
-    <script>
-        function realizaLogin(args) {
-            var retorno = null
-            $.ajax({
-                method: 'POST',
-                url: "@(Url.Action("RealizaLogin", "Autenticacao"))",
-                data: args,
-                dataType: 'json',
-                async: false,
-                success: function (data) {
-                    retorno = data;
-                },
-                error: function (e) {
-                    return {
-                        Sucesso: false,
-                        Mensagem: e.errorText
-                    };
-                }
-            });
-            return retorno;
-        }
-
-        function redirecionaHome() {
-            window.location.href = '@(ViewBag.ReturnUrl)';
-        }
-
-        const esqueceuSenhaBtn = document.getElementById("esqueceuSenhaBtn");
-        const popup = document.getElementById("popup");
-        const fecharPopup = document.getElementById("fecharPopup");
-
-        esqueceuSenhaBtn.addEventListener("click", () => {
-            popup.style.display = "block";
-        });
-
-        fecharPopup.addEventListener("click", () => {
-            popup.style.display = "none";
-        });
-
-        document.addEventListener("keydown", (e) => {
-            if (e.key === "Escape") {
-                popup.style.display = "none";
+        <script>
+            function realizaLogin(args) {
+                var retorno = null
+                $.ajax({
+                    method: 'POST',
+                    url: "@(Url.Action("RealizaLogin", "Autenticacao"))",
+                    data: args,
+                    dataType: 'json',
+                    async: false,
+                    success: function (data) {
+                        retorno = data;
+                    },
+                    error: function (e) {
+                        return {
+                            Sucesso: false,
+                            Mensagem: retorno.Mensagem
+                        };
+                    }
+                });
+                return retorno;
             }
-        });
 
-        const enviarEmailBtn = document.getElementById("enviarEmail");
-        enviarEmailBtn.addEventListener("click", () => {
-            const email = document.getElementById("email").value;
-            if (email == "") {
-                return notifica("Atenção!", "Preencha seu endereço de email para continuar!", "warning")
+            function recuperaSenha(model) {
+                var retorno = null
+                $.ajax({
+                    method: 'POST',
+                    url: "@(Url.Action("RecuperarSenha", "Autenticacao"))",
+                    data: model,
+                    dataType: 'json',
+                    async: false,
+                    success: function (data) {
+                        retorno = data;
+                    },
+                    error: function (e) {
+                        return {
+                            Sucesso: false,
+                            Mensagem: retorno.Mensagem
+                        };
+                    }
+                });
+                return retorno;
             }
-            notifica("Email Enviado", "Um email para recuperação de senha foi enviado!", "success")
-            popup.style.display = "none";
-        });
-    </script>
+
+            function redirecionaHome() {
+                window.location.href = '@(ViewBag.ReturnUrl)';
+            }
+
+                    // const esqueceuSenhaBtn = document.getElementById("esqueceuSenhaBtn");
+                    // const popup = document.getElementById("popup");
+                    // const fecharPopup = document.getElementById("fecharPopup");
+
+                    // esqueceuSenhaBtn.addEventListener("click", () => {
+                    //     popup.style.display = "block";
+                    // });
+
+                    // fecharPopup.addEventListener("click", () => {
+                    //     popup.style.display = "none";
+                    // });
+
+                    // document.addEventListener("keydown", (e) => {
+                    //     if (e.key === "Escape") {
+                    //         popup.style.display = "none";
+                    //     }
+                    // });
+
+                    // const enviarEmailBtn = document.getElementById("enviarEmail");
+                    // enviarEmailBtn.addEventListener("click", () => {
+                    //     const email = document.getElementById("email").value;
+                    //     if (email == "") {
+                    //         return notifica("Atenção!", "Preencha seu endereço de email para continuar!", "warning")
+                    //     }
+                    //     notifica("Email Enviado", "Um email para recuperação de senha foi enviado!", "success")
+                    //     popup.style.display = "none";
+                    // });
+        </script>
 </body>
 </html>

@@ -23,16 +23,16 @@ namespace SiteJogos.Console.Controllers
         [Route("/")]
         public IActionResult Index()
         {
-            if (!_usuarioRepository.VerificaUsuarios())
-            {
-                var usuarioMaster = new Usuario()
-                {
-                    UserName = "master@gmail.com",
-                    Nome = "Master",
-                    Email = "master@gmail.com",
-                };
-                _userManager.CreateAsync(usuarioMaster, "Master@2023");
-            }
+            //if (!_usuarioRepository.VerificaUsuarios())
+            //{
+            //    var usuarioMaster = new Usuario()
+            //    {
+            //        UserName = "master@gmail.com",
+            //        Nome = "Master",
+            //        Email = "master@gmail.com",
+            //    };
+            //    _userManager.CreateAsync(usuarioMaster, "Master@2023");
+            //}
             return View();
         }
 
@@ -146,18 +146,23 @@ namespace SiteJogos.Console.Controllers
                         return new RetornoViewModel
                         {
                             Sucesso = true,
+                            Codigo = "success",
+                            Titulo = "Sucesso!",
+                            Mensagem = "Usuário cadastrado com sucesso!"
                         };
                     }
                 }
 
                 throw new Exception("Falha ao cadastrar");
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return new RetornoViewModel
                 {
                     Sucesso = false,
-                    Mensagem = e.Message
+                    Titulo = "Erro!",
+                    Codigo = "error",
+                    Mensagem = "Ocorreu um problema ao cadastrar usuário!"
                 };
             }
         }
@@ -165,9 +170,35 @@ namespace SiteJogos.Console.Controllers
         [HttpGet]
         [Route("/Sair")]
         public IActionResult Sair()
-        {
+        { 
             _signInManager.SignOutAsync().Wait();
             return RedirectToAction("Index", "Autenticacao");
+        }
+
+        [HttpPost]
+        public RetornoViewModel RecuperarSenha(AutenticacaoViewModel model) 
+        {
+            if (model.Login != null)
+            {
+                return new RetornoViewModel
+                {
+                    Sucesso = true,
+                    Codigo = "success",
+                    Titulo = "Sucesso!",
+                    Mensagem = "Você recebera um email em breve!"
+                };
+            }
+
+            else
+            {
+                return new RetornoViewModel
+                {
+                    Sucesso = false,
+                    Codigo = "warning",
+                    Titulo = "Atenção!",
+                    Mensagem = "Preencha o campo email!"
+                };
+            }
         }
     }
 }

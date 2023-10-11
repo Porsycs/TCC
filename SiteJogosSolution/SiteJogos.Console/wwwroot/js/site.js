@@ -15,38 +15,6 @@
     });
 }
 
-function notificaIziToast(titulo, mensagem, tipo = null, tempo = 4000, posicao = 'bottomCenter') {
-    if (tipo == true) {
-        iziToast.success({
-            title: titulo,
-            message: mensagem,
-            position: posicao,
-            timeout: tempo,
-        });
-    }
-    else if (tipo == false) {
-        iziToast.error({
-            title: titulo,
-            message: mensagem,
-            position: posicao,
-            timeout: tempo,
-            icon: 'fa-solid fa-circle-exclamation',
-            iconColor: 'white',
-            backgroundColor: '#f9777f',
-            titleColor: "white",
-            messageColor: "white"
-        });
-    }
-    else {
-        iziToast.show({
-            title: titulo,
-            message: mensagem,
-            position: posicao,
-            timeout: tempo,
-        });
-    }
-}
-
 function redirecionaTela(url) {
     window.location.href = url;
 }

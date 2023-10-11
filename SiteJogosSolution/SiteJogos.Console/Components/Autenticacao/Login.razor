@@ -1,6 +1,7 @@
 ﻿@inject IJSRuntime JsRuntime;
 @inject HttpClient httpClient;
 @inject NotificationService notificationService;
+@inject DialogService dialogService;
 
 <RadzenDialog />
 <RadzenNotification />
@@ -20,47 +21,20 @@
             <RadzenText TextStyle="TextStyle.DisplayH6" TagName="TagName.H2" Class="rz-mb-6">
                 Informe seus Dados
             </RadzenText>
-            <RadzenLogin AllowRegister="true" AllowResetPassword="false" UserText="E-mail" PasswordText="Senha" RememberMeText="Lembrar" AllowRememberMe="true" RegisterMessageText="Novo aqui? Cadastre-se já!" RegisterText="Cadastrar" Register="@(args => Cadastrar())" RememberMe="false" Login=@(args => OnLogin(args)) />
+            <RadzenLogin AllowRegister="true" AllowResetPassword="true" UserText="E-mail" PasswordText="Senha" RememberMeText="Lembrar" AllowRememberMe="true" RegisterMessageText="Novo aqui? Cadastre-se já!" RegisterText="Cadastrar" Register="@(args => Cadastrar())" RememberMe="false" Login=@(args => OnLogin(args)) ResetPassword=@(args => OnResetPassword()) ResetPasswordText="Esqueceu sua senha?" />
         </RadzenCard>
     </RadzenColumn>
 </RadzenRow>
-
-@*<section style="background:black">
-    <div class="container-parent">
-        <div>
-            <img src="/images/piratalogin5.png" />
-        </div>
-        <RadzenCard class="rz-my-12 rz-mx-auto rz-p-4 rz-p-md-12" style="max-width: 600px; margin-left: 3rem; margin-right: 3rem">
-            <h1 style="text-align:center; padding:30px">Junte se a nós e nos ajude a criar uma nova história!</h1>
-            <h2>Informe seus Dados</h2>
-            <RadzenLogin AllowRegister="false" AllowResetPassword="false" UserText="Login" PasswordText="Senha" RememberMeText="Lembrar" AllowRememberMe="true" RememberMe="false" Login=@(args => OnLogin(args)) />
-        </RadzenCard>
-        <div class="container">
-            <h1 style="text-align:center; padding:30px">Junte se a nós e nos ajude a criar uma nova história!</h1>
-            <h2>Informe seus Dados</h2>
-            <form id="loginForm" method="post" action="Url.Action("Login", "Autenticacao")">
-                @foreach (var item in listaCadastro)
-                {
-                    <div class="form-group">
-                        <input type=@item.type class=@item.classe id=@item.id name=@item.name placeholder=@item.placeholder required>
-                    </div>
-                }
-                <button type="submit" id="btnEntrar" class="btn btn-primary">Entrar</button>
-            </form>
-            <a class="link">Novo aqui? Cadastre-se já!</a>
-        </div>
-    </div>
-</section>*@
 
 @code {
     async void OnLogin(LoginArgs args)
     {
         var retorno = await JsRuntime.InvokeAsync<RetornoViewModel>("realizaLogin", new AutenticacaoViewModel()
-        {
-            Login = args.Username,
-            Senha = args.Password,
-            Lembrar = args.RememberMe,
-        });
+                {
+                    Login = args.Username,
+                    Senha = args.Password,
+                    Lembrar = args.RememberMe,
+                });
         if (retorno.Sucesso)
         {
             //await JsRuntime.InvokeVoidAsync("redirecionaHome");
@@ -75,5 +49,30 @@
     async void Cadastrar()
     {
         await JsRuntime.InvokeVoidAsync("redirecionaTela", "/Cadastrar");
+    }
+
+
+    async Task OnResetPassword()
+    {
+        string valorEmail = "";
+        await dialogService.OpenAsync("Recuperar Senha", ds =>
+    @<RadzenStack AlignItems="AlignItems.Center">
+        <RadzenTextBox @bind-Value="valorEmail" Placeholder="Digite seu email..." />
+        <RadzenButton Click="() => EnviarResetSenha(valorEmail)">Enviar</RadzenButton>
+        </RadzenStack>
+    , new DialogOptions() { ShowTitle = true, Width = "400", ShowClose = true, Style = "min-height:auto;min-width:auto;width:auto", CloseDialogOnEsc = true });
+    }
+
+    async Task EnviarResetSenha(string value)
+    {
+        var email = "";
+        var retorno = await JsRuntime.InvokeAsync<RetornoViewModel>("recuperaSenha", new AutenticacaoViewModel()
+        {
+            Login = value
+        });
+
+        if(retorno.Sucesso)
+            dialogService.Close();
+        await JsRuntime.InvokeVoidAsync("notifica", retorno.Titulo, retorno.Mensagem, retorno.Codigo);
     }
 }
