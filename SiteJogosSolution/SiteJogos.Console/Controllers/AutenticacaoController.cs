@@ -170,33 +170,46 @@ namespace SiteJogos.Console.Controllers
         [HttpGet]
         [Route("/Sair")]
         public IActionResult Sair()
-        { 
+        {
             _signInManager.SignOutAsync().Wait();
             return RedirectToAction("Index", "Autenticacao");
         }
 
         [HttpPost]
-        public RetornoViewModel RecuperarSenha(AutenticacaoViewModel model) 
+        public RetornoViewModel RecuperarSenha(AutenticacaoViewModel model)
         {
-            if (model.Login != null)
+            try
             {
-                return new RetornoViewModel
+                if (model.Login != null)
                 {
-                    Sucesso = true,
-                    Codigo = "success",
-                    Titulo = "Sucesso!",
-                    Mensagem = "Você recebera um email em breve!"
-                };
+
+                    var emailEnviado = _usuarioRepository.EmailRecuperaSenha(model.Login);
+
+                    if (emailEnviado) {
+                        return new RetornoViewModel
+                        {
+                            Sucesso = true,
+                            Codigo = "success",
+                            Titulo = "Sucesso!",
+                            Mensagem = "Você recebera um email em breve!"
+                        };
+                    }
+                    else
+                        throw new Exception("Ocorreu um erro ao enviar o email!");
+                }
+
+                else
+                    throw new Exception("Preencha o campo email!");
             }
 
-            else
+            catch(Exception e)
             {
                 return new RetornoViewModel
                 {
                     Sucesso = false,
                     Codigo = "warning",
                     Titulo = "Atenção!",
-                    Mensagem = "Preencha o campo email!"
+                    Mensagem = e.Message ?? "Algo deu errado"
                 };
             }
         }

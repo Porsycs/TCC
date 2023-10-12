@@ -16,6 +16,12 @@ builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation()
     options.JsonSerializerOptions.PropertyNamingPolicy = null;
 }).AddNewtonsoftJson();
 
+IConfiguration configuration = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json")
+            .Build();
+
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();

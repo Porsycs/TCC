@@ -5,18 +5,24 @@ using SiteJogos.Core.Services.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using System.Text.RegularExpressions;
 
 namespace SiteJogos.Core.Services.Repository
 {
     public class UsuarioRepository : IUsuarioRepository
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly IConfiguration _configuration;
 
-        public UsuarioRepository(ApplicationDbContext dbContext)
+        public UsuarioRepository(ApplicationDbContext dbContext, IConfiguration configuration)
         {
             _dbContext = dbContext;
+            _configuration = configuration;
         }
 
         public IEnumerable<Usuario> GetAll()
@@ -76,10 +82,52 @@ namespace SiteJogos.Core.Services.Repository
             }
         }
 
+        public bool EmailRecuperaSenha(string email)
+        {
+            var emailSettings = _configuration.GetSection("EmailSettings");
+            var smtpServer = emailSettings["SmtpServer"];
+            var smtpPort = int.Parse(emailSettings["SmtpPort"]);
+            var smtpUsername = emailSettings["SmtpUsername"];
+            var smtpPassword = emailSettings["SmtpPassword"];
+
+            if (!IsValidEmail(email))
+                throw new Exception("Email em formato inválido!");
+
+            using (SmtpClient smtpClient = new SmtpClient(smtpServer, smtpPort))
+            {
+                smtpClient.Credentials = new NetworkCredential(smtpUsername, smtpPassword);
+                smtpClient.EnableSsl = true; 
+
+                // Create a new MailMessage
+                MailMessage mailMessage = new MailMessage();
+                mailMessage.From = new MailAddress(smtpUsername);
+                mailMessage.To.Add(email);
+                mailMessage.Subject = "Recuperação de senha";
+                mailMessage.Body = $"Email de recuperação de senha teste para: {email}";
+
+                try
+                {
+                    smtpClient.Send(mailMessage);
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         public bool VerificaUsuarios()
         {
             return true;
             //return _dbContext.Usuarios.Any();
+        }
+
+        private bool IsValidEmail(string email)
+        {
+            // Use a regular expression to validate the email format
+            string emailPattern = @"^[\w\.-]+@[\w\.-]+\.\w+$";
+            return Regex.IsMatch(email, emailPattern);
         }
     }
 }
