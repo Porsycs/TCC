@@ -2,13 +2,8 @@
 using SiteJogos.Core.Context;
 using SiteJogos.Core.Entities;
 using SiteJogos.Core.Services.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Mail;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using System.Text.RegularExpressions;
 
@@ -18,7 +13,7 @@ namespace SiteJogos.Core.Services.Repository
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IConfiguration _configuration;
-        
+
         public UsuarioRepository(ApplicationDbContext dbContext, IConfiguration configuration)
         {
             _dbContext = dbContext;
@@ -82,6 +77,18 @@ namespace SiteJogos.Core.Services.Repository
             }
         }
 
+        public bool VerificaUsuarios()
+        {
+            return true;
+            //return _dbContext.Usuarios.Any();
+        }
+
+        private bool IsValidEmail(string email)
+        {
+            string emailPattern = @"^[\w\.-]+@[\w\.-]+\.\w+$";
+            return Regex.IsMatch(email, emailPattern);
+        }
+
         public bool EmailRecuperaSenha(string email)
         {
 
@@ -93,7 +100,7 @@ namespace SiteJogos.Core.Services.Repository
             using (SmtpClient smtpClient = new SmtpClient(dados.smtpServer, dados.smtpPort))
             {
                 smtpClient.Credentials = new NetworkCredential(dados.smtpUsername, dados.smtpPassword);
-                smtpClient.EnableSsl = true; 
+                smtpClient.EnableSsl = true;
 
                 // Create a new MailMessage
                 MailMessage mailMessage = new MailMessage();
@@ -133,23 +140,10 @@ namespace SiteJogos.Core.Services.Repository
                 return emailSettingsObject;
             }
 
-            catch(Exception)
+            catch (Exception)
             {
                 return new object();
             }
-        }
-
-        public bool VerificaUsuarios()
-        {
-            return true;
-            //return _dbContext.Usuarios.Any();
-        }
-
-        private bool IsValidEmail(string email)
-        {
-            // Use a regular expression to validate the email format
-            string emailPattern = @"^[\w\.-]+@[\w\.-]+\.\w+$";
-            return Regex.IsMatch(email, emailPattern);
         }
     }
 }
