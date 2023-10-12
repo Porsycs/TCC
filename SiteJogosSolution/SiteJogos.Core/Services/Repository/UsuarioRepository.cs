@@ -18,7 +18,7 @@ namespace SiteJogos.Core.Services.Repository
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IConfiguration _configuration;
-
+        
         public UsuarioRepository(ApplicationDbContext dbContext, IConfiguration configuration)
         {
             _dbContext = dbContext;
@@ -84,23 +84,20 @@ namespace SiteJogos.Core.Services.Repository
 
         public bool EmailRecuperaSenha(string email)
         {
-            var emailSettings = _configuration.GetSection("EmailSettings");
-            var smtpServer = emailSettings["SmtpServer"];
-            var smtpPort = int.Parse(emailSettings["SmtpPort"]);
-            var smtpUsername = emailSettings["SmtpUsername"];
-            var smtpPassword = emailSettings["SmtpPassword"];
 
             if (!IsValidEmail(email))
                 throw new Exception("Email em formato inválido!");
 
-            using (SmtpClient smtpClient = new SmtpClient(smtpServer, smtpPort))
+            dynamic dados = DadosEmail();
+
+            using (SmtpClient smtpClient = new SmtpClient(dados.smtpServer, dados.smtpPort))
             {
-                smtpClient.Credentials = new NetworkCredential(smtpUsername, smtpPassword);
+                smtpClient.Credentials = new NetworkCredential(dados.smtpUsername, dados.smtpPassword);
                 smtpClient.EnableSsl = true; 
 
                 // Create a new MailMessage
                 MailMessage mailMessage = new MailMessage();
-                mailMessage.From = new MailAddress(smtpUsername);
+                mailMessage.From = new MailAddress(dados.smtpUsername);
                 mailMessage.To.Add(email);
                 mailMessage.Subject = "Recuperação de senha";
                 mailMessage.Body = $"Email de recuperação de senha teste para: {email}";
@@ -115,6 +112,31 @@ namespace SiteJogos.Core.Services.Repository
                 }
             }
             return true;
+        }
+        private dynamic DadosEmail()
+        {
+            try
+            {
+                var emailSettings = _configuration.GetSection("EmailSettings");
+                var smtpServer = emailSettings["SmtpServer"];
+                var smtpPort = int.Parse(emailSettings["SmtpPort"]);
+                var smtpUsername = emailSettings["SmtpUsername"];
+                var smtpPassword = emailSettings["SmtpPassword"];
+                var emailSettingsObject = new
+                {
+                    smtpServer,
+                    smtpPort,
+                    smtpUsername,
+                    smtpPassword
+                };
+
+                return emailSettingsObject;
+            }
+
+            catch(Exception)
+            {
+                return new object();
+            }
         }
 
         public bool VerificaUsuarios()
