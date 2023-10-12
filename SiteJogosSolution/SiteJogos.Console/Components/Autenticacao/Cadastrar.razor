@@ -73,16 +73,21 @@
 
     async void OnSubmit(FormCadastroViewModel model)
     {
+        await JsRuntime.InvokeVoidAsync("exibeLoadPanel");
         var retorno = await JsRuntime.InvokeAsync<RetornoViewModel>("getDados", "/Autenticacao/CadastraUsuario", model, "POST");
         if (retorno.Sucesso)
         {
 
+            await JsRuntime.InvokeVoidAsync("escondeLoadPanel");
             await JsRuntime.InvokeVoidAsync("notifica", retorno.Titulo, retorno.Mensagem, retorno.Codigo);
             await Task.Delay(1500);
             retornaHome();
         }
         else
+        {
+            await JsRuntime.InvokeVoidAsync("escondeLoadPanel");
             await JsRuntime.InvokeVoidAsync("notifica", retorno.Titulo, retorno.Mensagem, retorno.Codigo);
+        }
     }
 
     async void retornaHome()

@@ -34,7 +34,7 @@ namespace SiteJogos.Core.Services.Repository
                 _dbContext.Add(item);
                 _dbContext.SaveChanges();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
@@ -54,7 +54,7 @@ namespace SiteJogos.Core.Services.Repository
                     _dbContext.Entry(result).CurrentValues.SetValues(item);
                     _dbContext.SaveChanges();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     throw;
                 }
@@ -75,7 +75,7 @@ namespace SiteJogos.Core.Services.Repository
                     _dbSet.Remove(result);
                     _dbContext.SaveChanges();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     throw;
                 }

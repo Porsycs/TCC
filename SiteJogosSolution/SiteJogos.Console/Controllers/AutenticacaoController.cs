@@ -63,6 +63,9 @@ namespace SiteJogos.Console.Controllers
                         return new RetornoViewModel
                         {
                             Sucesso = true,
+                            Titulo = "Sucesso",
+                            Mensagem = "Sucesso ao logar no site!",
+                            Codigo = "success"
                         };
                     }
                     else
@@ -78,7 +81,9 @@ namespace SiteJogos.Console.Controllers
                 return new RetornoViewModel
                 {
                     Sucesso = false,
-                    Mensagem = e.Message
+                    Titulo = "Atenção",
+                    Mensagem = e.Message ?? "Ocorreu um erro ao entrar no site!",
+                    Codigo = "warning"
                 };
             }
         }
@@ -160,8 +165,8 @@ namespace SiteJogos.Console.Controllers
                 return new RetornoViewModel
                 {
                     Sucesso = false,
-                    Titulo = "Erro!",
-                    Codigo = "error",
+                    Titulo = "Atenção!",
+                    Codigo = "warning",
                     Mensagem = "Ocorreu um problema ao cadastrar usuário!"
                 };
             }

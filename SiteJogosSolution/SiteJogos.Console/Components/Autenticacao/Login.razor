@@ -29,6 +29,7 @@
 @code {
     async void OnLogin(LoginArgs args)
     {
+        await JsRuntime.InvokeVoidAsync("exibeLoadPanel");
         var retorno = await JsRuntime.InvokeAsync<RetornoViewModel>("realizaLogin", new AutenticacaoViewModel()
                 {
                     Login = args.Username,
@@ -37,12 +38,15 @@
                 });
         if (retorno.Sucesso)
         {
-            //await JsRuntime.InvokeVoidAsync("redirecionaHome");
+
+            await JsRuntime.InvokeVoidAsync("escondeLoadPanel");
+            await JsRuntime.InvokeVoidAsync("notifica", retorno.Titulo, retorno.Mensagem, retorno.Codigo);
             await JsRuntime.InvokeVoidAsync("redirecionaTela", "/Jogo");
         }
         else
         {
-            await JsRuntime.InvokeVoidAsync("notificaIziToast", "Erro:", retorno.Mensagem, false);
+            await JsRuntime.InvokeVoidAsync("escondeLoadPanel");
+            await JsRuntime.InvokeVoidAsync("notifica", retorno.Titulo, retorno.Mensagem, retorno.Codigo);
         }
     }
 
