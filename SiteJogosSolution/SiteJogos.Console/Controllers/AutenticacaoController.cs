@@ -20,19 +20,14 @@ namespace SiteJogos.Console.Controllers
             _usuarioRepository = usuarioRepository;
         }
 
-        [Route("/")]
-        public IActionResult Index()
+        [Route("/Login")]
+        [AllowAnonymous]
+        public IActionResult Login()
         {
-            //if (!_usuarioRepository.VerificaUsuarios())
-            //{
-            //    var usuarioMaster = new Usuario()
-            //    {
-            //        UserName = "master@gmail.com",
-            //        Nome = "Master",
-            //        Email = "master@gmail.com",
-            //    };
-            //    _userManager.CreateAsync(usuarioMaster, "Master@2023");
-            //}
+            if(_userManager.GetUserAsync(User).Result != null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
 
@@ -40,6 +35,10 @@ namespace SiteJogos.Console.Controllers
         [AllowAnonymous]
         public IActionResult Cadastrar()
         {
+            if (_userManager.GetUserAsync(User).Result != null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
 

@@ -1,0 +1,95 @@
+﻿@inject IJSRuntime Js;
+@inject DialogService DialogService;
+
+<RadzenDialog />
+<RadzenNotification />
+<RadzenContextMenu />
+<RadzenTooltip />
+
+<RadzenLayout>
+    <RadzenHeader>
+        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween" Gap="0"  Style="height: 100%">
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
+                @*<RadzenImage Path="/images/Logo_Class_Redondo.png" Style="width: 2rem; height: auto; margin-right: 0.5rem" />*@
+                <RadzenLabel Text="Historiando" />
+            </RadzenStack>
+                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
+                    <RadzenButton Variant="Variant.Text" Text="Início" ButtonStyle="ButtonStyle.Warning" Click='() => redirecionaTela("/")' />
+                    @if (usuario == null)
+                    {
+                        <RadzenButton Text="Login" Variant="Variant.Text" ButtonStyle="ButtonStyle.Warning" Click='() => redirecionaTela("/Login")' />
+                        <RadzenButton Text="Cadastre-se" Variant="Variant.Text" ButtonStyle="ButtonStyle.Warning" Click='() => redirecionaTela("/Cadastrar")' />
+                    }
+                    else
+                    {
+                        <RadzenProfileMenu>
+                            <Template>
+                                <RadzenLabel Text="@(usuario.UserName)" Style="margin-right: 0.5rem" />
+                                <RadzenGravatar Email="@(usuario.Email)" />
+                            </Template>
+                            <ChildContent>
+                                @*<RadzenProfileMenuItem Text="Ver Perfil" Path="menu" Icon="account_circle"></RadzenProfileMenuItem>*@
+                                <div @onclick="exibePopupTrocaSenha">
+                                    <RadzenProfileMenuItem Text="Trocar Senha" Icon="lock_reset"></RadzenProfileMenuItem>
+                                </div>
+                                <div @onclick="temaClaro">
+                                    <RadzenProfileMenuItem Visible="!LightMode" Text="Modo Claro" Icon="light_mode"></RadzenProfileMenuItem>
+                                </div>
+                                <div @onclick="temaEscuro">
+                                    <RadzenProfileMenuItem Visible="LightMode" Text="Modo Escuro" Icon="dark_mode" @onclick="temaEscuro"></RadzenProfileMenuItem>
+                                </div>
+                                <div onclick="sairSistema()">
+                                    <RadzenProfileMenuItem Text="Sair" Icon="logout"></RadzenProfileMenuItem>
+                                </div>
+                            </ChildContent>
+                        </RadzenProfileMenu>
+                    }
+                </RadzenStack>
+        </RadzenStack>
+    </RadzenHeader>
+    <RadzenBody>
+        <div id="corpo-principal" class="rz-p-4">
+        </div>
+    </RadzenBody>
+</RadzenLayout>
+
+@code {
+
+    [Parameter]
+    public Usuario? usuario { get; set; } = null;
+
+    [Parameter]
+    public bool LightMode { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await Js.InvokeVoidAsync("insereBody");
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    async void temaClaro()
+    {
+        LightMode = true;
+        await Js.InvokeVoidAsync("temaClaro");
+    }
+
+    async void temaEscuro()
+    {
+        LightMode = false;
+        await Js.InvokeVoidAsync("temaEscuro");
+    }
+
+    async void exibePopupTrocaSenha()
+    {
+    }
+
+    async void redirecionaTela(string url)
+    {
+        await Js.InvokeVoidAsync("redirecionaTela", url);
+    }
+
+    async void sairSistema()
+    {
+        await Js.InvokeVoidAsync("sairSistema");
+    }
+}

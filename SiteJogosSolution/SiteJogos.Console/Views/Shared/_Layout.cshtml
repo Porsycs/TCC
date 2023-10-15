@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@inject Microsoft.AspNetCore.Identity.UserManager<Usuario> userManager;
+
+@{
+    var usuario = userManager?.GetUserAsync(User)?.Result;
+}
+
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="utf-8" />
@@ -19,38 +25,79 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <style>
+        body {
+            padding: 0 !important;
+        }
+
+        h4 {
+            font-family: 'Zeyada', cursive !important;
+        }
+
+        h1 {
+            font-family: 'Zeyada', cursive !important;
+            font-weight: bold
+        }
+
+        .alinha-centro {
+            display: grid;
+            margin: 0 auto;
+            justify-content: center;
+            align-content: center;
+            align-items: center;
+        }
+    </style>
+
 </head>
+
 <body>
-    <div>
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+
+    <component type="typeof(SiteJogos.Console.Components.Shared.Layout)" render-mode="Server" param-usuario="usuario" />
+    <div class="container d-none">
+        @RenderBody()
     </div>
+
     <script src="_framework/blazor.server.js"></script>
     <script src="_content/Radzen.Blazor/Radzen.Blazor.js" asp-append-version="true"></script>
+    <script>
+
+        function insereBody() {
+            $(".container").appendTo("#corpo-principal");
+            $(".container").removeClass("d-none");
+        }
+
+        function temaClaro() {
+            $("#temaBlazor").attr("href", "_content/Radzen.Blazor/css/software-base.css");
+            getDados("@(Url.Action("TemaClaro", "Usuario"))", {}, "POST");
+        }
+
+        function temaEscuro() {
+            $("#temaBlazor").attr("href", "_content/Radzen.Blazor/css/dark-base.css");
+            getDados("@(Url.Action("TemaEscuro", "Usuario"))", {}, "POST");
+        }
+
+        function trocaSenha(model) {
+            var retorno = null
+            $.ajax({
+                method: 'POST',
+                url: "@(Url.Action("TrocaSenha", "Autenticacao"))",
+                data: model,
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+                    retorno = data;
+                },
+                error: function (e) {
+                    return {
+                        Sucesso: false,
+                        Mensagem: e.errorText
+                    };
+                }
+            });
+            return retorno;
+        }
+
+    </script>
 </body>
 </html>
-
-
-<style>
-    body {
-        padding: 0 !important;
-    }
-
-    h4 {
-        font-family: 'Zeyada', cursive !important;
-    }
-
-    h1 {
-        font-family: 'Zeyada', cursive !important;
-        font-weight: bold
-    }
-    .alinha-centro {
-        display: grid;
-        margin: 0 auto;
-        justify-content: center;
-        align-content: center;
-        align-items: center;
-    }
-
-</style>
