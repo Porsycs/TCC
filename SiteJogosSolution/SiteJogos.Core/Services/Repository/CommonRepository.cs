@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using SiteJogos.Core.Context;
 using SiteJogos.Core.Entities;
 using SiteJogos.Core.Services.Interface;
@@ -9,10 +10,13 @@ namespace SiteJogos.Core.Services.Repository
     {
         private readonly ApplicationDbContext _dbContext;
         private DbSet<T> _dbSet;
-        public CommonRepository(ApplicationDbContext dbContext)
+        private IConfiguration _configuration;
+
+        public CommonRepository(ApplicationDbContext dbContext, IConfiguration configuration)
         {
             _dbContext = dbContext;
             _dbSet = _dbContext.Set<T>();
+            _configuration = configuration;
         }
 
         public List<T> GetAll()
@@ -85,6 +89,32 @@ namespace SiteJogos.Core.Services.Repository
         {
             var existe = _dbSet.AsNoTracking().Any(f => f.Id == Id);
             return existe;
+        }
+
+        public dynamic DadosEmail()
+        {
+            try
+            {
+                var emailSettings = _configuration.GetSection("EmailSettings");
+                var smtpServer = emailSettings["SmtpServer"];
+                var smtpPort = int.Parse(emailSettings["SmtpPort"]);
+                var smtpUsername = emailSettings["SmtpUsername"];
+                var smtpPassword = emailSettings["SmtpPassword"];
+                var emailSettingsObject = new
+                {
+                    smtpServer,
+                    smtpPort,
+                    smtpUsername,
+                    smtpPassword
+                };
+
+                return emailSettingsObject;
+            }
+
+            catch (Exception)
+            {
+                return new object();
+            }
         }
     }
 }
