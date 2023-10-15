@@ -195,7 +195,7 @@ namespace SiteJogos.Console.Controllers
                             Sucesso = true,
                             Codigo = "success",
                             Titulo = "Sucesso!",
-                            Mensagem = "Você recebera um email em breve!"
+                            Mensagem = "Se o email estiver cadastrado você recebera as instruções nele em breve!"
                         };
                     }
                     else

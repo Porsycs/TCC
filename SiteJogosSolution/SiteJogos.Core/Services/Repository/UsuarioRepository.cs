@@ -22,12 +22,12 @@ namespace SiteJogos.Core.Services.Repository
 
         public IEnumerable<Usuario> GetAll()
         {
-            return _dbContext.Usuarios.Where(u => !u.Excluido).AsEnumerable();
+            return _dbContext.Usuarios.AsNoTracking().Where(u => !u.Excluido).AsEnumerable();
         }
 
         public Usuario GetById(Guid id)
         {
-            return _dbContext.Usuarios.SingleOrDefault(t => t.Id == id);
+            return _dbContext.Usuarios.AsNoTracking().SingleOrDefault(t => t.Id == id) ?? new Usuario();
         }
 
         public void Delete(Guid Id)
@@ -83,7 +83,7 @@ namespace SiteJogos.Core.Services.Repository
             //return _dbContext.Usuarios.Any();
         }
 
-        private bool IsValidEmail(string email)
+        private static bool IsValidEmail(string email)
         {
             string emailPattern = @"^[\w\.-]+@[\w\.-]+\.\w+$";
             return Regex.IsMatch(email, emailPattern);
@@ -94,6 +94,10 @@ namespace SiteJogos.Core.Services.Repository
 
             if (!IsValidEmail(email))
                 throw new Exception("Email em formato inválido!");
+
+            var usuarioCadastro = GetAll().Where(w => w.UserName.ToLower() == email.ToLower());
+            if (!usuarioCadastro.Any())
+                return true;
 
             dynamic dados = DadosEmail();
 
