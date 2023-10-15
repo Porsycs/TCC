@@ -27,7 +27,7 @@ namespace SiteJogos.Core.Services.Repository
 
         public Usuario GetById(Guid id)
         {
-            return _dbContext.Usuarios.AsNoTracking().SingleOrDefault(t => t.Id == id);
+            return _dbContext.Usuarios.AsNoTracking().SingleOrDefault(t => t.Id == id) ?? new Usuario();
         }
 
         public void Delete(Guid Id)
@@ -83,7 +83,7 @@ namespace SiteJogos.Core.Services.Repository
             //return _dbContext.Usuarios.Any();
         }
 
-        private bool IsValidEmail(string email)
+        private static bool IsValidEmail(string email)
         {
             string emailPattern = @"^[\w\.-]+@[\w\.-]+\.\w+$";
             return Regex.IsMatch(email, emailPattern);

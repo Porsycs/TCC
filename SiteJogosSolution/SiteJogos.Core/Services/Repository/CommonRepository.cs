@@ -9,8 +9,8 @@ namespace SiteJogos.Core.Services.Repository
     public class CommonRepository<T> : ICommonRepository<T> where T : BaseEntity
     {
         private readonly ApplicationDbContext _dbContext;
-        private DbSet<T> _dbSet;
-        private IConfiguration _configuration;
+        private readonly DbSet<T> _dbSet;
+        private readonly IConfiguration _configuration;
 
         public CommonRepository(ApplicationDbContext dbContext, IConfiguration configuration)
         {
@@ -25,7 +25,7 @@ namespace SiteJogos.Core.Services.Repository
             return dado;
         }
 
-        public T GetById(Guid Id)
+        public T? GetById(Guid Id)
         {
             var dado = _dbSet.FirstOrDefault(f => f.Id == Id);
             return dado;
@@ -46,7 +46,7 @@ namespace SiteJogos.Core.Services.Repository
             return item;
         }
 
-        public T Update(T item)
+        public T? Update(T item)
         {
 
             var result = GetById(item.Id);
