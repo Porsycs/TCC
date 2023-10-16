@@ -1,0 +1,51 @@
+﻿@inject DialogService DialogService;
+@inject IJSRuntime Js;
+
+<RadzenTemplateForm TItem="SenhaViewModel" Data=@model Submit=@OnSubmit>
+    <RadzenFieldset>
+        <RadzenStack Gap="1rem" Class="rz-p-4 rz-p-md-12" Style="padding: 0 !important">
+            <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                <RadzenColumn Size="12" SizeMD="12">
+                    <RadzenLabel Text="Senha Atual" />
+                    <RadzenPassword Name="SenhaAtual" @bind-Value=@model.SenhaAtual Style="display: block; width: 100%" />
+                    <RadzenRequiredValidator Component="SenhaAtual" Text="Preencha a Senha Atual" Popup="true" Style="position: absolute" />
+                </RadzenColumn>
+            </RadzenRow>
+            <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                <RadzenColumn Size="12" SizeMD="12">
+                    <RadzenLabel Text="Senha Nova" />
+                    <RadzenPassword Name="SenhaNova" @bind-Value=@model.SenhaNova Style="display: block; width: 100%" />
+                    <RadzenRequiredValidator Component="SenhaNova" Text="Insira a Senha Nova" Popup="true" Style="position: absolute" />
+                </RadzenColumn>
+            </RadzenRow>
+            <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                <RadzenColumn Size="12" SizeMD="12">
+                    <RadzenLabel Text="Repetir Senha Nova" />
+                    <RadzenPassword Name="RepetirSenhaNova" @bind-Value=@model.RepetirSenhaNova Style="display: block; width: 100%" />
+                    <RadzenRequiredValidator Component="RepetirSenhaNova" Text="Insira a Senha Nova" Popup="true" Style="position: absolute" />
+                    <RadzenCompareValidator Visible=@(!string.IsNullOrEmpty(model.RepetirSenhaNova)) Value=@model.SenhaNova Component="RepetirSenhaNova" Text="As senhas devem ser iguais" Popup=true Style="position: absolute" />
+                </RadzenColumn>
+            </RadzenRow>
+            <RadzenRow AlignItems="AlignItems.Center" Class="rz-mt-4">
+                <RadzenColumn Size="12" SizeMD="12" Style="text-align:center">
+                    <RadzenButton ButtonType="ButtonType.Submit" Text="Salvar Senha"></RadzenButton>
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenStack>
+    </RadzenFieldset>
+</RadzenTemplateForm>
+
+@code {
+
+    SenhaViewModel model = new SenhaViewModel();
+
+    async void OnSubmit(SenhaViewModel model)
+    {
+        var retorno = await Js.InvokeAsync<RetornoViewModel>("trocaSenha", model);
+        if (retorno.Sucesso)
+        {
+            DialogService.Close();
+        }
+        await Js.InvokeVoidAsync("notifica", retorno.Sucesso ? "" : "Erro", retorno.Mensagem, retorno.Sucesso);
+    }
+}

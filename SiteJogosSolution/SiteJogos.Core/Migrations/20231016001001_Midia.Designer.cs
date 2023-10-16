@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SiteJogos.Core.Context;
 
@@ -11,9 +12,10 @@ using SiteJogos.Core.Context;
 namespace SiteJogos.Core.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231016001001_Midia")]
+    partial class Midia
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -155,88 +157,6 @@ namespace SiteJogos.Core.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("UsuarioToken", (string)null);
-                });
-
-            modelBuilder.Entity("SiteJogos.Core.Entities.Jogo", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("Alteracao")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("Excluido")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("Inclusao")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Template")
-                        .HasColumnType("int");
-
-                    b.Property<Guid?>("UsuarioAlteracaoId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UsuarioInclusaoId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UsuarioAlteracaoId");
-
-                    b.HasIndex("UsuarioInclusaoId");
-
-                    b.ToTable("Jogo");
-                });
-
-            modelBuilder.Entity("SiteJogos.Core.Entities.JogoDaMemoriaMidia", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("Alteracao")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("Excluido")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("Inclusao")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("JogoId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("MidiaPrimariaId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("MidiaSecundariaId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("UsuarioAlteracaoId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UsuarioInclusaoId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("JogoId");
-
-                    b.HasIndex("MidiaPrimariaId");
-
-                    b.HasIndex("MidiaSecundariaId");
-
-                    b.HasIndex("UsuarioAlteracaoId");
-
-                    b.HasIndex("UsuarioInclusaoId");
-
-                    b.ToTable("JogoDaMemoriaMidia");
                 });
 
             modelBuilder.Entity("SiteJogos.Core.Entities.Midia", b =>
@@ -404,64 +324,6 @@ namespace SiteJogos.Core.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("SiteJogos.Core.Entities.Jogo", b =>
-                {
-                    b.HasOne("SiteJogos.Core.Entities.Usuario", "UsuarioAlteracao")
-                        .WithMany()
-                        .HasForeignKey("UsuarioAlteracaoId");
-
-                    b.HasOne("SiteJogos.Core.Entities.Usuario", "UsuarioInclusao")
-                        .WithMany()
-                        .HasForeignKey("UsuarioInclusaoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("UsuarioAlteracao");
-
-                    b.Navigation("UsuarioInclusao");
-                });
-
-            modelBuilder.Entity("SiteJogos.Core.Entities.JogoDaMemoriaMidia", b =>
-                {
-                    b.HasOne("SiteJogos.Core.Entities.Jogo", "Jogo")
-                        .WithMany()
-                        .HasForeignKey("JogoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SiteJogos.Core.Entities.Midia", "MidiaPrimaria")
-                        .WithMany()
-                        .HasForeignKey("MidiaPrimariaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SiteJogos.Core.Entities.Midia", "MidiaSecundaria")
-                        .WithMany()
-                        .HasForeignKey("MidiaSecundariaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SiteJogos.Core.Entities.Usuario", "UsuarioAlteracao")
-                        .WithMany()
-                        .HasForeignKey("UsuarioAlteracaoId");
-
-                    b.HasOne("SiteJogos.Core.Entities.Usuario", "UsuarioInclusao")
-                        .WithMany()
-                        .HasForeignKey("UsuarioInclusaoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Jogo");
-
-                    b.Navigation("MidiaPrimaria");
-
-                    b.Navigation("MidiaSecundaria");
-
-                    b.Navigation("UsuarioAlteracao");
-
-                    b.Navigation("UsuarioInclusao");
                 });
 
             modelBuilder.Entity("SiteJogos.Core.Entities.Midia", b =>

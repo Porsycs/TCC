@@ -16,9 +16,9 @@ namespace SiteJogos.Core.Context
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
         public DbSet<Usuario> Usuarios { get; set; }
-        //public DbSet<Template> Templates { get; set; }
-        //public DbSet<TemplateJogoForca> TemplateJogoForca { get; set; }
-        //public DbSet<TemplateJogoMemoria> TemplateJogoMemoria { get; set; }
+        public DbSet<Midia> Midias { get; set; }
+        public DbSet<Jogo> Jogos { get; set; }
+        public DbSet<JogoDaMemoriaMidia> JogoDaMemoriaMidias { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

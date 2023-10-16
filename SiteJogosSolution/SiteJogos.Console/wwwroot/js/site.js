@@ -1,4 +1,8 @@
-﻿function notifica(titulo, mensagem, tema, posicao = 'nfc-bottom-right')
+﻿function sairSistema() {
+    window.location.href = "/Sair";
+}
+
+function notifica(titulo, mensagem, tema, posicao = 'nfc-bottom-right')
 {
     var myNotification = window.createNotification({
         title: titulo,

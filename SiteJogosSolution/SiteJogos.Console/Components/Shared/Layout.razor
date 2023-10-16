@@ -13,38 +13,39 @@
                 @*<RadzenImage Path="/images/Logo_Class_Redondo.png" Style="width: 2rem; height: auto; margin-right: 0.5rem" />*@
                 <RadzenLabel Text="Historiando" />
             </RadzenStack>
-                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
-                    <RadzenButton Variant="Variant.Text" Text="Início" ButtonStyle="ButtonStyle.Warning" Click='() => redirecionaTela("/")' />
-                    @if (usuario == null)
-                    {
-                        <RadzenButton Text="Login" Variant="Variant.Text" ButtonStyle="ButtonStyle.Warning" Click='() => redirecionaTela("/Login")' />
-                        <RadzenButton Text="Cadastre-se" Variant="Variant.Text" ButtonStyle="ButtonStyle.Warning" Click='() => redirecionaTela("/Cadastrar")' />
-                    }
-                    else
-                    {
-                        <RadzenProfileMenu>
-                            <Template>
-                                <RadzenLabel Text="@(usuario.UserName)" Style="margin-right: 0.5rem" />
-                                <RadzenGravatar Email="@(usuario.Email)" />
-                            </Template>
-                            <ChildContent>
-                                @*<RadzenProfileMenuItem Text="Ver Perfil" Path="menu" Icon="account_circle"></RadzenProfileMenuItem>*@
-                                <div @onclick="exibePopupTrocaSenha">
-                                    <RadzenProfileMenuItem Text="Trocar Senha" Icon="lock_reset"></RadzenProfileMenuItem>
-                                </div>
-                                <div @onclick="temaClaro">
-                                    <RadzenProfileMenuItem Visible="!LightMode" Text="Modo Claro" Icon="light_mode"></RadzenProfileMenuItem>
-                                </div>
-                                <div @onclick="temaEscuro">
-                                    <RadzenProfileMenuItem Visible="LightMode" Text="Modo Escuro" Icon="dark_mode" @onclick="temaEscuro"></RadzenProfileMenuItem>
-                                </div>
-                                <div onclick="sairSistema()">
-                                    <RadzenProfileMenuItem Text="Sair" Icon="logout"></RadzenProfileMenuItem>
-                                </div>
-                            </ChildContent>
-                        </RadzenProfileMenu>
-                    }
-                </RadzenStack>
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
+                <RadzenButton Variant="Variant.Text" Text="Início" ButtonStyle="ButtonStyle.Warning" Click='() => redirecionaTela("/")' />
+                @if (usuario == null)
+                {
+                    <RadzenButton Text="Login" Variant="Variant.Text" ButtonStyle="ButtonStyle.Warning" Click='() => redirecionaTela("/Login")' />
+                    <RadzenButton Text="Cadastre-se" Variant="Variant.Text" ButtonStyle="ButtonStyle.Warning" Click='() => redirecionaTela("/Cadastrar")' />
+                }
+                else
+                {
+                    <RadzenButton Text="Meus Jogos" ButtonStyle="ButtonStyle.Warning" Click='() => redirecionaTela("/Login")' />
+                    <RadzenProfileMenu>
+                        <Template>
+                            <RadzenLabel Text="@(usuario.UserName)" Style="margin-right: 0.5rem" />
+                            <RadzenGravatar Email="@(usuario.Email)" />
+                        </Template>
+                        <ChildContent>
+                            @*<RadzenProfileMenuItem Text="Ver Perfil" Path="menu" Icon="account_circle"></RadzenProfileMenuItem>*@
+                            <div @onclick="exibePopupTrocaSenha">
+                                <RadzenProfileMenuItem Text="Trocar Senha" Icon="lock_reset"></RadzenProfileMenuItem>
+                            </div>
+                            <div @onclick="temaClaro">
+                                <RadzenProfileMenuItem Visible="!LightMode" Text="Modo Claro" Icon="light_mode"></RadzenProfileMenuItem>
+                            </div>
+                            <div @onclick="temaEscuro">
+                                <RadzenProfileMenuItem Visible="LightMode" Text="Modo Escuro" Icon="dark_mode" @onclick="temaEscuro"></RadzenProfileMenuItem>
+                            </div>
+                            <div onclick="sairSistema()">
+                                <RadzenProfileMenuItem Text="Sair" Icon="logout"></RadzenProfileMenuItem>
+                            </div>
+                        </ChildContent>
+                    </RadzenProfileMenu>
+                }
+            </RadzenStack>
         </RadzenStack>
     </RadzenHeader>
     <RadzenBody>
@@ -81,6 +82,7 @@
 
     async void exibePopupTrocaSenha()
     {
+        await DialogService.OpenAsync<SiteJogos.Console.Components.Autenticacao.TrocaSenha>("Trocar Senha", null, new DialogOptions() { Width = "400px", Height = "auto", Resizable = false, Draggable = false });
     }
 
     async void redirecionaTela(string url)
