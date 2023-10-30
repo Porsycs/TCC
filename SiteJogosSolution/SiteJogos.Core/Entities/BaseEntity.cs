@@ -6,7 +6,7 @@ namespace SiteJogos.Core.Entities
     public class BaseEntity
     {
         [Key]
-        public Guid Id { get; set; } = new Guid();
+        public Guid Id { get; set; } = Guid.NewGuid();
         public bool Excluido { get; set; } = false;
         public DateTime Inclusao { get; set; } = DateTime.Now;
         public DateTime? Alteracao { get; set; }

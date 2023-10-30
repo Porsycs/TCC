@@ -1,0 +1,60 @@
+﻿@inject IJSRuntime JS;
+@inject DialogService DialogService;
+
+<RadzenTemplateForm TItem="JogoDaMemoriaMidia" Data=@midia Submit="OnSubmit">
+    <RadzenRow Class="rz-mt-4">
+        <RadzenColumn Size="12" SizeMD="6">
+            <RadzenFieldset Text="Imagem 1">
+                <RadzenStack Gap="1rem" Class="rz-p-4 rz-p-md-12" Style="padding: 0 !important">
+                    <RadzenFileInput @bind-Value=@midia.MidiaPrimaria.Url @bind-FileName=@midia.MidiaPrimaria.Nome Accept="image/*" TValue="string" class="w-100" ChooseText="Selecione" Placeholder="Selecione a Imagem" />
+                </RadzenStack>
+            </RadzenFieldset>
+        </RadzenColumn>
+        <RadzenColumn Size="12" SizeMD="6">
+            <RadzenFieldset Text="Imagem 2">
+                <RadzenStack Gap="1rem" Class="rz-p-4 rz-p-md-12" Style="padding: 0 !important">
+                    <RadzenFileInput @bind-Value=@midia.MidiaSecundaria.Url @bind-FileName=@midia.MidiaSecundaria.Nome Accept="image/*" TValue="string" class="w-100" ChooseText="Selecione" Placeholder="Selecione a Imagem" />
+                </RadzenStack>
+            </RadzenFieldset>
+        </RadzenColumn>
+    </RadzenRow>
+    <RadzenRow AlignItems="AlignItems.Center" Class="rz-mt-4">
+        <RadzenColumn Size="12" SizeMD="12" Style="text-align:center">
+            <RadzenButton ButtonType="ButtonType.Button" ButtonStyle="ButtonStyle.Danger" Text="Cancelar" Click="EscondePopup"></RadzenButton>
+            <RadzenButton ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Success" Text="Salvar"></RadzenButton>
+        </RadzenColumn>
+    </RadzenRow>
+</RadzenTemplateForm>
+
+@code {
+
+    [Parameter]
+    public Components.Jogo.JogoDaMemoria jogoDaMemoria { get; set; }
+
+    public JogoDaMemoriaMidia midia { get; set; } = new JogoDaMemoriaMidia() { MidiaPrimaria = new Midia(), MidiaSecundaria = new Midia() };
+
+    void EscondePopup()
+    {
+        DialogService.Close();
+    }
+
+    async void OnSubmit()
+    {
+        if(midia.MidiaPrimaria.Url == null || midia.MidiaSecundaria.Url == null)
+        {
+            await JS.InvokeVoidAsync("notifica", "Erro", "Insira as imagens da carta para salvar", "error");
+            return;
+        }
+
+        midia.JogoId = jogoDaMemoria.jogo.Id;
+        midia.MidiaPrimariaId = midia.MidiaPrimaria.Id;
+        midia.MidiaPrimaria.Arquivo = Convert.FromBase64String(midia.MidiaPrimaria.Url.Split(";base64,")[1]);
+        midia.MidiaSecundariaId = midia.MidiaSecundaria.Id;
+        midia.MidiaSecundaria.Arquivo = Convert.FromBase64String(midia.MidiaSecundaria.Url.Split(";base64,")[1]);
+
+        jogoDaMemoria.midias.Add(midia);
+        jogoDaMemoria.grid.Reset(true);
+
+        EscondePopup();
+    }
+}

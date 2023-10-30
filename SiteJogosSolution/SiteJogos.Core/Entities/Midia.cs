@@ -15,6 +15,9 @@ namespace SiteJogos.Core.Entities
         public string Nome { get; set; }
 
         [NotMapped]
+        public string Url { get; set; }
+
+        [NotMapped]
         public string Extensao
         {
             get

@@ -1,0 +1,11 @@
+﻿@model Jogo
+@{
+    ViewData["Title"] = Model == null ? "Novo Jogo" : "Editar";
+}
+
+<component type="typeof(SiteJogos.Console.Components.Jogo.Criar)" render-mode="Server" />
+
+@if(Model == null)
+{
+    <component type="typeof(SiteJogos.Console.Components.Jogo.JogoDaMemoria)" render-mode="Server" />
+}

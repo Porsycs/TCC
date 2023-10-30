@@ -8,7 +8,7 @@ namespace SiteJogos.Core.Services.Repository
 {
     public class CommonRepository<T> : ICommonRepository<T> where T : BaseEntity
     {
-        private readonly ApplicationDbContext _dbContext;
+        protected readonly ApplicationDbContext _dbContext;
         private readonly DbSet<T> _dbSet;
         private readonly IConfiguration _configuration;
 

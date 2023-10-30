@@ -48,8 +48,8 @@ builder.Services.AddAuthorization(auth =>
 #region Interfaces
 builder.Services.AddSingleton(typeof(ICommonRepository<>), typeof(CommonRepository<>));
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<IJogoRepository, JogoRepository>();
 #endregion
-
 
 builder.Services.AddScoped<DialogService>();
 builder.Services.AddScoped<NotificationService>();

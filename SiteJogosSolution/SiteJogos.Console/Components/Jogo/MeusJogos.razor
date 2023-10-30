@@ -1,8 +1,73 @@
-﻿<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween" AlignItems="AlignItems.Center">
+﻿@inject IJSRuntime JS;
+@inject DialogService DialogService;
+
+<style>
+    .card-home:hover {
+        background-color: var(--rz-secondary) !important;
+        cursor: pointer !important;
+    }
+</style>
+
+<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween" AlignItems="AlignItems.Center">
     <RadzenLabel><h4>Meus Jogos</h4></RadzenLabel>
-    <RadzenButton Text="+ Novo Jogo" ButtonStyle="ButtonStyle.Secondary" />
+    <RadzenButton Text="+ Novo Jogo" ButtonStyle="ButtonStyle.Secondary" Click="RedirecionaNovoJogo" />
 </RadzenStack>
 
+<RadzenTabs TabPosition="@TabPosition.TopRight" RenderMode="TabRenderMode.Server" Style="margin-top: 1rem">
+    <Tabs>
+        <RadzenTabsItem Text="Lista" Icon="list">
+            <RadzenDataList AllowVirtualization=false WrapItems="true" AllowPaging="@true" Data="@Jogos" TItem="Jogo" PageSize="5" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true" IsLoading=@isLoading LoadData="@LoadData" Style="height: calc(100vh - 20rem)">
+                <Template Context="jogo">
+                    <RadzenCard Style="width: 33%;" Class="rz-border-radius-3 text-center card-home">
+                        <RadzenIcon Icon="@jogo.IconeJogo" Style="font-size: 2.5rem; color: var(--rz-text-color)" />
+                        <RadzenText TextStyle="TextStyle.Subtitle1">@jogo.Nome</RadzenText>
+                    </RadzenCard>
+                </Template>
+            </RadzenDataList>
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Grade" Icon="grid_view">
+            <RadzenDataGrid @ref="grid" AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="true" EmptyText="Nenhum Jogo Encontrado!" IsLoading=@isLoading LoadData="@LoadData" Count="@count" Data="@Jogos" TItem="Jogo" ColumnWidth="300px" Responsive="true" LogicalFilterOperator="LogicalFilterOperator.And" Style="height: calc(100vh - 20rem)">
+                <Columns>
+                    <RadzenDataGridColumn TItem="Jogo" Property="Nome" Title="Nome" Filterable="true" Sortable="true" FilterOperator="FilterOperator.StartsWith">
+                        <FooterTemplate>
+                            <b>@count</b> Registros
+                        </FooterTemplate>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="Jogo" Property="TemplateDescricao" Title="Tipo" FilterOperator="FilterOperator.StartsWith" />
+                    <RadzenDataGridColumn TItem="Jogo" Property="Inclusao" Title="Dt. Inclusão" SortOrder="SortOrder.Descending" />
+                    <RadzenDataGridColumn TItem="Jogo" Property="Alteracao" Title="Dt. Alteração" />
+                </Columns>
+            </RadzenDataGrid>
+        </RadzenTabsItem>
+    </Tabs>
+</RadzenTabs>
+
 @code {
+
+    IEnumerable<Jogo> Jogos = new List<Jogo>();
+    RadzenDataGrid<Jogo> grid;
+    int count;
+    bool isLoading;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        Jogos = await JS.InvokeAsync<IEnumerable<Jogo>>("getDados", "/Jogo/Get");
+    }
+
+    async Task LoadData(LoadDataArgs args)
+    {
+        isLoading = true;
+        // Update the Data property
+        Jogos = await JS.InvokeAsync<IEnumerable<Jogo>>("getDados", "/Jogo/Get");
+        // Update the count
+        count = Jogos.Count();
+        isLoading = false;
+    }
+
+    void RedirecionaNovoJogo()
+    {
+        JS.InvokeVoidAsync("redirecionaTela", "/NovoJogo");
+    }
 
 }

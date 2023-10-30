@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -16,8 +17,34 @@ namespace SiteJogos.Core.Entities
 
         public enum EnumTemplate
         {
+            [Description("Jogo da Memória")]
             JogoDaMemoria = 0,
+
+            [Description("Forca")]
             Forca = 1,
+        }
+
+        [NotMapped]
+        public string TemplateDescricao
+        {
+            get
+            {
+                return Common.GetEnumDescription(Template);
+            }
+        } 
+
+        [NotMapped]
+        public string IconeJogo
+        {
+            get
+            {
+                switch(Template)
+                {
+                    case EnumTemplate.JogoDaMemoria: return "cards";
+                    case EnumTemplate.Forca: return "table_lamp";
+                    default: return "";
+                }
+            }
         }
     }
 }
