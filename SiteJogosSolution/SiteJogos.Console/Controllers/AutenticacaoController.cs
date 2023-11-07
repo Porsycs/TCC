@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using SiteJogos.Core.Entities;
 using SiteJogos.Core.Entities.ViewModel;
 using SiteJogos.Core.Services.Interface;
+using System.Globalization;
+using System.Reflection;
+using System.Resources;
 
 namespace SiteJogos.Console.Controllers
 {
@@ -155,9 +158,28 @@ namespace SiteJogos.Console.Controllers
                             Mensagem = "Usuário cadastrado com sucesso!"
                         };
                     }
+                    
+                    
+                    else
+                    {
+                        //ResourceManager rm = new("SiteJogos.Core.Resources.ErrorMessages", Assembly.GetExecutingAssembly());
+                        var listaErros = new List<string>();
+                        foreach (var erro in result.Errors.ToList())
+                        {   
+                            //string translatedError = rm.GetString(erro.Code, new CultureInfo("pt-BR"));
+                            listaErros.Add(erro.Description);
+                        }
+                        var erroMensagem = string.Join(";", listaErros);
+                        return new RetornoViewModel
+                        {
+                            Sucesso = false,
+                            Titulo = "Atenção!",
+                            Codigo = "warning",
+                            Mensagem = $"{erroMensagem}"
+                        };
+                    }
                 }
-
-                throw new Exception("Falha ao cadastrar");
+                throw new Exception();
             }
             catch (Exception)
             {

@@ -15,7 +15,7 @@ function notifica(titulo, mensagem, tema, posicao = 'nfc-bottom-right')
         title: titulo,
         message: mensagem,
         theme: tema, //success, info, warning, error, and none
-        positionClass: posicao
+        positionClass: posicao,
     });
 }
 
