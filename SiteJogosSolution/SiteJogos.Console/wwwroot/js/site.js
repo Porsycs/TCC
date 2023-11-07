@@ -2,19 +2,21 @@
     window.location.href = "/Sair";
 }
 
-function notifica(titulo, mensagem, tema, posicao = 'nfc-bottom-right')
+function notifica(titulo, mensagem, tema, duracao = 3500, posicao = 'nfc-bottom-right')
 {
     var myNotification = window.createNotification({
         title: titulo,
         message: mensagem,
         theme: tema, //success, info, warning, error, and none
-        positionClass: posicao
+        showDuration: duracao,
+        positionClass: posicao,
     });
 
     myNotification({
         title: titulo,
         message: mensagem,
         theme: tema, //success, info, warning, error, and none
+        showDuration: duracao,
         positionClass: posicao,
     });
 }

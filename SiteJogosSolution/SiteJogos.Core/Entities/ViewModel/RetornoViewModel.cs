@@ -12,5 +12,6 @@ namespace SiteJogos.Core.Entities.ViewModel
         public string? Titulo { get; set; }
         public string? Mensagem { get; set; }
         public string? Codigo { get; set; }
+        public int? Duracao { get; set; }
     }
 }

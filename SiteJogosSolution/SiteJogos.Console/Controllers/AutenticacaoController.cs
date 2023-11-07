@@ -175,7 +175,8 @@ namespace SiteJogos.Console.Controllers
                             Sucesso = false,
                             Titulo = "Atenção!",
                             Codigo = "warning",
-                            Mensagem = $"{erroMensagem}"
+                            Mensagem = $"{erroMensagem}",
+                            Duracao = 10000
                         };
                     }
                 }

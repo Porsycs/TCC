@@ -81,7 +81,7 @@
         else
         {
             await JsRuntime.InvokeVoidAsync("escondeLoadPanel");
-            await JsRuntime.InvokeVoidAsync("notifica", retorno.Titulo, retorno.Mensagem, retorno.Codigo);
+            await JsRuntime.InvokeVoidAsync("notifica", retorno.Titulo, retorno.Mensagem, retorno.Codigo, retorno.Duracao);
         }
     }
 
