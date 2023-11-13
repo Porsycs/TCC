@@ -77,10 +77,9 @@ namespace SiteJogos.Core.Services.Repository
             }
         }
 
-        public bool VerificaUsuarios()
+        public bool VerificaUsuarios(Guid Id, string email)
         {
-            return true;
-            //return _dbContext.Usuarios.Any();
+            return _dbContext.Usuarios.Any(a => a.Id != Id && a.Email == email);
         }
 
         private static bool IsValidEmail(string email)

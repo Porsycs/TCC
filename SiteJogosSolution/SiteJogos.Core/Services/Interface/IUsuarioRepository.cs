@@ -13,7 +13,7 @@ namespace SiteJogos.Core.Services.Interface
         Usuario GetById(Guid id);
         void InsertOrReplace(Usuario usuario);
         void Delete(Guid id);
-        bool VerificaUsuarios();
+        bool VerificaUsuarios(Guid Id, string email);
         bool EmailRecuperaSenha(string email);
     }
 }

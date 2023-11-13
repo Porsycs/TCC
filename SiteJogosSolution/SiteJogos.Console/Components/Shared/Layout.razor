@@ -24,7 +24,14 @@
                     <RadzenProfileMenu>
                         <Template>
                             <RadzenLabel Text="@(usuario.UserName)" Style="margin-right: 0.5rem" />
-                            <RadzenGravatar Email="@(usuario.Email)" />
+                            @if (usuario.MidiaId.HasValue)
+                            {
+                                <RadzenImage Path="@($"/Midia/GetMidia?Id={usuario.MidiaId}")" class="rz-gravatar" />
+                            }
+                            else
+                            {
+                                <RadzenGravatar Email="@(usuario.Email)" />
+                            }
                         </Template>
                         <ChildContent>
                             <div onclick='redirecionaTela("/Perfil")'>

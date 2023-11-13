@@ -35,9 +35,8 @@
     </RadzenBreadCrumb>
 </RadzenStack>
 
-@*<RadzenCard Class="rz-shadow-0 rz-border-radius-0 rz-p-12" Style="margin-top: 1.5rem; background-color: var(--rz-header-background-color); color: var(--rz-header-color)">*@
 <div style="display: flex; justify-content: center; width: 100%">
-    <RadzenTemplateForm TItem="Usuario" Data="@usuario" Style="margin-top: 1.5rem; border-radius: 25px; width: 100%; max-width: 35rem; background-color: var(--rz-header-background-color); color: var(--rz-header-color)">
+    <RadzenTemplateForm TItem="Usuario" Data="@usuario" Submit=@OnSubmit Style="margin-top: 1.5rem; border-radius: 25px; width: 100%; max-width: 35rem; background-color: var(--rz-header-background-color); color: var(--rz-header-color)">
         <RadzenFieldset Style="border: none; border-radius: 0px">
             <RadzenStack Gap="1rem" Class="rz-p-4 rz-p-md-12" Style="padding: 0 !important">
                 <RadzenRow AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" RowGap="0.25rem">
@@ -86,6 +85,17 @@
     public string? fileName { get; set; } = null;
     public string? base64 { get; set; } = null;
 
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        if (usuario.MidiaId.HasValue)
+        {
+            mostraAvatar = false;
+            mostraFoto = true;
+            path = $"/Midia/GetMidia?Id={usuario.MidiaId}";
+        }
+    }
+
     public void CompleteUpload(UploadCompleteEventArgs args)
     {
         var result = Newtonsoft.Json.Linq.JObject.Parse(args.JsonResponse.RootElement.ToString());
@@ -103,21 +113,15 @@
         {
             var dados = new
             {
-                values = Newtonsoft.Json.JsonConvert.SerializeObject(new
-                {
-                    Nome = usuario.Nome,
-                    Email = usuario.Email
-                }),
+                nome = usuario.Nome,
+                email = usuario.Email,
                 fileName,
                 base64
             };
-
+            await JS.InvokeVoidAsync("exibeLoadPanel");
             var retorno = await JS.InvokeAsync<RetornoViewModel>("getDados", "/Usuario/Put", dados, "PUT");
-            await JS.InvokeVoidAsync("notifica", retorno.Sucesso ? "" : "Erro", retorno.Mensagem, retorno.Sucesso);
-            if (retorno.Sucesso)
-            {
-                DialogService.Close();
-            }
+            await JS.InvokeVoidAsync("escondeLoadPanel");
+            await JS.InvokeVoidAsync("notifica", retorno.Titulo, retorno.Mensagem, retorno.Codigo);
         }
     }
 }
