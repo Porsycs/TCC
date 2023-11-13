@@ -22,7 +22,7 @@ namespace SiteJogos.Console.Controllers
             _midiaRepository = midiaRepository;
         }
 
-        [HttpPut]
+        [HttpPost]
         [Authorize]
         public RetornoViewModel Put(string nome, string email, string? fileName = null, string? base64 = null)
         {

@@ -4,3 +4,31 @@
 }
 
 <component type="typeof(SiteJogos.Console.Components.Home.Perfil)" render-mode="Server" param-usuario="Model" />
+
+<script>
+    function salvarPefil(nome, email, fileName, base64) {
+        let dadosRetorno = null;
+
+        let formData = new FormData();
+        formData.append("nome", nome)
+        formData.append("email", email)
+        formData.append("fileName", fileName)
+        formData.append("base64", base64)
+
+        $.ajax({
+            method: "POST",
+            url: "@(Url.Action("Put", "Usuario"))",
+            data: formData,
+            dataType: "json",
+            processData: false,
+            contentType: false,
+            async: false,
+            success: function (data) {
+                dadosRetorno = data;
+            },
+            error: function (e) {
+            }
+        });
+        return dadosRetorno;
+    }
+</script>
