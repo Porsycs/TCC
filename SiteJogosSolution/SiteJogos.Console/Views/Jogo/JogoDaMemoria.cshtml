@@ -1,67 +1,64 @@
-﻿@{
-    var cartasMemoria = new List<CartasMemoria>
-{
-               new CartasMemoria {dataNome = "torre-eifel", nomeCarta = "/images/JogoDaMemoria/torre-eiffel.png", nomeVerso = "/images/interrogacao.png"},
-               new CartasMemoria {dataNome = "torre-eifel", nomeCarta ="/images/JogoDaMemoria/torre-eiffel-descricao.png", nomeVerso = "/images/interrogacao.png"},
-               new CartasMemoria {dataNome = "piramide", nomeCarta ="/images/JogoDaMemoria/piramide.png", nomeVerso = "/images/interrogacao.png"},
-               new CartasMemoria {dataNome = "piramide", nomeCarta ="/images/JogoDaMemoria/piramide-descricao.png", nomeVerso = "/images/interrogacao.png"},
-               new CartasMemoria {dataNome = "coliseu", nomeCarta ="/images/JogoDaMemoria/coliseu.png", nomeVerso = "/images/interrogacao.png"},
-               new CartasMemoria {dataNome = "coliseu", nomeCarta ="/images/JogoDaMemoria/coliseu-descricao.png", nomeVerso = "/images/interrogacao.png"},
-               new CartasMemoria {dataNome = "estatua-liberdade", nomeCarta ="/images/JogoDaMemoria/estatua-liberdade.png", nomeVerso = "/images/interrogacao.png"},
-               new CartasMemoria {dataNome = "estatua-liberdade", nomeCarta ="/images/JogoDaMemoria/estatua-liberdade-descricao.png", nomeVerso = "/images/interrogacao.png"},
-               new CartasMemoria {dataNome = "cristo-redentor", nomeCarta ="/images/JogoDaMemoria/cristo-redentor.png", nomeVerso = "/images/interrogacao.png"},
-               new CartasMemoria {dataNome = "cristo-redentor", nomeCarta ="/images/JogoDaMemoria/cristo-redentor-descricao.png", nomeVerso = "/images/interrogacao.png"},
-               new CartasMemoria {dataNome = "torre-pisa", nomeCarta ="/images/JogoDaMemoria/torre-pisa.png", nomeVerso = "/images/interrogacao.png"},
-               new CartasMemoria {dataNome = "torre-pisa", nomeCarta ="/images/JogoDaMemoria/torre-pisa-descricao.png", nomeVerso = "/images/interrogacao.png"}
-    };
+﻿@model Jogo
+@{
+    Layout = "";
+    var midias = (List<JogoDaMemoriaMidia>)ViewBag.Midias;
 }
-<link rel="shortcut icon" href="https://image.flaticon.com/icons/svg/3132/3132772.svg" type="image/x-icon" />
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="/js/JogoDaMemoria.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400&display=swap" rel="stylesheet" />
-<link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="~/css/JogoDaMemoria/main.css" />
-<link rel="stylesheet" href="~/css/JogoDaMemoria/card.css" />
-<link rel="stylesheet" href="~/css/JogoDaMemoria/win.css" /><!--Estilo da tela de vitória-->
-<link rel="stylesheet" href="~/css/JogoDaMemoria/responsive.css" />
 
-<!--ALTERAÇÃO* Essa div vai ser exibida quando o jogador vencer a partida!-->
-<div id="vitoria">
-    <div id="container">
-        <h1>Parabéns!</h1>
-        <p>Você encontrou todos os pares com</p>
-        <h2><span id="movimentosvitoria">0</span> ERROS</h2>
-        <a href="/Jogo">Jogar denovo</a>
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <link rel="shortcut icon" href="https://image.flaticon.com/icons/svg/3132/3132772.svg" type="image/x-icon" />
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="/js/JogoDaMemoria.js"></script>
+        <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet" />
+        <link rel="stylesheet" href="~/css/JogoDaMemoria/main.css" />
+        <link rel="stylesheet" href="~/css/JogoDaMemoria/card.css" />
+        <link rel="stylesheet" href="~/css/JogoDaMemoria/win.css" /><!--Estilo da tela de vitória-->
+        <link rel="stylesheet" href="~/css/JogoDaMemoria/responsive.css" />
+    </head>
+<body>
+    <h1>@Model.Nome</h1>
+    <!--ALTERAÇÃO* Essa div vai ser exibida quando o jogador vencer a partida!-->
+    <div id="vitoria">
+        <div id="container">
+            <h1>Parabéns!</h1>
+            <p>Você encontrou todos os pares com</p>
+            <h2><span id="movimentosvitoria">0</span> ERROS</h2>
+            <a href="/Jogo">Jogar denovo</a>
+        </div>
     </div>
-</div>
-<!--FIM-ALTERAÇÃO*-->
-<section id="responsivo">
-    <h2>Erros <span id="movimentos2">0</span></h2>
+    <!--FIM-ALTERAÇÃO*-->
+    <!--<section id="responsivo">
+        <h2>Erros <span id="movimentos2">0</span></h2>-->
     <!-- <button id="btn-mudartema">Mudar tema</button>
         <button id="btn-reiniciar">Reiniciar</button> -->
-    <a href="/Jogo">Reiniciar</a>
-</section>
+    <!--<a href="/Jogo">Reiniciar</a>
+    </section>-->
 
-<div class="corpo">
-    <section id="esq">
-        <h2>Erros <span id="movimentos">0</span></h2>
+    <div class="corpo">
+        <!--<section id="esq">
+            <h2>Erros <span id="movimentos">0</span></h2>-->
         <!-- <button id="btn-mudartema">Mudar tema</button>
             <button id="btn-reiniciar">Reiniciar</button> -->
-        <a href="/Jogo">Reiniciar</a>
-    </section>
-    <section class="jogo">
-        @foreach (var itens in cartasMemoria)
-        {
-            <div class="card" data-nome=@itens.dataNome>
-                <img class="frente"
-                     src=@itens.nomeCarta
-                     alt="card" />
-                <img class="verso"
-                     src=@itens.nomeVerso
-                     alt="card" />
-            </div>
-        }
-    </section>
+        <!--<a href="/Jogo">Reiniciar</a>
+        </section>-->
+        <section class="jogo">
+            @foreach (var carta in midias)
+            {
+                <div class="card" data-nome="@midias.IndexOf(carta)">
+                    <img class="frente" src="@(Url.Action("GetMidia", "Midia"))?id=@(carta.MidiaPrimariaId)" alt="card" />
+                    <img class="verso" src="/images/interrogacao.png" alt="card" />
+                </div>
 
-    <section id="dir"></section>
-</div>
+                <div class="card" data-nome="@midias.IndexOf(carta)">
+                    <img class="frente" src="@(Url.Action("GetMidia", "Midia"))?id=@(carta.MidiaSecundariaId)" alt="card" />
+                    <img class="verso" src="/images/interrogacao.png" alt="card" />
+                </div>
+            }
+        </section>
+
+        <section id="dir"></section>
+    </div>
+</body>
+</html>

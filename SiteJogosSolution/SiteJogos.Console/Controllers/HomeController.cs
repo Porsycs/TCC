@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using SiteJogos.Core.Entities;
 using SiteJogos.Core.Entities.ViewModel;
 
 namespace SiteJogos.Console.Controllers
@@ -6,10 +9,12 @@ namespace SiteJogos.Console.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly UserManager<Usuario> _userManager;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, UserManager<Usuario> userManager)
         {
             _logger = logger;
+            _userManager = userManager;
         }
 
         [Route("/")]
@@ -32,6 +37,13 @@ namespace SiteJogos.Console.Controllers
         public IActionResult Jogo()
         {
             return View();
+        }
+
+        [Route("/Perfil")]
+        [Authorize]
+        public IActionResult Perfil()
+        {
+            return View(_userManager.GetUserAsync(User).Result);
         }
 
         public IActionResult Privacy()

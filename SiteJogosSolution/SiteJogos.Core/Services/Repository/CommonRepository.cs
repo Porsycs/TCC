@@ -76,7 +76,9 @@ namespace SiteJogos.Core.Services.Repository
             {
                 try
                 {
-                    _dbSet.Remove(result);
+                    result.Excluido = true;
+                    result.Alteracao = DateTime.Now;
+                    _dbContext.Set<T>().Update(result);
                     _dbContext.SaveChanges();
                 }
                 catch (Exception)

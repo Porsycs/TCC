@@ -3,7 +3,6 @@
 
 <style>
     .card-home:hover {
-        background-color: var(--rz-secondary) !important;
         cursor: pointer !important;
     }
 </style>
@@ -16,10 +15,10 @@
 <RadzenTabs TabPosition="@TabPosition.TopRight" RenderMode="TabRenderMode.Server" Style="margin-top: 1rem">
     <Tabs>
         <RadzenTabsItem Text="Lista" Icon="list">
-            <RadzenDataList AllowVirtualization=false WrapItems="true" AllowPaging="@true" Data="@Jogos" TItem="Jogo" PageSize="5" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true" IsLoading=@isLoading LoadData="@LoadData" Style="height: calc(100vh - 20rem)">
+            <RadzenDataList @ref="list" AllowVirtualization=false WrapItems="true" AllowPaging="@true" Data="@Jogos" TItem="Jogo" PageSize="5" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true" IsLoading=@isLoading LoadData="@LoadData" Style="height: calc(100vh - 20rem);width: 100%">
                 <Template Context="jogo">
-                    <RadzenCard Style="width: 33%;" Class="rz-border-radius-3 text-center card-home">
-                        <RadzenIcon Icon="@jogo.IconeJogo" Style="font-size: 2.5rem; color: var(--rz-text-color)" />
+                    <RadzenCard Class="rz-border-radius-3 text-center card-home">
+                        <RadzenIcon Icon="@(jogo.IconeJogo)" Style="font-size: 2.5rem; color: var(--rz-text-color)" />
                         <RadzenText TextStyle="TextStyle.Subtitle1">@jogo.Nome</RadzenText>
                     </RadzenCard>
                 </Template>
@@ -28,6 +27,13 @@
         <RadzenTabsItem Text="Grade" Icon="grid_view">
             <RadzenDataGrid @ref="grid" AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="true" EmptyText="Nenhum Jogo Encontrado!" IsLoading=@isLoading LoadData="@LoadData" Count="@count" Data="@Jogos" TItem="Jogo" ColumnWidth="300px" Responsive="true" LogicalFilterOperator="LogicalFilterOperator.And" Style="height: calc(100vh - 20rem)">
                 <Columns>
+                    <RadzenDataGridColumn TItem="Jogo" Context="Id" Filterable="false" Sortable="false" TextAlign="TextAlign.Right" Frozen="true" Width="150px" Resizable="false">
+                        <Template Context="Id">
+                            <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="play_arrow" Variant="Variant.Flat" Size="ButtonSize.Medium" title="Jogar" Click="(args => Jogar(Id))" />
+                            <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="edit" Variant="Variant.Flat" Size="ButtonSize.Medium" title="Editar" />
+                            <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Click="(args => Delete(Id))" class="my-1 ms-1" title="Remover" />
+                        </Template>
+                    </RadzenDataGridColumn>
                     <RadzenDataGridColumn TItem="Jogo" Property="Nome" Title="Nome" Filterable="true" Sortable="true" FilterOperator="FilterOperator.StartsWith">
                         <FooterTemplate>
                             <b>@count</b> Registros
@@ -46,6 +52,7 @@
 
     IEnumerable<Jogo> Jogos = new List<Jogo>();
     RadzenDataGrid<Jogo> grid;
+    RadzenDataList<Jogo> list;
     int count;
     bool isLoading;
 
@@ -53,6 +60,7 @@
     {
         await base.OnInitializedAsync();
         Jogos = await JS.InvokeAsync<IEnumerable<Jogo>>("getDados", "/Jogo/Get");
+        await list.Reload();
     }
 
     async Task LoadData(LoadDataArgs args)
@@ -65,9 +73,26 @@
         isLoading = false;
     }
 
+    async Task Delete(Jogo jogo)
+    {
+        var popupConfirma = await DialogService.Confirm($"Deseja mesmo deletar este jogo?", "Deletar Jogo", new ConfirmOptions() { OkButtonText = "Sim", CancelButtonText = "Não" });
+        if (popupConfirma == true)
+        {
+            var retorno = await JS.InvokeAsync<RetornoViewModel>("getDados", "/Jogo/Delete", new { key = jogo.Id }, "DELETE");
+            await JS.InvokeVoidAsync("notifica", retorno.Sucesso ? "" : "Erro", retorno.Mensagem, retorno.Sucesso);
+            grid.ResetLoadData();
+            await list.Reload();
+        }
+    }
+
     void RedirecionaNovoJogo()
     {
         JS.InvokeVoidAsync("redirecionaTela", "/NovoJogo");
+    }
+
+    void Jogar(Jogo jogo)
+    {
+        JS.InvokeVoidAsync("jogar", jogo.Id);
     }
 
 }

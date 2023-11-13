@@ -1,0 +1,123 @@
+﻿@inject IJSRuntime JS;
+@inject DialogService DialogService;
+
+<style>
+    .icone {
+        height: 12rem !important;
+        width: 12rem !important;
+    }
+
+    .rz-fileupload-buttonbar {
+        background-color: transparent;
+    }
+
+    .rz-fileupload-content {
+        display: none !important;
+    }
+
+    .rz-fileupload-choose {
+        background-color: var(--rz-warning) !important;
+        color: var(--rz-on-warning) !important;
+        width: 2rem !important;
+        height: 2rem !important;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 20px;
+    }
+</style>
+
+<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween" AlignItems="AlignItems.Center">
+    <RadzenLabel><h4>Meu Perfil</h4></RadzenLabel>
+    <RadzenBreadCrumb>
+        <RadzenBreadCrumbItem Path="/" Text="Home" Icon="home" />
+        <RadzenBreadCrumbItem Text="Perfil" Icon="account_circle" />
+    </RadzenBreadCrumb>
+</RadzenStack>
+
+@*<RadzenCard Class="rz-shadow-0 rz-border-radius-0 rz-p-12" Style="margin-top: 1.5rem; background-color: var(--rz-header-background-color); color: var(--rz-header-color)">*@
+<div style="display: flex; justify-content: center; width: 100%">
+    <RadzenTemplateForm TItem="Usuario" Data="@usuario" Style="margin-top: 1.5rem; border-radius: 25px; width: 100%; max-width: 35rem; background-color: var(--rz-header-background-color); color: var(--rz-header-color)">
+        <RadzenFieldset Style="border: none; border-radius: 0px">
+            <RadzenStack Gap="1rem" Class="rz-p-4 rz-p-md-12" Style="padding: 0 !important">
+                <RadzenRow AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" RowGap="0.25rem">
+                    <RadzenColumn Size="12" SizeMD="12" Style="width: 100%; text-align: center;">
+                        <div style="width: 100%">
+                            <RadzenUpload Url="upload/single" Accept="image/*" Icon="photo_camera" ChooseText="" Complete=@CompleteUpload Style="border-radius: 20px; position: relative; left: 4rem; top: 3rem;"></RadzenUpload>
+                        </div>
+                        <RadzenImage Path="@path" class="rz-gravatar icone" Visible="@mostraFoto" /> 
+                        <RadzenGravatar Email="@(usuario.Email)" class="icone" Visible="@mostraAvatar" />
+                    </RadzenColumn>
+                </RadzenRow>
+                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem" Style="margin-top: 2rem">
+                    <RadzenColumn Size="12" SizeMD="12">
+                        <RadzenLabel Text="Nome" />
+                        <RadzenTextBox Name="Nome" @bind-Value=@usuario.Nome Style="display: block; width: 100%" MaxLength="100" AutoComplete="false" />
+                        <RadzenRequiredValidator Component="Nome" Text="Nome é de Preenchimento Obrigatório" Popup="true" Style="position: absolute" />
+                    </RadzenColumn>
+                </RadzenRow>
+                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                    <RadzenColumn Size="12" SizeMD="12">
+                        <RadzenLabel Text="E-mail" />
+                        <RadzenTextBox Name="Email" @bind-Value=@usuario.Email Style="display: block; width: 100%" MaxLength="100" AutoComplete="false" />
+                        <RadzenRequiredValidator Component="Email" Text="E-mail é de Preenchimento Obrigatório" Popup="true" Style="position: absolute" />
+                        <RadzenEmailValidator Component="Email" Text="Insira um e-mail válido" Popup="true" Style="position: absolute" />
+                    </RadzenColumn>
+                </RadzenRow>
+                <RadzenRow AlignItems="AlignItems.Center" Class="rz-mt-4">
+                    <RadzenColumn Size="12" SizeMD="12" Style="text-align:center">
+                        <RadzenButton ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Success" Text="Salvar"></RadzenButton>
+                    </RadzenColumn>
+                </RadzenRow>
+            </RadzenStack>
+        </RadzenFieldset>
+    </RadzenTemplateForm>
+</div>
+
+@code {
+
+    [Parameter]
+    public Usuario usuario { get; set; }
+
+    public bool mostraFoto { get; set; } = false;
+    public bool mostraAvatar { get; set; } = true;
+
+    public string? path { get; set; } = null;
+    public string? fileName { get; set; } = null;
+    public string? base64 { get; set; } = null;
+
+    public void CompleteUpload(UploadCompleteEventArgs args)
+    {
+        var result = Newtonsoft.Json.Linq.JObject.Parse(args.JsonResponse.RootElement.ToString());
+        fileName = result.GetValue("fileName")?.ToString();
+        base64 = result.GetValue("base64")?.ToString();
+        path = $"data:{result.GetValue("contentType")};base64,{result.GetValue("base64")}";
+        mostraAvatar = false;
+        mostraFoto = true;
+    }
+
+    async void OnSubmit(Usuario usuario)
+    {
+        var popupConfirma = await DialogService.Confirm($"Deseja salvar suas informações de Perfil?", "Salvar", new ConfirmOptions() { OkButtonText = "Sim", CancelButtonText = "Não" });
+        if (popupConfirma == true)
+        {
+            var dados = new
+            {
+                values = Newtonsoft.Json.JsonConvert.SerializeObject(new
+                {
+                    Nome = usuario.Nome,
+                    Email = usuario.Email
+                }),
+                fileName,
+                base64
+            };
+
+            var retorno = await JS.InvokeAsync<RetornoViewModel>("getDados", "/Usuario/Put", dados, "PUT");
+            await JS.InvokeVoidAsync("notifica", retorno.Sucesso ? "" : "Erro", retorno.Mensagem, retorno.Sucesso);
+            if (retorno.Sucesso)
+            {
+                DialogService.Close();
+            }
+        }
+    }
+}

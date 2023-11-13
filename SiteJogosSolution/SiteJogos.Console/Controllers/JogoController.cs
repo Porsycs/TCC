@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using SiteJogos.Core.Entities;
 using SiteJogos.Core.Entities.ViewModel;
 using SiteJogos.Core.Services.Interface;
+using SiteJogos.Core.Services.Repository;
 
 namespace SiteJogos.Console.Controllers
 {
@@ -14,12 +15,14 @@ namespace SiteJogos.Console.Controllers
         private readonly UserManager<Usuario> _userManager;
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly IJogoRepository _jogoRepository;
+        private readonly IJogoDaMemoriaMidiaRepository _jogoDaMemoriaMidiaRepository;
 
-        public JogoController(UserManager<Usuario> userManager, IUsuarioRepository usuarioRepository, IJogoRepository jogoRepository)
+        public JogoController(UserManager<Usuario> userManager, IUsuarioRepository usuarioRepository, IJogoRepository jogoRepository, IJogoDaMemoriaMidiaRepository jogoDaMemoriaMidiaRepository)
         {
             _userManager = userManager;
             _usuarioRepository = usuarioRepository;
             _jogoRepository = jogoRepository;
+            _jogoDaMemoriaMidiaRepository = jogoDaMemoriaMidiaRepository;
         }
 
         [HttpGet]
@@ -40,6 +43,51 @@ namespace SiteJogos.Console.Controllers
             catch (Exception)
             {
                 return new List<Jogo>();
+            }
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        [Route("/Play")]
+        public IActionResult Play(Guid id)
+        {
+            try
+            {
+                var jogo = _jogoRepository.GetById(id) ?? throw new Exception("Jogo não encontrado");
+
+                if(jogo.Template == Jogo.EnumTemplate.JogoDaMemoria)
+                {
+                    ViewData["Midias"] = _jogoDaMemoriaMidiaRepository.GetByJogoId(jogo.Id).ToList(); 
+                    return View("~/Views/Jogo/JogoDaMemoria.cshtml", jogo);
+                }
+
+                throw new Exception();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpDelete]
+        public RetornoViewModel Delete(Guid key)
+        {
+            try
+            {
+                _jogoRepository.Delete(key);
+                return new RetornoViewModel()
+                {
+                    Sucesso = true,
+                    Mensagem = "Jogo deletado com sucesso"
+                };
+            }
+            catch (Exception e)
+            {
+                return new RetornoViewModel()
+                {
+                    Sucesso = false,
+                    Mensagem = e.Message
+                };
             }
         }
 

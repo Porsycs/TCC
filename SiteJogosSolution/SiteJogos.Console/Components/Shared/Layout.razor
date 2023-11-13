@@ -27,16 +27,18 @@
                             <RadzenGravatar Email="@(usuario.Email)" />
                         </Template>
                         <ChildContent>
-                            @*<RadzenProfileMenuItem Text="Ver Perfil" Path="menu" Icon="account_circle"></RadzenProfileMenuItem>*@
+                            <div onclick='redirecionaTela("/Perfil")'>
+                                <RadzenProfileMenuItem Text="Meu Perfil" Icon="account_circle"></RadzenProfileMenuItem>
+                            </div>
                             <div @onclick="exibePopupTrocaSenha">
                                 <RadzenProfileMenuItem Text="Trocar Senha" Icon="lock_reset"></RadzenProfileMenuItem>
                             </div>
-                            <div @onclick="temaClaro">
+                            @*<div @onclick="temaClaro">
                                 <RadzenProfileMenuItem Visible="!LightMode" Text="Modo Claro" Icon="light_mode"></RadzenProfileMenuItem>
                             </div>
                             <div @onclick="temaEscuro">
                                 <RadzenProfileMenuItem Visible="LightMode" Text="Modo Escuro" Icon="dark_mode" @onclick="temaEscuro"></RadzenProfileMenuItem>
-                            </div>
+                            </div>*@
                             <div onclick="sairSistema()">
                                 <RadzenProfileMenuItem Text="Sair" Icon="logout"></RadzenProfileMenuItem>
                             </div>

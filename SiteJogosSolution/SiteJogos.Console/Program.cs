@@ -49,6 +49,8 @@ builder.Services.AddAuthorization(auth =>
 builder.Services.AddSingleton(typeof(ICommonRepository<>), typeof(CommonRepository<>));
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IJogoRepository, JogoRepository>();
+builder.Services.AddScoped<IJogoDaMemoriaMidiaRepository, JogoDaMemoriaMidiaRepository>();
+builder.Services.AddScoped<IMidiaRepository, MidiaRepository>();
 #endregion
 
 builder.Services.AddScoped<DialogService>();
@@ -56,7 +58,10 @@ builder.Services.AddScoped<NotificationService>();
 builder.Services.AddScoped<TooltipService>();
 builder.Services.AddScoped<ContextMenuService>();
 
-builder.Services.AddServerSideBlazor();
+builder.Services.AddServerSideBlazor().AddHubOptions(options =>
+{
+    options.MaximumReceiveMessageSize = 10485760;
+});
 builder.Services.AddHttpClient();
 
 var app = builder.Build();

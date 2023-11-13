@@ -3,3 +3,11 @@
 }
 
 <component type="typeof(SiteJogos.Console.Components.Jogo.MeusJogos)" render-mode="Server">
+
+<script>
+
+    function jogar(id) {
+        window.open("@(Url.Action("Play", "Jogo"))?id=" + id);
+    }
+
+</script>
