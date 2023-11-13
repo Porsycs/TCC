@@ -162,11 +162,9 @@ namespace SiteJogos.Console.Controllers
                     
                     else
                     {
-                        //ResourceManager rm = new("SiteJogos.Core.Resources.ErrorMessages", Assembly.GetExecutingAssembly());
                         var listaErros = new List<string>();
                         foreach (var erro in result.Errors.ToList())
                         {   
-                            //string translatedError = rm.GetString(erro.Code, new CultureInfo("pt-BR"));
                             listaErros.Add(erro.Description);
                         }
                         var erroMensagem = string.Join(";", listaErros);

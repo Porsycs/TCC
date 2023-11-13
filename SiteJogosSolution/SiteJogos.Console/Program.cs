@@ -5,6 +5,7 @@ using SiteJogos.Core.Context;
 using Microsoft.EntityFrameworkCore;
 using SiteJogos.Core.Services.Interface;
 using SiteJogos.Core.Services.Repository;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,8 +26,8 @@ IConfiguration configuration = new ConfigurationBuilder()
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-builder.Services.AddDefaultIdentity<Usuario>().AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddDefaultIdentity<Usuario>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<ApplicationDbContext>().AddErrorDescriber<ErrorDescriber>();
 
 builder.Services.AddAuthenticationCore();
 builder.Services.AddSession(options =>
