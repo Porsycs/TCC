@@ -10,6 +10,9 @@ namespace SiteJogos.Core.Entities
         public bool Excluido { get; set; } = false;
         public DateTime Inclusao { get; set; } = DateTime.Now;
         public DateTime? Alteracao { get; set; }
+
+        [ForeignKey("Midia")]
+        public Guid? MidiaId { get; set; }
     }
 
     public class ErrorDescriber : IdentityErrorDescriber
