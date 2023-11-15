@@ -14,6 +14,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - Console", "2 - Console"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SiteJogos.Core", "SiteJogos.Core\SiteJogos.Core.csproj", "{BBCACFE2-B594-4697-9910-0C45A5278508}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - Test", "3 - Test", "{B444477E-4E93-4F91-BE07-16E6534C1E46}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test\Test.csproj", "{DFAE288F-B87A-484E-9D14-185A7CE4979D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,6 +32,10 @@ Global
 		{BBCACFE2-B594-4697-9910-0C45A5278508}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BBCACFE2-B594-4697-9910-0C45A5278508}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BBCACFE2-B594-4697-9910-0C45A5278508}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFAE288F-B87A-484E-9D14-185A7CE4979D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFAE288F-B87A-484E-9D14-185A7CE4979D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFAE288F-B87A-484E-9D14-185A7CE4979D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFAE288F-B87A-484E-9D14-185A7CE4979D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -35,6 +43,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{736783B4-FE5D-4939-8FB9-FD03F51AEB12} = {1B46EA08-94F5-43CF-BF45-929027DD7DDB}
 		{BBCACFE2-B594-4697-9910-0C45A5278508} = {EFFDB598-E5E3-4A72-A45A-7DC4E7248385}
+		{DFAE288F-B87A-484E-9D14-185A7CE4979D} = {B444477E-4E93-4F91-BE07-16E6534C1E46}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {16D2CEA8-112C-42BF-BE2D-95C34D3B5B17}
