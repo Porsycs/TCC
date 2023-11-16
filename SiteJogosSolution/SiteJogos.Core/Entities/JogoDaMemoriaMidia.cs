@@ -21,5 +21,7 @@ namespace SiteJogos.Core.Entities
         [ForeignKey("MidiaSecundaria")]
         public Guid MidiaSecundariaId { get; set; }
         public virtual Midia MidiaSecundaria { get; set; }
+
+        public string? Cor { get; set; }
     }
 }
