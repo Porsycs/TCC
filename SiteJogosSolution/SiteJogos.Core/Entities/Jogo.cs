@@ -40,7 +40,7 @@ namespace SiteJogos.Core.Entities
             {
                 switch(Template)
                 {
-                    case EnumTemplate.JogoDaMemoria: return "cards";
+                    case EnumTemplate.JogoDaMemoria: return "view_module";
                     case EnumTemplate.Forca: return "table_lamp";
                     default: return "";
                 }

@@ -2,9 +2,23 @@
 @inject DialogService DialogService;
 
 <style>
+
+    .card-home {
+        max-width: 100%;
+        flex-basis: 100%;
+    }
+
     .card-home:hover {
         cursor: pointer !important;
     }
+
+    @@media(min-width: 1024px) {
+        .card-home {
+            max-width: calc(4 * ((100% - 11 * var(--rz-gap)) / 12) + 3 * var(--rz-gap)) !important;
+            flex-basis: calc(4 * ((100% - 11 * var(--rz-gap)) / 12) + 3 * var(--rz-gap)) !important;
+        }
+    }
+
 </style>
 
 <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween" AlignItems="AlignItems.Center">

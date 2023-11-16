@@ -33,14 +33,12 @@
                             </RadzenColumn>
                         </RadzenRow>
                         <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
-                            <RadzenColumn Size="12" SizeMD="12">
+                            <RadzenColumn Size="12" SizeMD="6">
                                 <RadzenLabel Text="Senha" />
                                 <RadzenPassword Name="Senha" @bind-Value=@model.Senha Style="display: block; width: 100%" />
                                 <RadzenRequiredValidator Component="Senha" Text="Insira a Senha" Popup="true" Style="position: absolute" />
                             </RadzenColumn>
-                        </RadzenRow>
-                        <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
-                            <RadzenColumn Size="12" SizeMD="12">
+                            <RadzenColumn Size="12" SizeMD="6">
                                 <RadzenLabel Text="Repetir Senha" />
                                 <RadzenPassword Name="ConfirmaSenha" @bind-Value=@model.ConfirmaSenha Style="display: block; width: 100%" />
                                 <RadzenRequiredValidator Component="ConfirmaSenha" Text="Insira a Confirmação de Senha" Popup="true" Style="position: absolute" />

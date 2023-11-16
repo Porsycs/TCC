@@ -66,6 +66,11 @@
     public RadzenDataGrid<JogoDaMemoriaMidia> grid;
     public List<JogoDaMemoriaMidia> midias = new List<JogoDaMemoriaMidia>();
 
+    public void Atualiza()
+    {
+        StateHasChanged();
+    }
+
     void DeletaMidia(JogoDaMemoriaMidia item)
     {
         midias.Remove(item);
