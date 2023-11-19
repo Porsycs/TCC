@@ -4,10 +4,26 @@
 
 <component type="typeof(SiteJogos.Console.Components.Jogo.MeusJogos)" render-mode="Server">
 
-<script>
+    <script>
 
     function jogar(id) {
         window.open("@(Url.Action("Play", "Jogo"))?id=" + id);
     }
 
-</script>
+    function copiarLink(id) {
+        var textArea = document.createElement("textarea");
+        const link = "@(ViewBag.UrlRequest)" + "@(Url.Action("Play", "Jogo"))?id=" + id;
+        textArea.value = link;
+
+        document.body.appendChild(textArea);
+        textArea.select();
+        var resultado = document.execCommand("copy");
+
+        if (resultado) {
+            notifica("", "Link do Jogo copiado para sua Área de Transferência", "success");
+        }
+
+        document.body.removeChild(textArea);
+    }
+
+    </script>

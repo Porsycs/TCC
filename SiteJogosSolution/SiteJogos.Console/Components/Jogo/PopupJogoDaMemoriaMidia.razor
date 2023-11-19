@@ -3,6 +3,15 @@
 
 <RadzenTemplateForm TItem="JogoDaMemoriaMidia" Data=@midia Submit="OnSubmit">
     <RadzenRow Class="rz-mt-4">
+        <RadzenColumn Size="12" SizeMD="12">
+            <RadzenFieldset Text="Cor da Carta">
+                <RadzenStack Gap="1rem" Class="rz-p-4 rz-p-md-12" Style="padding: 0 !important">
+                    <RadzenColorPicker @bind-Value=@midia.Cor ShowHSV="true" ShowRGBA="false" ShowColors="true" ShowButton="true" />
+                </RadzenStack>
+            </RadzenFieldset>
+        </RadzenColumn>
+    </RadzenRow>
+    <RadzenRow Class="rz-mt-4">
         <RadzenColumn Size="12" SizeMD="6">
             <RadzenFieldset Text="Imagem 1">
                 <RadzenStack Gap="1rem" Class="rz-p-4 rz-p-md-12" Style="padding: 0 !important">

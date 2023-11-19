@@ -17,8 +17,8 @@
         <link rel="stylesheet" href="~/css/JogoDaMemoria/win.css" /><!--Estilo da tela de vitória-->
         <link rel="stylesheet" href="~/css/JogoDaMemoria/responsive.css" />
     </head>
-<body>
-    <h1>@Model.Nome</h1>
+<body style="width: 100vw; height: 100vh; padding: 2rem">
+    <h1 style="color: #fff">@Model.Nome</h1>
     <!--ALTERAÇÃO* Essa div vai ser exibida quando o jogador vencer a partida!-->
     <div id="vitoria">
         <div id="container">
@@ -57,8 +57,6 @@
                 </div>
             }
         </section>
-
-        <section id="dir"></section>
     </div>
 </body>
 </html>

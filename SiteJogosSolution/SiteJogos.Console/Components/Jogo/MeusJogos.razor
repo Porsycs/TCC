@@ -3,6 +3,21 @@
 
 <style>
 
+    .menuLista {
+        display: flex;
+        justify-content: start;
+        width: 100%;
+        background-color: transparent !important;
+    }
+
+    .menuLista .rz-navigation-item-icon-children{
+        display: none;
+    }
+
+        .menuLista .rz-navigation-item-icon {
+            color: var(--rz-text-color) !important;
+        }
+
     .card-home {
         max-width: 100%;
         flex-basis: 100%;
@@ -19,6 +34,19 @@
         }
     }
 
+    @@media(min-width: 768px){
+        .card-home {
+            max-width: calc(6 * ((100% - 11 * var(--rz-gap)) / 12) + 5 * var(--rz-gap));
+            flex-basis: calc(6 * ((100% - 11 * var(--rz-gap)) / 12) + 5 * var(--rz-gap));
+        }
+    }
+
+    @@media(max-width: 767px){
+        .card-home {
+            width: 100%;
+        }
+    }
+
 </style>
 
 <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween" AlignItems="AlignItems.Center">
@@ -32,7 +60,15 @@
             <RadzenDataList @ref="list" AllowVirtualization=false WrapItems="true" AllowPaging="@true" Data="@Jogos" TItem="Jogo" PageSize="5" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true" IsLoading=@isLoading LoadData="@LoadData" Style="height: calc(100vh - 20rem);width: 100%">
                 <Template Context="jogo">
                     <RadzenCard Class="rz-border-radius-3 text-center card-home">
-                        <RadzenIcon Icon="@(jogo.IconeJogo)" Style="font-size: 2.5rem; color: var(--rz-text-color)" />
+                        <RadzenMenu class="menuLista" ClickToOpen="true" Responsive="false">
+                            <RadzenMenuItem Text="" Icon="more_vert">
+                                <RadzenMenuItem Text="Jogar" Icon="play_arrow" Click="(args) => Jogar(jogo)"></RadzenMenuItem>
+                                <RadzenMenuItem Text="Editar" Icon="edit" Disabled="true"></RadzenMenuItem>
+                                <RadzenMenuItem Text="Copiar Link" Icon="content_copy" Click="(args) => CopiarLink(jogo)"></RadzenMenuItem>
+                                <RadzenMenuItem Text="Excluir" Icon="delete" Click="(args) => Delete(jogo)"></RadzenMenuItem>
+                            </RadzenMenuItem>
+                        </RadzenMenu>
+                        <RadzenIcon Icon="@(jogo.IconeJogo)" Style="font-size: 2.5rem; color: var(--rz-text-color); padding-bottom: 1rem" />
                         <RadzenText TextStyle="TextStyle.Subtitle1">@jogo.Nome</RadzenText>
                     </RadzenCard>
                 </Template>
@@ -45,7 +81,7 @@
                         <Template Context="Id">
                             <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="play_arrow" Variant="Variant.Flat" Size="ButtonSize.Medium" title="Jogar" Click="(args => Jogar(Id))" />
                             <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="edit" Variant="Variant.Flat" Size="ButtonSize.Medium" title="Editar" />
-                            <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Click="(args => Delete(Id))" class="my-1 ms-1" title="Remover" />
+                            <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Click="(args => Delete(Id))" class="my-1 ms-1" title="Excluir" />
                         </Template>
                     </RadzenDataGridColumn>
                     <RadzenDataGridColumn TItem="Jogo" Property="Nome" Title="Nome" Filterable="true" Sortable="true" FilterOperator="FilterOperator.StartsWith">
@@ -89,7 +125,7 @@
 
     async Task Delete(Jogo jogo)
     {
-        var popupConfirma = await DialogService.Confirm($"Deseja mesmo deletar este jogo?", "Deletar Jogo", new ConfirmOptions() { OkButtonText = "Sim", CancelButtonText = "Não" });
+        var popupConfirma = await DialogService.Confirm($"Deseja mesmo excluir este jogo?", "Excluir Jogo", new ConfirmOptions() { OkButtonText = "Sim", CancelButtonText = "Não" });
         if (popupConfirma == true)
         {
             var retorno = await JS.InvokeAsync<RetornoViewModel>("getDados", "/Jogo/Delete", new { key = jogo.Id }, "DELETE");
@@ -102,6 +138,11 @@
     void RedirecionaNovoJogo()
     {
         JS.InvokeVoidAsync("redirecionaTela", "/NovoJogo");
+    }
+
+    void CopiarLink(Jogo jogo)
+    {
+        JS.InvokeVoidAsync("copiarLink", jogo.Id);
     }
 
     void Jogar(Jogo jogo)

@@ -29,6 +29,7 @@ namespace SiteJogos.Console.Controllers
         [Route("/MeusJogos")]
         public IActionResult MeusJogos()
         {
+            ViewData["UrlRequest"] = Request.Scheme + "://" + Request.Host.Value;
             return View();
         }
 

@@ -6,6 +6,16 @@
 <RadzenContextMenu />
 <RadzenTooltip />
 
+<style>
+
+    @@media(max-width: 1024px) {
+        .nome-usuario {
+            display: none;
+        }
+    }
+
+</style>
+
 <RadzenLayout>
     <RadzenHeader>
         <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween" Gap="0"  Style="height: 100%">
@@ -23,7 +33,7 @@
                     <RadzenButton Text="Meus Jogos" ButtonStyle="ButtonStyle.Warning" Click='() => redirecionaTela("/MeusJogos")' />
                     <RadzenProfileMenu>
                         <Template>
-                            <RadzenLabel Text="@(usuario.UserName)" Style="margin-right: 0.5rem" />
+                            <RadzenLabel Text="@(usuario.UserName)" class="nome-usuario" Style="margin-right: 0.5rem" />
                             @if (usuario.MidiaId.HasValue)
                             {
                                 <RadzenImage Path="@($"/Midia/GetMidia?Id={usuario.MidiaId}")" class="rz-gravatar" />

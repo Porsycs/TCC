@@ -41,6 +41,11 @@
                                                 <RadzenImage Path="@(data.MidiaSecundaria.Url != null ? data.MidiaSecundaria.Url : $"/Midia/GetArquivo?id={data.MidiaSecundariaId}")" Style="max-height: 6rem; width: auto; max-width: 6rem; height: auto;" />
                                             </Template>
                                         </RadzenDataGridColumn>
+                                        <RadzenDataGridColumn Context="data" TItem="JogoDaMemoriaMidia" Property="Cor" Title="Cor">
+                                            <Template>
+                                                <div style="background-color:@(data.Cor);height:2rem;width:2rem;border-radius: 50%"></div>
+                                            </Template>
+                                        </RadzenDataGridColumn>
                                         <RadzenDataGridColumn TItem="JogoDaMemoriaMidia" Context="Id" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Frozen="true" Width="4rem" Resizable="false">
                                             <Template Context="Id">
                                                 <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Click="(args => DeletaMidia(Id))" class="my-1 ms-1" />
