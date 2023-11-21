@@ -66,7 +66,7 @@
                                 <RadzenMenuItem Text="Ranking" Icon="emoji_events" Click="(args) => CopiarLink(jogo)"></RadzenMenuItem>
                                 <RadzenMenuItem Text="Editar" Icon="edit" Disabled="true"></RadzenMenuItem>
                                 <RadzenMenuItem Text="Copiar Link" Icon="content_copy" Click="(args) => CopiarLink(jogo)"></RadzenMenuItem>
-                                <RadzenMenuItem Text="QR Code" Icon="qr_code" Click="(args) => CopiarLink(jogo)"></RadzenMenuItem>
+                                <RadzenMenuItem Text="QR Code" Icon="qr_code" Click="(args) => QRCode(jogo)"></RadzenMenuItem>
                                 <RadzenMenuItem Text="Excluir" Icon="delete" Click="(args) => Delete(jogo)"></RadzenMenuItem>
                             </RadzenMenuItem>
                         </RadzenMenu>
@@ -85,7 +85,7 @@
                             <RadzenButton ButtonStyle="ButtonStyle.Warning" Icon="emoji_events" Variant="Variant.Flat" Size="ButtonSize.Medium" title="Ranking" Click="(args => CopiarLink(Id))" />
                             <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="edit" Variant="Variant.Flat" Size="ButtonSize.Medium" title="Editar" />
                             <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="content_copy" Variant="Variant.Flat" Size="ButtonSize.Medium" title="Copiar Link" Click="(args => CopiarLink(Id))" />
-                            <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="qr_code" Variant="Variant.Flat" Size="ButtonSize.Medium" title="QR Code" />
+                            <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="qr_code" Variant="Variant.Flat" Size="ButtonSize.Medium" title="QR Code" Click="(args => QRCode(Id))" />
                             <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Click="(args => Delete(Id))" class="my-1 ms-1" title="Excluir" />
                         </Template>
                     </RadzenDataGridColumn>
@@ -164,6 +164,11 @@
     void CopiarLink(Jogo jogo)
     {
         JS.InvokeVoidAsync("copiarLink", jogo.Id);
+    }
+
+    void QRCode(Jogo jogo)
+    {
+        JS.InvokeVoidAsync("qrCode", jogo.Id);
     }
 
     void Jogar(Jogo jogo)

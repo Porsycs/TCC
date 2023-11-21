@@ -25,6 +25,9 @@ namespace SiteJogos.Core.Entities
         }
 
         [NotMapped]
+        public string? Base64QrCode { get; set; }
+
+        [NotMapped]
         public string TemplateDescricao
         {
             get

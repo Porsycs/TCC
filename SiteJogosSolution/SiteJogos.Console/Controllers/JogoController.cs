@@ -2,11 +2,13 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using QRCoder;
 using Rotativa.AspNetCore;
 using SiteJogos.Core.Entities;
 using SiteJogos.Core.Entities.ViewModel;
 using SiteJogos.Core.Services.Interface;
 using SiteJogos.Core.Services.Repository;
+using static QRCoder.PayloadGenerator;
 
 namespace SiteJogos.Console.Controllers
 {
@@ -53,6 +55,16 @@ namespace SiteJogos.Console.Controllers
         public IActionResult QRCode(Guid id)
         {
             var jogo = _jogoRepository.GetById(id);
+            jogo.UsuarioInclusao = _usuarioRepository.GetById(jogo.UsuarioInclusaoId);
+
+            var qrGenerator = new QRCodeGenerator();
+            var qrCodeData = qrGenerator.CreateQrCode($"{Request.Scheme}://{Request.Host.Value}/Play?id={jogo.Id}", QRCodeGenerator.ECCLevel.Q);
+            using var qrCode = new QRCode(qrCodeData);
+            using var stream = new MemoryStream();
+            var qrCodeImage = qrCode.GetGraphic(10);
+            qrCodeImage.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+            jogo.Base64QrCode = Convert.ToBase64String(stream.ToArray());
+
             var pdf = new ViewAsPdf("_PDFJogoQRCode", jogo)
             {
                 FileName = $"QR Code - {Common.RemoveCaratereEspecial(jogo.Nome)}.pdf",
