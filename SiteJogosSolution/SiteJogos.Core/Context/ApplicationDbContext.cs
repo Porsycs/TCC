@@ -18,6 +18,7 @@ namespace SiteJogos.Core.Context
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Midia> Midias { get; set; }
         public DbSet<Jogo> Jogos { get; set; }
+        public DbSet<JogoRanking> JogoRankings { get; set; }
         public DbSet<JogoDaMemoriaMidia> JogoDaMemoriaMidias { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
