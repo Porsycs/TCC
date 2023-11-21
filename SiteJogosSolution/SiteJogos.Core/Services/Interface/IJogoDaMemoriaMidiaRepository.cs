@@ -9,6 +9,6 @@ namespace SiteJogos.Core.Services.Interface
 {
     public interface IJogoDaMemoriaMidiaRepository : ICommonRepository<JogoDaMemoriaMidia>
     {
-        IEnumerable<JogoDaMemoriaMidia> GetByJogoId(Guid jogoId);
+        IEnumerable<JogoDaMemoriaMidia> GetByJogoId(Guid jogoId, bool includes = false);
     }
 }

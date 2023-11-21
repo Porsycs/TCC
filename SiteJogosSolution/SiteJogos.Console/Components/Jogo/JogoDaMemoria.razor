@@ -33,12 +33,12 @@
                                     <Columns>
                                         <RadzenDataGridColumn Context="data" TItem="JogoDaMemoriaMidia" Property="MidiaPrimariaId" Title="Imagem 1">
                                             <Template>
-                                                <RadzenImage Path="@(data.MidiaPrimaria.Url != null ? data.MidiaPrimaria.Url : $"/Midia/GetArquivo?id={data.MidiaPrimariaId}")" Style="max-height: 6rem; width: auto; max-width: 6rem; height: auto;" />
+                                                <RadzenImage Path="@(data?.MidiaPrimaria?.Url != null ? data.MidiaPrimaria.Url : $"/Midia/GetMidia?id={data.MidiaPrimariaId}")" Style="max-height: 6rem; width: auto; max-width: 6rem; height: auto;" />
                                             </Template>
                                         </RadzenDataGridColumn>
                                         <RadzenDataGridColumn Context="data" TItem="JogoDaMemoriaMidia" Property="MidiaSecundariaId" Title="Imagem 2">
                                             <Template>
-                                                <RadzenImage Path="@(data.MidiaSecundaria.Url != null ? data.MidiaSecundaria.Url : $"/Midia/GetArquivo?id={data.MidiaSecundariaId}")" Style="max-height: 6rem; width: auto; max-width: 6rem; height: auto;" />
+                                                <RadzenImage Path="@(data?.MidiaSecundaria?.Url != null ? data.MidiaSecundaria.Url : $"/Midia/GetMidia?id={data.MidiaSecundariaId}")" Style="max-height: 6rem; width: auto; max-width: 6rem; height: auto;" />
                                             </Template>
                                         </RadzenDataGridColumn>
                                         <RadzenDataGridColumn Context="data" TItem="JogoDaMemoriaMidia" Property="Cor" Title="Cor">
@@ -67,9 +67,13 @@
 
 @code {
 
-    public Jogo jogo = new Jogo();
+    [Parameter]
+    public Jogo jogo { get; set; } = new Jogo();
+
+    [Parameter]
+    public List<JogoDaMemoriaMidia> midias { get; set; } = new List<JogoDaMemoriaMidia>();
+
     public RadzenDataGrid<JogoDaMemoriaMidia> grid;
-    public List<JogoDaMemoriaMidia> midias = new List<JogoDaMemoriaMidia>();
 
     public void Atualiza()
     {
@@ -101,9 +105,9 @@
             return;
         }
 
-        var dados = new 
-        { 
-            jogo = Newtonsoft.Json.JsonConvert.SerializeObject(jogo), 
+        var dados = new
+        {
+            jogo = Newtonsoft.Json.JsonConvert.SerializeObject(jogo),
             midias = Newtonsoft.Json.JsonConvert.SerializeObject(midias)
         };
 

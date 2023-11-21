@@ -3,9 +3,9 @@
     ViewData["Title"] = Model == null ? "Novo Jogo" : "Editar";
 }
 
-<component type="typeof(SiteJogos.Console.Components.Jogo.Criar)" render-mode="Server" />
+<component type="typeof(SiteJogos.Console.Components.Jogo.Criar)" render-mode="Server" param-Existe="ViewBag.Existe" />
 
-@if(Model == null)
+@if(Model.Template == Jogo.EnumTemplate.JogoDaMemoria)
 {
-    <component type="typeof(SiteJogos.Console.Components.Jogo.JogoDaMemoria)" render-mode="Server" />
+    <component type="typeof(SiteJogos.Console.Components.Jogo.JogoDaMemoria)" render-mode="Server" param-jogo="Model" param-midias="ViewBag.Midias" />
 }

@@ -125,7 +125,32 @@ namespace SiteJogos.Console.Controllers
         [Route("/NovoJogo")]
         public IActionResult NovoJogo(Jogo.EnumTemplate template)
         {
-            return View();
+            ViewData["Existe"] = false;
+            var novoJogo = new Jogo()
+            {
+                Template = template,
+            };
+            return View(novoJogo);
+        }
+
+        [HttpGet]
+        [Route("/Editar")]
+        public IActionResult Editar(Guid id)
+        {
+            try
+            {
+                ViewData["Existe"] = true;
+                var jogo = _jogoRepository.GetById(id) ?? throw new Exception("Jogo não encontrado");
+                if (jogo.Template == Jogo.EnumTemplate.JogoDaMemoria)
+                {
+                    ViewData["Midias"] = _jogoDaMemoriaMidiaRepository.GetByJogoId(jogo.Id, true).ToList();
+                }
+                return View("~/Views/Jogo/NovoJogo.cshtml", jogo);
+            }
+            catch (Exception e)
+            {
+                return View(e.Message);
+            }
         }
 
         [HttpPost]

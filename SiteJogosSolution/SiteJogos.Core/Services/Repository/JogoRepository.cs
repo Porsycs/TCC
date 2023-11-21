@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using SiteJogos.Core.Context;
 using SiteJogos.Core.Entities;
@@ -25,19 +26,21 @@ namespace SiteJogos.Core.Services.Repository
         {
             try
             {
-                var jogoExistente = _dbContext.Jogos.FirstOrDefault(f => f.Id == jogo.Id);
+                var jogoExistente = _dbContext.Jogos.AsNoTracking().FirstOrDefault(f => f.Id == jogo.Id);
                 if (jogoExistente == null)
                 {
                     _dbContext.Jogos.Add(jogo);
                 }
                 else
                 {
+                    jogo.Alteracao = DateTime.Now;
                     _dbContext.Jogos.Update(jogo);
                 }
 
-                var midiasExistentes = _dbContext.JogoDaMemoriaMidias.Where(w => midias.Select(s => s.Id).Contains(w.Id)).ToList();
+                var midiasExistentes = _dbContext.JogoDaMemoriaMidias.AsNoTracking().Where(w => midias.Select(s => s.Id).Contains(w.Id)).ToList();
                 foreach(var m  in midias) 
                 {
+                    m.Jogo = null;
                     if(!midiasExistentes.Any(a => a.Id == m.Id))
                     {
                         _dbContext.JogoDaMemoriaMidias.Add(m);
@@ -48,7 +51,7 @@ namespace SiteJogos.Core.Services.Repository
                     }
                 }
 
-                foreach(var m in midiasExistentes.Where(w => midias.Any(a => a.Id == w.Id)).ToList())
+                foreach(var m in midiasExistentes.Where(w => !midias.Any(a => a.Id == w.Id)).ToList())
                 {
                     m.Excluido = true;
                     m.Alteracao = DateTime.Now;
