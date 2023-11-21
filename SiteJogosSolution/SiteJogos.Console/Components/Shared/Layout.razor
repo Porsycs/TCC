@@ -18,19 +18,19 @@
 
 <RadzenLayout>
     <RadzenHeader>
-        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween" Gap="0"  Style="height: 100%">
+        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween" Gap="0"  Style="height: 100%; background: white">
             <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Style="margin-left:2rem">
-                <RadzenLabel Text="Historiando" Style="font-weight:600" />
+                <RadzenLabel Text="Historiando" Style="font-weight:600; color:black" />
             </RadzenStack>
             <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
-                <RadzenButton Variant="Variant.Text" Text="Início" ButtonStyle="ButtonStyle.Warning" Click='() => redirecionaTela("/")' />
+                <RadzenButton Variant="Variant.Text" Text="Início" Style="color:black" ButtonStyle="ButtonStyle.Warning" Click='() => redirecionaTela("/")' />
                 @if (usuario == null)
                 {
-                    <RadzenButton Text="Login" Variant="Variant.Text" ButtonStyle="ButtonStyle.Warning" Click='() => redirecionaTela("/Login")' />
+                    <RadzenButton Text="Login" Variant="Variant.Text" Style="color:black" ButtonStyle="ButtonStyle.Warning" Click='() => redirecionaTela("/Login")' />
                 }
                 else
                 {
-                    <RadzenButton Text="Meus Jogos" ButtonStyle="ButtonStyle.Warning" Click='() => redirecionaTela("/MeusJogos")' />
+                    <RadzenButton Text="Meus Jogos" ButtonStyle="ButtonStyle.Warning" Style="color:black" Click='() => redirecionaTela("/MeusJogos")' />
                     <RadzenProfileMenu>
                         <Template>
                             <RadzenLabel Text="@(usuario.UserName)" class="nome-usuario" Style="margin-right: 0.5rem" />
@@ -45,10 +45,10 @@
                         </Template>
                         <ChildContent>
                             <div onclick='redirecionaTela("/Perfil")'>
-                                <RadzenProfileMenuItem Text="Meu Perfil" Icon="account_circle"></RadzenProfileMenuItem>
+                                <RadzenProfileMenuItem Text="Meu Perfil" Style="color:black" Icon="account_circle"></RadzenProfileMenuItem>
                             </div>
                             <div @onclick="exibePopupTrocaSenha">
-                                <RadzenProfileMenuItem Text="Trocar Senha" Icon="lock_reset"></RadzenProfileMenuItem>
+                                <RadzenProfileMenuItem Text="Trocar Senha" Style="color:black" Icon="lock_reset"></RadzenProfileMenuItem>
                             </div>
                             @*<div @onclick="temaClaro">
                                 <RadzenProfileMenuItem Visible="!LightMode" Text="Modo Claro" Icon="light_mode"></RadzenProfileMenuItem>
