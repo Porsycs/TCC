@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using SiteJogos.Core.Services.Interface;
 using SiteJogos.Core.Services.Repository;
 using Microsoft.AspNetCore.Identity;
+using Rotativa.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -87,5 +88,7 @@ app.UseAuthorization();
 app.MapControllerRoute(name: "default", pattern: "{controller=Autenticacao}/{action=Index}/{id?}");
 app.MapRazorPages();
 app.MapBlazorHub();
+
+app.UseRotativa();
 
 app.Run();

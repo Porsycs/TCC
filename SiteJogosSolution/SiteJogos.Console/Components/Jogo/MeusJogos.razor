@@ -1,4 +1,5 @@
-﻿@inject IJSRuntime JS;
+﻿@using System.Linq.Dynamic.Core;
+@inject IJSRuntime JS;
 @inject DialogService DialogService;
 
 <style>
@@ -10,9 +11,9 @@
         background-color: transparent !important;
     }
 
-    .menuLista .rz-navigation-item-icon-children{
-        display: none;
-    }
+        .menuLista .rz-navigation-item-icon-children {
+            display: none;
+        }
 
         .menuLista .rz-navigation-item-icon {
             color: var(--rz-text-color) !important;
@@ -23,9 +24,9 @@
         flex-basis: 100%;
     }
 
-    .card-home:hover {
-        cursor: pointer !important;
-    }
+        .card-home:hover {
+            cursor: pointer !important;
+        }
 
     @@media(min-width: 1024px) {
         .card-home {
@@ -34,19 +35,18 @@
         }
     }
 
-    @@media(min-width: 768px){
+    @@media(min-width: 768px) {
         .card-home {
             max-width: calc(6 * ((100% - 11 * var(--rz-gap)) / 12) + 5 * var(--rz-gap));
             flex-basis: calc(6 * ((100% - 11 * var(--rz-gap)) / 12) + 5 * var(--rz-gap));
         }
     }
 
-    @@media(max-width: 767px){
+    @@media(max-width: 767px) {
         .card-home {
             width: 100%;
         }
     }
-
 </style>
 
 <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween" AlignItems="AlignItems.Center">
@@ -57,14 +57,16 @@
 <RadzenTabs TabPosition="@TabPosition.TopRight" RenderMode="TabRenderMode.Server" Style="margin-top: 1rem">
     <Tabs>
         <RadzenTabsItem Text="Lista" Icon="list">
-            <RadzenDataList @ref="list" AllowVirtualization=false WrapItems="true" AllowPaging="@true" Data="@Jogos" TItem="Jogo" PageSize="5" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true" IsLoading=@isLoading LoadData="@LoadData" Style="height: calc(100vh - 20rem);width: 100%">
+            <RadzenDataList @ref="list" AllowVirtualization=false WrapItems="true" AllowPaging="@true" Data="@Jogos" TItem="Jogo" PageSize="5" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true" IsLoading=@isLoading Style="height: calc(100vh - 20rem);width: 100%">
                 <Template Context="jogo">
                     <RadzenCard Class="rz-border-radius-3 text-center card-home">
                         <RadzenMenu class="menuLista" ClickToOpen="true" Responsive="false">
                             <RadzenMenuItem Text="" Icon="more_vert">
                                 <RadzenMenuItem Text="Jogar" Icon="play_arrow" Click="(args) => Jogar(jogo)"></RadzenMenuItem>
+                                <RadzenMenuItem Text="Ranking" Icon="emoji_events" Click="(args) => CopiarLink(jogo)"></RadzenMenuItem>
                                 <RadzenMenuItem Text="Editar" Icon="edit" Disabled="true"></RadzenMenuItem>
                                 <RadzenMenuItem Text="Copiar Link" Icon="content_copy" Click="(args) => CopiarLink(jogo)"></RadzenMenuItem>
+                                <RadzenMenuItem Text="QR Code" Icon="qr_code" Click="(args) => CopiarLink(jogo)"></RadzenMenuItem>
                                 <RadzenMenuItem Text="Excluir" Icon="delete" Click="(args) => Delete(jogo)"></RadzenMenuItem>
                             </RadzenMenuItem>
                         </RadzenMenu>
@@ -75,12 +77,15 @@
             </RadzenDataList>
         </RadzenTabsItem>
         <RadzenTabsItem Text="Grade" Icon="grid_view">
-            <RadzenDataGrid @ref="grid" AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="true" EmptyText="Nenhum Jogo Encontrado!" IsLoading=@isLoading LoadData="@LoadData" Count="@count" Data="@Jogos" TItem="Jogo" ColumnWidth="300px" Responsive="true" LogicalFilterOperator="LogicalFilterOperator.And" Style="height: calc(100vh - 20rem)">
+            <RadzenDataGrid @ref="grid" AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="true" EmptyText="Nenhum Jogo Encontrado!" IsLoading=@isLoading LoadData="@LoadDataGrid" Count="@count" Data="@Jogos" TItem="Jogo" Responsive="true" LogicalFilterOperator="LogicalFilterOperator.And" Style="height: calc(100vh - 20rem)">
                 <Columns>
-                    <RadzenDataGridColumn TItem="Jogo" Context="Id" Filterable="false" Sortable="false" TextAlign="TextAlign.Right" Frozen="true" Width="150px" Resizable="false">
+                    <RadzenDataGridColumn TItem="Jogo" Context="Id" Filterable="false" Sortable="false" TextAlign="TextAlign.Right" Frozen="true" Resizable="false" Width="265px">
                         <Template Context="Id">
                             <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="play_arrow" Variant="Variant.Flat" Size="ButtonSize.Medium" title="Jogar" Click="(args => Jogar(Id))" />
+                            <RadzenButton ButtonStyle="ButtonStyle.Warning" Icon="emoji_events" Variant="Variant.Flat" Size="ButtonSize.Medium" title="Ranking" Click="(args => CopiarLink(Id))" />
                             <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="edit" Variant="Variant.Flat" Size="ButtonSize.Medium" title="Editar" />
+                            <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="content_copy" Variant="Variant.Flat" Size="ButtonSize.Medium" title="Copiar Link" Click="(args => CopiarLink(Id))" />
+                            <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="qr_code" Variant="Variant.Flat" Size="ButtonSize.Medium" title="QR Code" />
                             <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Click="(args => Delete(Id))" class="my-1 ms-1" title="Excluir" />
                         </Template>
                     </RadzenDataGridColumn>
@@ -113,13 +118,29 @@
         await list.Reload();
     }
 
-    async Task LoadData(LoadDataArgs args)
+    async Task LoadDataGrid(LoadDataArgs args)
     {
         isLoading = true;
-        // Update the Data property
-        Jogos = await JS.InvokeAsync<IEnumerable<Jogo>>("getDados", "/Jogo/Get");
-        // Update the count
+
+        var query = await JS.InvokeAsync<IEnumerable<Jogo>>("getDados", "/Jogo/Get");
+
+        if (!string.IsNullOrEmpty(args.Filter))
+        {
+            query = query.AsQueryable().Where(args.Filter).AsEnumerable();
+        }
+
+        if (args.Sorts.Any())
+        {
+            foreach (var s in args.Sorts)
+            {
+                var propertyInfo = typeof(Jogo).GetProperty(s.Property);
+                query = s.SortOrder == SortOrder.Ascending ? query.OrderBy(o => propertyInfo.GetValue(o, null)) : query.OrderByDescending(o => propertyInfo.GetValue(o, null));
+            }
+        }
+
+        Jogos = query.ToList();
         count = Jogos.Count();
+
         isLoading = false;
     }
 

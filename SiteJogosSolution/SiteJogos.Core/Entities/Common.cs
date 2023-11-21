@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace SiteJogos.Core.Entities
@@ -20,6 +21,25 @@ namespace SiteJogos.Core.Entities
         {
             var base64EncodedBytes = Convert.FromBase64String(base64EncodedData ?? string.Empty);
             return Encoding.UTF8.GetString(base64EncodedBytes);
+        }
+
+        public static string RemoveCaratereEspecial(string? texto)
+        {
+            if (texto == null) return string.Empty;
+            var regex = new Regex("[^a-zA-Z0-9]");
+            return regex.Replace(RemoveAcentos(texto), "");
+        }
+
+        public static string RemoveAcentos(string? texto) 
+        {
+            if(texto == null) return string.Empty;
+            string comAcentos = "ÄÅÁÂÀÃäáâàãÉÊËÈéêëèÍÎÏÌíîïìÖÓÔÒÕöóôòõÜÚÛüúûùÇç";
+            string semAcentos = "AAAAAAaaaaaEEEEeeeeIIIIiiiiOOOOOoooooUUUuuuuCc";
+            for (int i = 0; i < comAcentos.Length; i++)
+            {
+                texto = texto.Replace(comAcentos[i].ToString(), semAcentos[i].ToString());
+            }
+            return texto;
         }
 
         public static string GetEnumDescription(Enum? value)

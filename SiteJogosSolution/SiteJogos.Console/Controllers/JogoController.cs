@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Rotativa.AspNetCore;
 using SiteJogos.Core.Entities;
 using SiteJogos.Core.Entities.ViewModel;
 using SiteJogos.Core.Services.Interface;
@@ -45,6 +46,22 @@ namespace SiteJogos.Console.Controllers
             {
                 return new List<Jogo>();
             }
+        }
+
+        [HttpGet]
+        [Route("/QRCode")]
+        public IActionResult QRCode(Guid id)
+        {
+            var jogo = _jogoRepository.GetById(id);
+            var pdf = new ViewAsPdf("_PDFJogoQRCode", jogo)
+            {
+                FileName = $"QR Code - {Common.RemoveCaratereEspecial(jogo.Nome)}.pdf",
+                PageSize = Rotativa.AspNetCore.Options.Size.A4,
+                PageOrientation = Rotativa.AspNetCore.Options.Orientation.Portrait,
+                ContentDisposition = Rotativa.AspNetCore.Options.ContentDisposition.Inline,
+                PageMargins = new Rotativa.AspNetCore.Options.Margins(1, 1, 1, 1),
+            };
+            return pdf;
         }
 
         [HttpGet]
