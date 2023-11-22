@@ -122,6 +122,7 @@
             var retorno = await JS.InvokeAsync<RetornoViewModel>("salvarPefil", usuario.Nome, usuario.Email, fileName, base64);
             await JS.InvokeVoidAsync("escondeLoadPanel");
             await JS.InvokeVoidAsync("notifica", retorno.Titulo, retorno.Mensagem, retorno.Codigo);
+            await JS.InvokeVoidAsync("recarregaTela");
         }
     }
 }

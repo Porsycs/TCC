@@ -37,7 +37,7 @@ namespace SiteJogos.Console.Controllers
                 usuario.UserName = email;
                 usuario.NormalizedUserName = email.ToUpper();
 
-                if(!string.IsNullOrEmpty(fileName) && !string.IsNullOrEmpty(base64))
+                if(fileName != "null" && base64 != "null")
                 {
                     if (usuario.MidiaId.HasValue)
                     {

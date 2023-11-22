@@ -25,6 +25,10 @@ function redirecionaTela(url) {
     window.location.href = url;
 }
 
+function recarregaTela() {
+    window.location.reload;
+}
+
 function getDados(url, data = {}, metodo = 'GET', dataType = 'json') {
     let dadosRetorno = null;
     $.ajax({
