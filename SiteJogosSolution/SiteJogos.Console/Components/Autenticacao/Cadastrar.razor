@@ -74,7 +74,7 @@
             await JsRuntime.InvokeVoidAsync("escondeLoadPanel");
             await JsRuntime.InvokeVoidAsync("notifica", retorno.Titulo, retorno.Mensagem, retorno.Codigo);
             await Task.Delay(1500);
-            retornaHome();
+            retornaLogin();
         }
         else
         {
@@ -83,8 +83,8 @@
         }
     }
 
-    async void retornaHome()
+    async void retornaLogin()
     {
-        await JsRuntime.InvokeVoidAsync("redirecionaTela", "/");
+        await JsRuntime.InvokeVoidAsync("redirecionaTela", "/Login");
     }
 }

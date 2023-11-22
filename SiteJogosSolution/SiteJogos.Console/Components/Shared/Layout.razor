@@ -18,23 +18,24 @@
 
 <RadzenLayout>
     <RadzenHeader>
-        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween" Gap="0"  Style="height: 100%; background: white">
+        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween" Gap="0" Style="height: 100%; background: white">
             <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Style="margin-left:2rem">
-                <RadzenIcon Icon="menu_book" Style="color:black; padding-right:1rem" />
-                <RadzenLabel Text="Historiando" Style="font-weight:600; color:black; font-family: math" />
+                <RadzenButton Click='() => redirecionaTela("/")' Style="background:white; box-shadow:none">
+                    <RadzenIcon Icon="menu_book" Style="color:black; padding-right:1rem" />
+                    <RadzenLabel Text="Historiando" Style="font-weight:600; color:black; font-family: math" />
+                </RadzenButton>
             </RadzenStack>
-            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
-                <RadzenButton Variant="Variant.Text" Text="Início" Style="color:black" ButtonStyle="ButtonStyle.Warning" Click='() => redirecionaTela("/")' />
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Style="padding-right:1rem">
                 @if (usuario == null)
                 {
-                    <RadzenButton Text="Login" Variant="Variant.Text" Style="color:black" ButtonStyle="ButtonStyle.Warning" Click='() => redirecionaTela("/Login")' />
+                    <RadzenButton Text="Acessar" Variant="Variant.Text" Style="color:black" ButtonStyle="ButtonStyle.Primary" Click='() => redirecionaTela("/Login")' />
                 }
                 else
                 {
-                    <RadzenButton Text="Meus Jogos" ButtonStyle="ButtonStyle.Warning" Style="color:black" Click='() => redirecionaTela("/MeusJogos")' />
-                    <RadzenProfileMenu>
+                    <RadzenButton Text="Meus Jogos" ButtonStyle="ButtonStyle.Primary" Style="color:black; background:white; box-shadow:none" Click='() => redirecionaTela("/MeusJogos")' />
+                    <RadzenProfileMenu Style="background:white">
                         <Template>
-                            <RadzenLabel Text="@(usuario.UserName)" class="nome-usuario" Style="margin-right: 0.5rem" />
+                            <RadzenLabel Text="@(usuario.UserName)" class="nome-usuario" Style="margin-right: 0.5rem; color:black" />
                             @if (usuario.MidiaId.HasValue)
                             {
                                 <RadzenImage Path="@($"/Midia/GetMidia?Id={usuario.MidiaId}")" class="rz-gravatar" />
@@ -52,11 +53,11 @@
                                 <RadzenProfileMenuItem Text="Trocar Senha" Style="color:black" Icon="lock_reset"></RadzenProfileMenuItem>
                             </div>
                             @*<div @onclick="temaClaro">
-                                <RadzenProfileMenuItem Visible="!LightMode" Text="Modo Claro" Icon="light_mode"></RadzenProfileMenuItem>
-                            </div>
-                            <div @onclick="temaEscuro">
-                                <RadzenProfileMenuItem Visible="LightMode" Text="Modo Escuro" Icon="dark_mode" @onclick="temaEscuro"></RadzenProfileMenuItem>
-                            </div>*@
+                        <RadzenProfileMenuItem Visible="!LightMode" Text="Modo Claro" Icon="light_mode"></RadzenProfileMenuItem>
+                        </div>
+                        <div @onclick="temaEscuro">
+                        <RadzenProfileMenuItem Visible="LightMode" Text="Modo Escuro" Icon="dark_mode" @onclick="temaEscuro"></RadzenProfileMenuItem>
+                        </div>*@
                             <div onclick="sairSistema()">
                                 <RadzenProfileMenuItem Text="Sair" Icon="logout"></RadzenProfileMenuItem>
                             </div>
