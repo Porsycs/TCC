@@ -30,15 +30,15 @@
 
     @@media(min-width: 1024px) {
         .card-home {
-            max-width: calc(4 * ((100% - 11 * var(--rz-gap)) / 12) + 3 * var(--rz-gap)) !important;
-            flex-basis: calc(4 * ((100% - 11 * var(--rz-gap)) / 12) + 3 * var(--rz-gap)) !important;
+            max-width: calc(4 * ((100% - 15 * var(--rz-gap)) / 12) + 3 * var(--rz-gap)) !important;
+            flex-basis: calc(4 * ((100% - 15 * var(--rz-gap)) / 12) + 3 * var(--rz-gap)) !important;
         }
     }
 
-    @@media(min-width: 768px) {
+    @@media(min-width: 768px) and (max-width: 1023px) {
         .card-home {
-            max-width: calc(6 * ((100% - 11 * var(--rz-gap)) / 12) + 5 * var(--rz-gap));
-            flex-basis: calc(6 * ((100% - 11 * var(--rz-gap)) / 12) + 5 * var(--rz-gap));
+            max-width: calc(6 * ((100% - 12 * var(--rz-gap)) / 12) + 5 * var(--rz-gap)) !important;
+            flex-basis: calc(6 * ((100% - 12 * var(--rz-gap)) / 12) + 5 * var(--rz-gap)) !important;
         }
     }
 
