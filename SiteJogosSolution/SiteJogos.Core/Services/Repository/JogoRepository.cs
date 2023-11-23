@@ -26,8 +26,8 @@ namespace SiteJogos.Core.Services.Repository
         {
             try
             {
-                var jogoExistente = _dbContext.Jogos.AsNoTracking().FirstOrDefault(f => f.Id == jogo.Id);
-                if (jogoExistente == null)
+                var jogoExistente = _dbContext.Jogos.AsNoTracking().Any(f => f.Id == jogo.Id);
+                if (!jogoExistente)
                 {
                     _dbContext.Jogos.Add(jogo);
                 }
@@ -37,7 +37,7 @@ namespace SiteJogos.Core.Services.Repository
                     _dbContext.Jogos.Update(jogo);
                 }
 
-                var midiasExistentes = _dbContext.JogoDaMemoriaMidias.AsNoTracking().Where(w => w.JogoId == jogo.Id).ToList();
+                var midiasExistentes = _dbContext.JogoDaMemoriaMidias.AsNoTracking().Where(w => midias.Select(s => s.Id).Contains(w.Id)).ToList();
                 foreach (var m in midias)
                 {
                     m.Jogo = null;
@@ -51,7 +51,10 @@ namespace SiteJogos.Core.Services.Repository
                     }
                 }
 
-                foreach (var m in midiasExistentes.Where(w => !midias.Any(a => a.Id == w.Id)).ToList())
+
+                var midiasOriginais = _dbContext.JogoDaMemoriaMidias.Where(w => w.JogoId == jogo.Id && !w.Excluido).ToList();
+                
+                foreach (var m in midiasOriginais.Where(w => !midias.Any(a => a.Id == w.Id)).ToList())
                 {
                     m.Excluido = true;
                     m.Alteracao = DateTime.Now;
@@ -63,7 +66,7 @@ namespace SiteJogos.Core.Services.Repository
                 return new RetornoViewModel()
                 {
                     Sucesso = true,
-                    Mensagem = "Jogo inserido com sucesso"
+                    Mensagem = jogoExistente ? "Jogo atualizado com sucesso!" : "Jogo inserido com sucesso!"
                 };
             }
             catch (Exception e)
