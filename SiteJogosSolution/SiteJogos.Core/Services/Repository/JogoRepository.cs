@@ -40,7 +40,7 @@ namespace SiteJogos.Core.Services.Repository
                 var midiasExistentes = _dbContext.JogoDaMemoriaMidias.AsNoTracking().Where(w => w.JogoId == jogo.Id).ToList();
                 foreach (var m in midias)
                 {
-                    m.Jogo = new Jogo();
+                    m.Jogo = null;
                     if (!midiasExistentes.Any(a => a.Id == m.Id))
                     {
                         _dbContext.JogoDaMemoriaMidias.Add(m);
