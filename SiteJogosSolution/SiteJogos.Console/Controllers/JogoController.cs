@@ -58,7 +58,7 @@ namespace SiteJogos.Console.Controllers
             jogo.UsuarioInclusao = _usuarioRepository.GetById(jogo.UsuarioInclusaoId);
 
             var qrGenerator = new QRCodeGenerator();
-            var qrCodeData = qrGenerator.CreateQrCode($"{Request.Scheme}://{Request.Host.Value}/Play?id={jogo.Id}", QRCodeGenerator.ECCLevel.Q);
+            var qrCodeData = qrGenerator.CreateQrCode($"{Request.Scheme}://{Request.Host}/Play?id={jogo.Id}", QRCodeGenerator.ECCLevel.Q);
             using var qrCode = new QRCode(qrCodeData);
             using var stream = new MemoryStream();
             var qrCodeImage = qrCode.GetGraphic(10);

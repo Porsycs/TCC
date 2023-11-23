@@ -90,6 +90,6 @@ app.MapControllerRoute(name: "default", pattern: "{controller=Autenticacao}/{act
 app.MapRazorPages();
 app.MapBlazorHub();
 
-app.UseRotativa();
+RotativaConfiguration.Setup((Microsoft.AspNetCore.Hosting.IHostingEnvironment)app.Environment);
 
 app.Run();
