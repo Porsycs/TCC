@@ -51,6 +51,7 @@ builder.Services.AddAuthorization(auth =>
 builder.Services.AddSingleton(typeof(ICommonRepository<>), typeof(CommonRepository<>));
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IJogoRepository, JogoRepository>();
+builder.Services.AddScoped<IJogoRankingRepository, JogoRankingRepository>();
 builder.Services.AddScoped<IJogoDaMemoriaMidiaRepository, JogoDaMemoriaMidiaRepository>();
 builder.Services.AddScoped<IMidiaRepository, MidiaRepository>();
 #endregion

@@ -17,5 +17,8 @@ namespace SiteJogos.Core.Entities
         public string Jogador { get; set; }
 
         public int Pontuacao { get; set; }
+
+        [NotMapped]
+        public int Ordem { get; set; }
     }
 }

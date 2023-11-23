@@ -6,17 +6,30 @@
 
 <!DOCTYPE html>
 <html lang="pt-br">
-    <head>
-        <link rel="shortcut icon" href="https://image.flaticon.com/icons/svg/3132/3132772.svg" type="image/x-icon" />
-        <script src="~/lib/jquery/dist/jquery.min.js"></script>
-        <script src="/js/JogoDaMemoria.js"></script>
-        <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400&display=swap" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet" />
-        <link rel="stylesheet" href="~/css/JogoDaMemoria/main.css" />
-        <link rel="stylesheet" href="~/css/JogoDaMemoria/card.css" />
-        <link rel="stylesheet" href="~/css/JogoDaMemoria/win.css" /><!--Estilo da tela de vitória-->
-        <link rel="stylesheet" href="~/css/JogoDaMemoria/responsive.css" />
-    </head>
+<head>
+    <link rel="shortcut icon" href="https://image.flaticon.com/icons/svg/3132/3132772.svg" type="image/x-icon" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="/js/JogoDaMemoria.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/JogoDaMemoria/main.css" />
+    <link rel="stylesheet" href="~/css/JogoDaMemoria/card.css" />
+    <link rel="stylesheet" href="~/css/JogoDaMemoria/win.css" /><!--Estilo da tela de vitória-->
+    <link rel="stylesheet" href="~/css/JogoDaMemoria/responsive.css" />
+
+    <style>
+
+        @foreach(var carta in midias)
+        {
+            @(Html.Raw($@".card.flip[data-nome='{midias.IndexOf(carta)}'], .card.flip[data-nome='{midias.IndexOf(carta)}'] img {{
+                            background-color: {carta.Cor};
+                        }}")
+            )
+        }
+
+    </style>
+</head>
+
 <body style="width: 100vw; height: 100vh; padding: 2rem">
     <h1 style="color: #fff">@Model.Nome</h1>
     <!--ALTERAÇÃO* Essa div vai ser exibida quando o jogador vencer a partida!-->
@@ -25,7 +38,7 @@
             <h1>Parabéns!</h1>
             <p>Você encontrou todos os pares com</p>
             <h2><span id="movimentosvitoria">0</span> ERROS</h2>
-            <a href="/Jogo">Jogar denovo</a>
+            <a href="@(Url.Action("Play", "Jogo"))?id=@(Model.Id)">Jogar de novo</a>
         </div>
     </div>
     <!--FIM-ALTERAÇÃO*-->

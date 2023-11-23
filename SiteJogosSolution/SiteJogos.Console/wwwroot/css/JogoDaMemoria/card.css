@@ -48,36 +48,6 @@
 .card.flip {
   transform: rotateY(180deg);
 }
-
-.card.flip[data-nome="torre-pisa"],
-.card.flip[data-nome="torre-pisa"] img {
-  background-color: #84cffa;
-}
-
-.card.flip[data-nome="cristo-redentor"],
-.card.flip[data-nome="cristo-redentor"] img {
-    background-color: #FA8484;
-}
-
-    .card.flip[data-nome="estatua-liberdade"],
-    .card.flip[data-nome="estatua-liberdade"] img {
-        background-color: #E984FA;
-    }
-
-    .card.flip[data-nome="coliseu"],
-    .card.flip[data-nome="coliseu"] img {
-        background-color: #84FAAC;
-    }
-
-    .card.flip[data-nome="torre-eiffel"],
-    .card.flip[data-nome="torre-eiffel"] img {
-        background-color: #8684FA;
-    }
-
-.card.flip[data-nome="piramide"],
-.card.flip[data-nome="piramide"] img {
-  background-color: #F7FA84;
-}
 /* novas */
 
 .frente,

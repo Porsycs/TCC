@@ -61,6 +61,11 @@
         midia.MidiaSecundariaId = midia.MidiaSecundaria.Id;
         midia.MidiaSecundaria.Arquivo = Convert.FromBase64String(midia.MidiaSecundaria.Url.Split(";base64,")[1]);
 
+        if(jogoDaMemoria.midias == null)
+        {
+            jogoDaMemoria.midias = new List<JogoDaMemoriaMidia>();
+        }
+
         jogoDaMemoria.midias.Add(midia);
         jogoDaMemoria.grid.Reset(true);
         jogoDaMemoria.Atualiza();

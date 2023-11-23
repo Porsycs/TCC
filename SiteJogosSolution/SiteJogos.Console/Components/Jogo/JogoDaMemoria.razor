@@ -26,7 +26,7 @@
                         <RadzenRow AlignItems="AlignItems.Center">
                             <RadzenColumn Size="12" SizeMD="12">
                                 <RadzenDataGrid @ref="grid" AllowFiltering="false" AllowColumnResize="true" Responsive="true" AllowAlternatingRows="true" AllowSorting="false" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="false" EmptyText="Nenhuma Carta Adicionada"
-                                                Data="@midias" TItem="JogoDaMemoriaMidia" Style="margin-top: 1.5rem; height: calc(100vh - 35rem);height: calc(100vh - 35rem);">
+                                                Data="@midias" TItem="JogoDaMemoriaMidia" Style="margin-top: 1.5rem; max-height: calc(100vh - 20rem);">
                                     <HeaderTemplate>
                                         <RadzenButton Text="Adicionar Carta" Click=@(() => ExibePopupInsereMidia()) />
                                     </HeaderTemplate>
