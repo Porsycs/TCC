@@ -17,7 +17,7 @@ namespace SiteJogos.Core.Services.Repository
     {
         public JogoRepository(ApplicationDbContext dbContext, IConfiguration configuration) : base(dbContext, configuration) { }
 
-        public IEnumerable<Jogo> GetByUsuarioId(Guid usuarioId) 
+        public IEnumerable<Jogo> GetByUsuarioId(Guid usuarioId)
         {
             return _dbContext.Jogos.Where(w => !w.Excluido && w.UsuarioInclusaoId == usuarioId);
         }
@@ -37,11 +37,11 @@ namespace SiteJogos.Core.Services.Repository
                     _dbContext.Jogos.Update(jogo);
                 }
 
-                var midiasExistentes = _dbContext.JogoDaMemoriaMidias.AsNoTracking().Where(w => midias.Select(s => s.Id).Contains(w.Id)).ToList();
-                foreach(var m  in midias) 
+                var midiasExistentes = _dbContext.JogoDaMemoriaMidias.AsNoTracking().Where(w => w.JogoId == jogo.Id).ToList();
+                foreach (var m in midias)
                 {
-                    m.Jogo = null;
-                    if(!midiasExistentes.Any(a => a.Id == m.Id))
+                    m.Jogo = new Jogo();
+                    if (!midiasExistentes.Any(a => a.Id == m.Id))
                     {
                         _dbContext.JogoDaMemoriaMidias.Add(m);
                     }
@@ -51,7 +51,7 @@ namespace SiteJogos.Core.Services.Repository
                     }
                 }
 
-                foreach(var m in midiasExistentes.Where(w => !midias.Any(a => a.Id == w.Id)).ToList())
+                foreach (var m in midiasExistentes.Where(w => !midias.Any(a => a.Id == w.Id)).ToList())
                 {
                     m.Excluido = true;
                     m.Alteracao = DateTime.Now;

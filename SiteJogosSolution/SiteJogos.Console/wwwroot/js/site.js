@@ -26,7 +26,7 @@ function redirecionaTela(url) {
 }
 
 function recarregaTela() {
-    window.location.reload;
+    window.location.reload();
 }
 
 function getDados(url, data = {}, metodo = 'GET', dataType = 'json') {
