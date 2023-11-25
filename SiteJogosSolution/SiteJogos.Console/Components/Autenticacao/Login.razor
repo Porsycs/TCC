@@ -3,23 +3,24 @@
 @inject NotificationService notificationService;
 @inject DialogService dialogService;
 
-<RadzenRow JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" Gap="0" Class="rz-my-12 rz-mx-auto rz-border-radius-6 rz-shadow-10" Style="width: 100%; max-width: 90vw; height: 75vh;overflow: hidden;margin: 0">
-    <RadzenColumn Size="12" SizeMD="6" SizeSM="0" class="painel">
-        <RadzenCard Class="rz-shadow-0 rz-border-radius-0 rz-text-align-center rz-p-12" Style="height: 100%; background: no-repeat url('/images/piratalogin5.png'); background-size: cover; background-position: center;">
-        </RadzenCard>
+<RadzenColumn JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" Gap="0" Class="rz-my-12 rz-mx-auto rz-border-radius-6 rz-shadow-10 rz-mob" Style="background:white;width: 30%; max-width: 90vw; height: auto; overflow: hidden; margin: 0">
+    <RadzenColumn JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" Style="background: white; padding-top:1rem">
+        <RadzenIcon Icon="account_circle" Class="rz-align-center" Style="align-items: center; width:100%; font-size:5rem;"></RadzenIcon> <!-- Added a class for centering -->
     </RadzenColumn>
     <RadzenColumn Size="12" SizeMD="6" SizeSM="12">
-        <RadzenCard Class="rz-shadow-0 rz-border-radius-0 rz-p-12">
-            <RadzenText TextStyle="TextStyle.DisplayH5" TagName="TagName.H2" Class="rz-mb-6">
-                Junte se a nós e nos ajude a criar uma nova história!
-            </RadzenText>
-            <RadzenText TextStyle="TextStyle.DisplayH6" TagName="TagName.H2" Class="rz-mb-6">
+        <RadzenCard Class="rz-shadow-0 rz-border-radius-0">
+            <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center" TagName="TagName.H2" Class="rz-mb-6">
                 Informe seus Dados
             </RadzenText>
-            <RadzenLogin AllowRegister="true" AllowResetPassword="true" UserText="E-mail" PasswordText="Senha" RememberMeText="Lembrar" AllowRememberMe="true" RegisterMessageText="Novo aqui? Cadastre-se já!" RegisterText="Cadastrar" Register="@(args => Cadastrar())" RememberMe="false" Login=@(args => OnLogin(args)) ResetPassword=@(args => OnResetPassword()) ResetPasswordText="Esqueceu sua senha?" />
+            <RadzenLogin AllowRegister="false" AllowResetPassword="true" UserText="E-mail" PasswordText="Senha" RememberMeText="Lembrar" ResetPasswordText="Esqueceu sua senha?" AllowRememberMe="true" RememberMe="false" Login=@(args => OnLogin(args)) ResetPassword=@(args => OnResetPassword()) />
+            <RadzenText Class="or">ou</RadzenText>
+            <RadzenButton Click="@(args => Cadastrar())" Class="button-secondary">
+                <RadzenIcon Icon="person_add" Style="color:black; padding-right:1rem"></RadzenIcon>
+                Cadastrar
+                </RadzenButton>
         </RadzenCard>
     </RadzenColumn>
-</RadzenRow>
+</RadzenColumn>
 
 @code {
     async void OnLogin(LoginArgs args)
@@ -57,7 +58,7 @@
     @<RadzenStack AlignItems="AlignItems.Center">
         <RadzenTextBox @bind-Value="valorEmail" Placeholder="Digite seu email..." />
         <RadzenButton Click="() => EnviarResetSenha(valorEmail)">Enviar</RadzenButton>
-        </RadzenStack>
+    </RadzenStack>
     , new DialogOptions() { ShowTitle = true, Width = "400", ShowClose = true, Style = "min-height:auto;min-width:auto;width:auto", CloseDialogOnEsc = true });
     }
 
@@ -65,12 +66,72 @@
     {
         var email = "";
         var retorno = await JsRuntime.InvokeAsync<RetornoViewModel>("recuperaSenha", new AutenticacaoViewModel()
-        {
-            Login = value
-        });
+            {
+                Login = value
+            });
 
-        if(retorno.Sucesso)
+        if (retorno.Sucesso)
             dialogService.Close();
         await JsRuntime.InvokeVoidAsync("notifica", retorno.Titulo, retorno.Mensagem, retorno.Codigo);
     }
 }
+
+
+<style>
+    i {
+        /* Replace this with your icon styling */
+        display: inline-block;
+        width: 50px;
+        height: 50px;
+        color: var(--rz-primary);
+        font-size: 24px;
+        line-height: 50px;
+        border-radius: 50%;
+    }
+
+    .or {
+        position: relative;
+        width: 300px;
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+    }
+
+        .or::before,
+        .or::after {
+            position: absolute;
+            width: 130px;
+            height: 1px;
+            top: 24px;
+            background-color: #aaa;
+            content: '';
+        }
+
+        .or::before {
+            left: 0;
+        }
+
+        .or::after {
+            right: 0;
+        }
+
+    .button-secondary {
+        background:white !important;
+        width:100% !important;
+        color:grey !important;
+        box-shadow:none !important;
+        border:1px solid black;
+        border-radius:28px !important;
+    }
+
+        .button-secondary:hover {
+            background: #dddddd !important;
+            border:1.5px solid black
+        }
+
+    @@media only screen and (max-width: 600px) {
+        .rz-mob {
+            width: 100% !important
+        }
+    }
+</style>
