@@ -51,8 +51,8 @@
 <section>
     <div class="card-home">
         <div style="display:flex; align-items: center;">
-            <i class="fa-sharp fa-solid fa-1" style="font-size:2rem"></i>
-            <h1>. Como Usar</h1>
+            <i class="fa-sharp fa-solid fa-1" style="font-size:2rem">.</i>
+            <h1> Como Usar</h1>
         </div>
         <div style="align-items: center; justify-content:center; display:flex;">
             <div>
@@ -71,13 +71,14 @@
             <img src="/images/comousar.png" style="height:25rem" />
         </div>
     </div>
+
 </section>
 
 <section>
     <div class="card-home">
         <div style="display:flex; align-items: center;">
-            <i class="fa-sharp fa-solid fa-2" style="font-size:2rem"></i>
-        <h1>. Criando Jogos</h1>
+            <i class="fa-sharp fa-solid fa-2" style="font-size:2rem">.</i>
+        <h1> Criando Jogos</h1>
         </div>
         <div style="align-items: center; justify-content:center; display:flex;">
             <div>
@@ -99,8 +100,8 @@
 <section>
     <div class="card-home">
         <div style="display:flex; align-items: center;">
-            <i class="fa-sharp fa-solid fa-3" style="font-size:2rem"></i>
-        <h1>. Usando os Jogos</h1>
+            <i class="fa-sharp fa-solid fa-3" style="font-size:2rem">.</i>
+        <h1>Usando os Jogos</h1>
         </div>
         <div style="align-items: center; justify-content:center; display:flex;">
             <div>
@@ -123,8 +124,8 @@
 <section>
     <div class="card-home">
         <div style="display:flex; align-items: center;">
-            <i class="fa-sharp fa-solid fa-4" style="font-size:2rem"></i>
-        <h1>. Conclusão</h1>
+            <i class="fa-sharp fa-solid fa-4" style="font-size:2rem">.</i>
+        <h1> Conclusão</h1>
         </div>
         <div style="align-items: center; justify-content:center; display:flex;">
             <div>
@@ -167,6 +168,29 @@
         justify-content: center;
         height: 100vh;
     }
+
+    @@media only screen and (max-width: 600px) {
+
+    section {
+        height:auto;
+        padding-bottom:5vh;
+    }
+    .card-home {
+        padding: 1rem;
+            max-width: 100% /* Adjust padding for smaller screens */
+    }
+
+    .card-home > div {
+        flex-direction: column;
+        /* Stack the inner div elements on smaller screens */
+    }
+
+    img {
+        height: auto !important; /* Make sure the image scales with the width on smaller screens */
+        max-width: 100% !important; /* Ensure the image doesn't overflow its container */
+        margin-top: 1rem !important; /* Add some space between the text and image on smaller screens */
+    }
+}
 </style>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
