@@ -52,9 +52,16 @@ namespace SiteJogos.Console.Controllers
         [Route("/QRCode")]
         public IActionResult QRCode(Guid id)
         {
-            using var client = new WebClient();
-            var html = client.DownloadString($"{Request.Scheme}://{Request.Host}/GetQRCode?id={id}");
-            return File(PdfSharpConvert(html), "application/pdf");
+            try
+            {
+                using var client = new WebClient();
+                var html = client.DownloadString($"{Request.Scheme}://{Request.Host}/GetQRCode?id={id}");
+                return File(PdfSharpConvert(html), "application/pdf");
+            }
+            catch(Exception ex)
+            {
+                return View("~/Views/Shared/Error.cshtml", new ErrorViewModel { Descricao = ex.Message + "/" + ex?.InnerException?.Message });
+            }
         }
 
         [HttpGet]
