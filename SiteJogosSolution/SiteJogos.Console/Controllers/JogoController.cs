@@ -3,12 +3,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using QRCoder;
-using Rotativa.AspNetCore;
 using SiteJogos.Core.Entities;
 using SiteJogos.Core.Entities.ViewModel;
 using SiteJogos.Core.Services.Interface;
-using SiteJogos.Core.Services.Repository;
-using static QRCoder.PayloadGenerator;
+using System.Net;
 
 namespace SiteJogos.Console.Controllers
 {
@@ -54,6 +52,16 @@ namespace SiteJogos.Console.Controllers
         [Route("/QRCode")]
         public IActionResult QRCode(Guid id)
         {
+            using var client = new WebClient();
+            var html = client.DownloadString($"{Request.Scheme}://{Request.Host}/GetQRCode?id={id}");
+            return File(PdfSharpConvert(html), "application/pdf");
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        [Route("/GetQRCode")]
+        public IActionResult GetQRCode(Guid id)
+        {
             var jogo = _jogoRepository.GetById(id);
             jogo.UsuarioInclusao = _usuarioRepository.GetById(jogo.UsuarioInclusaoId);
 
@@ -61,19 +69,23 @@ namespace SiteJogos.Console.Controllers
             var qrCodeData = qrGenerator.CreateQrCode($"{Request.Scheme}://{Request.Host}/Play?id={jogo.Id}", QRCodeGenerator.ECCLevel.Q);
             using var qrCode = new QRCode(qrCodeData);
             using var stream = new MemoryStream();
-            var qrCodeImage = qrCode.GetGraphic(10);
+            var qrCodeImage = qrCode.GetGraphic(7);
             qrCodeImage.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
             jogo.Base64QrCode = Convert.ToBase64String(stream.ToArray());
 
-            var pdf = new ViewAsPdf("_PDFJogoQRCode", jogo)
+            return View("~/Views/Jogo/_PDFJogoQRCode.cshtml", jogo);
+        }
+
+        private static byte[] PdfSharpConvert(string html)
+        {
+            byte[] res;
+            using (MemoryStream ms = new MemoryStream())
             {
-                FileName = $"QR Code - {Common.RemoveCaratereEspecial(jogo.Nome)}.pdf",
-                PageSize = Rotativa.AspNetCore.Options.Size.A4,
-                PageOrientation = Rotativa.AspNetCore.Options.Orientation.Portrait,
-                ContentDisposition = Rotativa.AspNetCore.Options.ContentDisposition.Inline,
-                PageMargins = new Rotativa.AspNetCore.Options.Margins(1, 1, 1, 1),
-            };
-            return pdf;
+                var pdf = TheArtOfDev.HtmlRenderer.PdfSharp.PdfGenerator.GeneratePdf(html, PdfSharp.PageSize.A4, 4);
+                pdf.Save(ms);
+                res = ms.ToArray();
+            }
+            return res;
         }
 
         [HttpGet]
