@@ -42,6 +42,14 @@ namespace SiteJogos.Core.Entities
             return texto;
         }
 
+        public static string NumeroFormatado(int numero, bool centena = false)
+        {
+            string zeros = "";
+            zeros += (centena && numero < 100) ? "0" : "";
+            zeros += numero < 10 ? "0" : "";
+            return zeros + numero;
+        }
+
         public static string GetEnumDescription(Enum? value)
         {
             if(value == null) return string.Empty;

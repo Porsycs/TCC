@@ -18,7 +18,45 @@ namespace SiteJogos.Core.Entities
 
         public int Pontuacao { get; set; }
 
+        public double Tempo { get; set; }
+
         [NotMapped]
         public int Ordem { get; set; }
+
+        [NotMapped]
+        public int Minutos 
+        { 
+            get
+            {
+                return (int)(Tempo / 60);
+            }
+        }
+
+        [NotMapped]
+        public int Segundos
+        {
+            get
+            {
+                return (int)(Tempo - (Minutos * 60));
+            }
+        }
+
+        [NotMapped]
+        public int Milissegundos
+        {
+            get
+            {
+                return ((int)(Tempo * 1000) - (int)(Tempo));
+            }
+        }
+
+        [NotMapped]
+        public string TempoFormatado
+        {
+            get
+            {
+                return $"{Common.NumeroFormatado(Minutos)}:{Common.NumeroFormatado(Segundos)}:{Common.NumeroFormatado(Milissegundos, true)}";
+            }
+        }
     }
 }
