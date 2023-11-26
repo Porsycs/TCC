@@ -1,0 +1,44 @@
+﻿@inject IJSRuntime Js;
+<RadzenCard Class="rz-p-4 rz-p-md-12" Style="border-radius: 25px; width: 100%; max-width: 35rem; background-color: var(--rz-header-background-color); color: var(--rz-header-color); margin: 2rem">
+    <RadzenStack Gap="1rem" Class="rz-p-4 rz-p-md-12" Style="padding: 0 !important" JustifyContent="JustifyContent.Center">
+        <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem" Style="margin-top: 2rem; text-align: center">
+            <RadzenColumn Size="12" SizeMD="12">
+                <RadzenText TextStyle="TextStyle.DisplayH5" Style="color: var(--rz-header-color); font-family: 'Zeyada', cursive !important;" Text="Digite seu nome para continuar"></RadzenText>
+            </RadzenColumn>
+        </RadzenRow>
+        <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+            <RadzenColumn Size="12" SizeMD="12">
+                <RadzenTextBox @bind-Value="nomeJogador" Style="width:100%" />
+            </RadzenColumn>
+        </RadzenRow>
+        <RadzenRow AlignItems="AlignItems.Center" Class="rz-mt-4">
+            <RadzenColumn Size="12" SizeMD="12" Style="text-align:center">
+                <RadzenButton ButtonStyle="ButtonStyle.Secondary" Click="InsereJogador" IsBusy="@busy" Text="Continuar" />
+            </RadzenColumn>
+        </RadzenRow>
+    </RadzenStack>
+</RadzenCard>
+
+@code {
+
+    [Parameter]
+    public string? nomeJogador { get; set; }
+
+    public bool busy = false;
+
+    public async void InsereJogador()
+    {
+        busy = true;
+        if (string.IsNullOrEmpty(nomeJogador?.Trim()))
+        {
+            busy = false;
+            await Js.InvokeVoidAsync("notifica", "Erro", "Insira seu nome para continuar", "error", "nfc-bottom-center");
+        }
+        else
+        {
+            await Js.InvokeVoidAsync("insereJogador", nomeJogador?.Trim());
+            busy = false;
+        }
+    }
+
+}

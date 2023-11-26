@@ -33,17 +33,15 @@ namespace SiteJogos.Console.Controllers
                 if(jogo.Template == Jogo.EnumTemplate.JogoDaMemoria)
                 {
                     var ordem = 1;
-                    foreach(var r in ranking.GroupBy(g => g.Pontuacao).OrderBy(o => o.Key))
+                    ranking = ranking.OrderBy(o => o.Pontuacao).ThenBy(tb => tb.Tempo).ToList();
+                    ranking.ForEach(fe =>
                     {
-                        foreach(var rank in r)
-                        {
-                            ranking[ranking.IndexOf(rank)].Ordem = ordem;
-                        }
+                        fe.Ordem = ordem;
                         ordem++;
-                    }
+                    });
                 }
 
-                return ranking.OrderBy(o => o.Ordem);
+                return ranking;
             }
             catch (Exception)
             {
@@ -78,6 +76,12 @@ namespace SiteJogos.Console.Controllers
                     Mensagem = "Erro: " + e.Message
                 };
             }
+        }
+
+        [HttpDelete]
+        public RetornoViewModel Delete(Guid key)
+        {
+            return _jogoRankingRepository.DeleteByJogoId(key);
         }
     }
 }

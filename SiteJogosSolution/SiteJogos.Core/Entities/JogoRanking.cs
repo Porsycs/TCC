@@ -46,7 +46,7 @@ namespace SiteJogos.Core.Entities
         {
             get
             {
-                return ((int)(Tempo * 1000) - (int)(Tempo));
+                return (int)((Tempo % 1) * 1000);
             }
         }
 

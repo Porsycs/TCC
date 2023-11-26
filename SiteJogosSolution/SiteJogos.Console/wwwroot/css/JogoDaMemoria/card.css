@@ -22,20 +22,21 @@
   background-color: #3a3a3a;
 }
 
-.jogo .card img {
-  width: 100px;
-  height: 100px;
+.card img {
+  width: 120px;
+  height: auto;
+  max-height: 120px;
   border-radius: 30px 30px 30px 30px;
 }
 
-.jogo .card,
-.jogo .virado {
+.card,
+.virado {
   perspective: 1000px;
   transform-style: preserve-3d;
   transition: transform 0.5s;
 }
 
-.jogo .card {
+.card {
   background-color: #c4c4c4;
   box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
 }

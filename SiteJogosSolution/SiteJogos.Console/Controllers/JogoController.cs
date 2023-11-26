@@ -103,8 +103,17 @@ namespace SiteJogos.Console.Controllers
             try
             {
                 var jogo = _jogoRepository.GetById(id) ?? throw new Exception("Jogo não encontrado");
+                var jogador = HttpContext.Request.Cookies["NomeJogador"]?.Trim();
+                if (string.IsNullOrEmpty(jogador))
+                {
+                    return View("~/Views/Jogo/Jogador.cshtml");
+                }
 
-                if(jogo.Template == Jogo.EnumTemplate.JogoDaMemoria)
+                ViewData["Jogador"] = jogador;
+                HttpContext.Response.Cookies.Append("NomeJogador", "");
+                HttpContext.Response.Cookies.Append("NomeJogadorUtilizado", jogador);
+
+                if (jogo.Template == Jogo.EnumTemplate.JogoDaMemoria)
                 {
                     ViewData["Midias"] = _jogoDaMemoriaMidiaRepository.GetByJogoId(jogo.Id).ToList(); 
                     return View("~/Views/Jogo/JogoDaMemoria.cshtml", jogo);
@@ -116,6 +125,14 @@ namespace SiteJogos.Console.Controllers
             {
                 return BadRequest(e.Message);
             }
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public bool InsereJogador(string nome)
+        {
+            HttpContext.Response.Cookies.Append("NomeJogador", nome);
+            return true;
         }
 
         [HttpDelete]

@@ -21,7 +21,7 @@ namespace SiteJogos.Core.Entities
             JogoDaMemoria = 0,
 
             [Description("Forca")]
-            Forca = 1,
+            Quiz = 1,
         }
 
         [NotMapped]
@@ -44,7 +44,7 @@ namespace SiteJogos.Core.Entities
                 switch(Template)
                 {
                     case EnumTemplate.JogoDaMemoria: return "view_module";
-                    case EnumTemplate.Forca: return "table_lamp";
+                    case EnumTemplate.Quiz: return "quiz";
                     default: return "";
                 }
             }

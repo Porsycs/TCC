@@ -2,6 +2,7 @@
 @{
     Layout = "";
     var midias = (List<JogoDaMemoriaMidia>)ViewBag.Midias;
+    var jogador = Context.Request.Cookies["NomeJogador"];
 }
 
 <!DOCTYPE html>
@@ -10,66 +11,90 @@
     <link rel="shortcut icon" href="https://image.flaticon.com/icons/svg/3132/3132772.svg" type="image/x-icon" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="/js/JogoDaMemoria.js"></script>
+    <link rel="stylesheet" href="_content/Radzen.Blazor/css/material-base.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/JogoDaMemoria/main.css" />
     <link rel="stylesheet" href="~/css/JogoDaMemoria/card.css" />
     <link rel="stylesheet" href="~/css/JogoDaMemoria/win.css" /><!--Estilo da tela de vitória-->
     <link rel="stylesheet" href="~/css/JogoDaMemoria/responsive.css" />
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
 
     <style>
 
         @foreach(var carta in midias)
         {
-            @(Html.Raw($@".card.flip[data-nome='{midias.IndexOf(carta)}'], .card.flip[data-nome='{midias.IndexOf(carta)}'] img {{
-                            background-color: {carta.Cor};
-                        }}")
-            )
+            if (!string.IsNullOrEmpty(carta.Cor))
+            {
+                @(Html.Raw($@".card.flip[data-nome='{midias.IndexOf(carta)}'], .card.flip[data-nome='{midias.IndexOf(carta)}'] img {{
+                                background-color: {carta.Cor} !important;
+                            }}"))
+            }
+        }
+
+        .iconeCerto {
+            position: absolute;
+            top: calc(50vh - 5rem);
+            left: calc(50vw - 5rem);
+            color: green;
+            background-color: white;
+            border-radius: 50%;
+            font-size: 10rem;
+            z-index: 1000;
+        }
+
+        .iconeErrado {
+            position: absolute;
+            top: calc(50vh - 5rem);
+            left: calc(50vw - 5rem);
+            color: red;
+            background-color: white;
+            border-radius: 50%;
+            font-size: 10rem;
+            z-index: 1000;
+        }
+
+        .d-none {
+            display: none !important;
         }
 
     </style>
 </head>
 
-<body style="width: 100vw; height: 100vh; padding: 2rem">
-    <h1 style="color: #fff">@Model.Nome</h1>
-    <!--ALTERAÇÃO* Essa div vai ser exibida quando o jogador vencer a partida!-->
-    <div id="vitoria">
-        <div id="container">
-            <h1>Parabéns!</h1>
-            <p>Você encontrou todos os pares com</p>
-            <h2><span id="movimentosvitoria">0</span> ERROS</h2>
-            <a href="@(Url.Action("Play", "Jogo"))?id=@(Model.Id)">Jogar de novo</a>
-        </div>
-    </div>
-    <!--FIM-ALTERAÇÃO*-->
-    <!--<section id="responsivo">
-        <h2>Erros <span id="movimentos2">0</span></h2>-->
-    <!-- <button id="btn-mudartema">Mudar tema</button>
-        <button id="btn-reiniciar">Reiniciar</button> -->
-    <!--<a href="/Jogo">Reiniciar</a>
-    </section>-->
+<body style="width: 100vw; height: 100vh; padding: 2rem; font-family: 'Zeyada', cursive !important;">
+    <h1 style="color: #fff; text-align:center">@Model.Nome</h1>
+    <i class="rzi iconeCerto d-none">check_circle</i>
+    <i class="rzi iconeErrado d-none">cancel</i>
 
-    <div class="corpo">
-        <!--<section id="esq">
-            <h2>Erros <span id="movimentos">0</span></h2>-->
-        <!-- <button id="btn-mudartema">Mudar tema</button>
-            <button id="btn-reiniciar">Reiniciar</button> -->
-        <!--<a href="/Jogo">Reiniciar</a>
-        </section>-->
-        <section class="jogo">
-            @foreach (var carta in midias)
-            {
-                <div class="card" data-nome="@midias.IndexOf(carta)">
-                    <img class="frente" src="@(Url.Action("GetMidia", "Midia"))?id=@(carta.MidiaPrimariaId)" alt="card" />
-                    <img class="verso" src="/images/interrogacao.png" alt="card" />
-                </div>
+    <component type="typeof(SiteJogos.Console.Components.JogoDaMemoria.JogoDaMemoriaPlay)" render-mode="Server" param-jogo="Model" param-midias="midias" />
 
-                <div class="card" data-nome="@midias.IndexOf(carta)">
-                    <img class="frente" src="@(Url.Action("GetMidia", "Midia"))?id=@(carta.MidiaSecundariaId)" alt="card" />
-                    <img class="verso" src="/images/interrogacao.png" alt="card" />
-                </div>
+    <div style="color: #fff"><span id="minute">00</span>:<span id="second">00</span> | Movimentos: <span id="erros">0</span></div>
+
+    <script>
+        function insereScore() {
+            let score = {
+                JogoId: "@(Model.Id)",
+                Jogador: "@(jogador)",
+                Pontuacao: movements,
+                Tempo: getTempo()
             }
-        </section>
-    </div>
+            $.ajax({
+                method: "POST",
+                url: "@(Url.Action("Post", "JogoRanking"))",
+                data: { values: JSON.stringify(score) },
+                dataType: 'json',
+                async: true,
+                success: function (data) {
+                },
+                error: function (e) {
+                }
+            });
+        }
+    </script>
+
+    <script src="_framework/blazor.server.js"></script>
+    <script src="_content/Radzen.Blazor/Radzen.Blazor.js" asp-append-version="true"></script>
 </body>
 </html>
