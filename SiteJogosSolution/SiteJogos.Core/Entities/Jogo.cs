@@ -13,6 +13,10 @@ namespace SiteJogos.Core.Entities
     {
         public string Nome { get; set; }
 
+        public bool Aleatorio { get; set; }
+
+        public int? LimiteTempo { get; set; }
+
         public EnumTemplate Template { get; set; }
 
         public enum EnumTemplate
