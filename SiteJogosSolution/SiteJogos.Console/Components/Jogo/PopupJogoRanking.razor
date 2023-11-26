@@ -1,0 +1,46 @@
+﻿@inject IJSRuntime JS;
+@inject DialogService DialogService;
+
+<RadzenStack>
+    <RadzenDataGrid @ref="grid" AllowFiltering="false" AllowColumnResize="true" AllowAlternatingRows="false" AllowFilterDateInput="false" AllowSorting="false" EmptyText="Nenhuma  Pontuação Encontrada" 
+                    IsLoading=@isLoading LoadData="@LoadData" Count="@count" Data="@Rankings" TItem="JogoRanking" Responsive="false" Style="min-height: 8rem; max-height: calc(100vh - 24rem);">
+        <Columns>
+            <RadzenDataGridColumn TItem="JogoRanking" Property="Ordem" Title="" Width="50px" />
+            <RadzenDataGridColumn TItem="JogoRanking" Property="Jogador" Title="Nome" />
+            <RadzenDataGridColumn TItem="JogoRanking" Property="Pontuacao" Title="@(Jogo.Template == Jogo.EnumTemplate.JogoDaMemoria ? "Movimentos" : "Acertoss")" />
+            <RadzenDataGridColumn TItem="JogoRanking" Property="TempoFormatado" Title="Tempo" />
+            <RadzenDataGridColumn TItem="JogoRanking" Property="Inclusao" Title="Data" />
+        </Columns>
+    </RadzenDataGrid>
+</RadzenStack>
+
+@code {
+
+    [Parameter]
+    public Jogo Jogo { get; set; }
+
+    RadzenDataGrid<JogoRanking> grid;
+    public List<JogoRanking> Rankings { get; set; } = new List<JogoRanking>();
+
+    bool isLoading;
+    int count;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        var query = await JS.InvokeAsync<IEnumerable<JogoRanking>>("getDados", "/JogoRanking/GetByJogoId", new { jogoId = $"{Jogo.Id}" });
+        Rankings = query.ToList();
+        grid.Reload();
+    }
+
+    async Task LoadData(LoadDataArgs? args)
+    {
+        isLoading = true;
+
+        var query = await JS.InvokeAsync<IEnumerable<JogoRanking>>("getDados", "/JogoRanking/GetByJogoId", new { jogoId = $"{Jogo.Id}" });
+
+        Rankings = query.ToList();
+
+        isLoading = false;
+    }
+}

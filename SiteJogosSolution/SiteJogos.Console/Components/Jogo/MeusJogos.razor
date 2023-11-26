@@ -24,9 +24,9 @@
         flex-basis: 100%;
     }
 
-        .card-home:hover {
-            cursor: pointer !important;
-        }
+    .rz-dialog {
+        height: auto !important;
+    }
 
     @@media(min-width: 1024px) {
         .card-home {
@@ -63,7 +63,7 @@
                         <RadzenMenu class="menuLista" ClickToOpen="true" Responsive="false">
                             <RadzenMenuItem Text="" Icon="more_vert">
                                 <RadzenMenuItem Text="Jogar" Icon="play_arrow" Click="(args) => Jogar(jogo)"></RadzenMenuItem>
-                                <RadzenMenuItem Text="Ranking" Icon="emoji_events" Click="(args) => CopiarLink(jogo)"></RadzenMenuItem>
+                                <RadzenMenuItem Text="Ranking" Icon="emoji_events" Click="(args) => Ranking(jogo)"></RadzenMenuItem>
                                 <RadzenMenuItem Text="Editar" Icon="edit" Click="(args) => Editar(jogo)"></RadzenMenuItem>
                                 <RadzenMenuItem Text="Copiar Link" Icon="content_copy" Click="(args) => CopiarLink(jogo)"></RadzenMenuItem>
                                 <RadzenMenuItem Text="QR Code" Icon="qr_code" Click="(args) => QRCode(jogo)"></RadzenMenuItem>
@@ -82,7 +82,7 @@
                     <RadzenDataGridColumn TItem="Jogo" Context="Id" Filterable="false" Sortable="false" TextAlign="TextAlign.Right" Frozen="true" Resizable="false" Width="265px">
                         <Template Context="Id">
                             <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="play_arrow" Variant="Variant.Flat" Size="ButtonSize.Medium" title="Jogar" Click="(args => Jogar(Id))" />
-                            <RadzenButton ButtonStyle="ButtonStyle.Warning" Icon="emoji_events" Variant="Variant.Flat" Size="ButtonSize.Medium" title="Ranking" Click="(args => CopiarLink(Id))" />
+                            <RadzenButton ButtonStyle="ButtonStyle.Warning" Icon="emoji_events" Variant="Variant.Flat" Size="ButtonSize.Medium" title="Ranking" Click="(args => Ranking(Id))" />
                             <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="edit" Variant="Variant.Flat" Size="ButtonSize.Medium" title="Editar" Click="(args) => Editar(Id)" />
                             <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="content_copy" Variant="Variant.Flat" Size="ButtonSize.Medium" title="Copiar Link" Click="(args => CopiarLink(Id))" />
                             <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="qr_code" Variant="Variant.Flat" Size="ButtonSize.Medium" title="QR Code" Click="(args => QRCode(Id))" />
@@ -110,6 +110,7 @@
     RadzenDataList<Jogo> list;
     int count;
     bool isLoading;
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -155,8 +156,38 @@
             var retorno = await JS.InvokeAsync<RetornoViewModel>("getDados", "/Jogo/Delete", new { key = jogo.Id }, "DELETE");
             await JS.InvokeVoidAsync("notifica", retorno.Sucesso ? "" : "Erro", retorno.Mensagem, retorno.Sucesso);
             grid.ResetLoadData();
-            if(retorno.Sucesso)
+            if (retorno.Sucesso)
                 await JS.InvokeVoidAsync("recarregaTela");
+        }
+    }
+
+    async Task Ranking(Jogo jogo)
+    {
+        DialogService.Close();
+        await DialogService.OpenAsync($"Ranking - {jogo.Nome}", ds =>
+        @<RadzenStack JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center">
+            <RadzenRow Gap="2rem" Class="rz-p-0 rz-p-lg-4">
+                <PopupJogoRanking Jogo="jogo" />
+            </RadzenRow>
+            <RadzenRow Gap="2rem" Class="rz-p-0 rz-p-lg-4" JustifyContent="JustifyContent.Center">
+                <RadzenButton ButtonStyle="ButtonStyle.Warning" Text="Limpar Ranking" Click="(args) => LimparRanking(jogo)" />
+                <RadzenButton ButtonStyle="ButtonStyle.Primary" Text="Fechar" Click="(args) => DialogService.Close()" />
+            </RadzenRow>
+        </RadzenStack>, new DialogOptions() { Width = "800px", Height = "auto", Resizable = false, Draggable = true, ShowClose = true });
+    }
+
+    async Task LimparRanking(Jogo jogo)
+    {
+        DialogService.Close();
+        var popupConfirma = await DialogService.Confirm($"Deseja mesmo limpar o ranking deste jogo?", "Limpar Ranking", new ConfirmOptions() { OkButtonText = "Sim", CancelButtonText = "Não" });
+        if (popupConfirma == true)
+        {
+            var retorno = await JS.InvokeAsync<RetornoViewModel>("getDados", "/JogoRanking/Delete", new { key = jogo.Id }, "DELETE");
+            await JS.InvokeVoidAsync("notifica", retorno.Sucesso ? "" : "Erro", retorno.Mensagem, retorno.Sucesso);
+        }
+        else
+        {
+            DialogService.Close();
         }
     }
 

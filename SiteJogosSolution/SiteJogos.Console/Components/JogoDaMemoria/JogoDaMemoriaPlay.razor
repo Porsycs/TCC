@@ -1,0 +1,164 @@
+﻿@inject DialogService DialogService;
+@inject IJSRuntime JS;
+
+<style>
+    .card {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0px 30px 0px 30px;
+        user-select: none;
+        background-color: #ccc;
+        height: 18rem;
+        width: 10rem;
+    }
+
+        .card img {
+            width: 100px;
+            height: 100px;
+            border-radius: 30px 30px 30px 30px;
+        }
+
+    .card,
+    .virado {
+        perspective: 1000px;
+        transform-style: preserve-3d;
+        transition: transform 0.5s;
+    }
+
+    .card {
+        background-color: #c4c4c4;
+        box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+    }
+
+        .card:active {
+            transform: scale(0.97);
+            transition: transform 0.2s;
+        }
+
+        .card.flip {
+            transform: rotateY(180deg);
+        }
+    /* novas */
+
+    .frente,
+    .verso {
+        width: 100px;
+        height: 100px;
+        padding: 15px;
+        position: absolute;
+        backface-visibility: hidden;
+    }
+
+    .frente {
+        transform: rotateY(180deg);
+    }
+
+    .rz-dialog {
+        height: auto !important;
+    }
+
+</style>
+
+<RadzenNotification />
+<RadzenDialog />
+<RadzenContextMenu />
+<RadzenTooltip />
+
+<RadzenStack Style="margin-top:1.5rem; width: 100%; height: calc(100vh - 10rem)">
+    <RadzenRow Gap="2rem" Class="rz-p-0 rz-p-lg-4" Style="height: 100%" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center">
+        @foreach (var m in midias)
+        {
+            <RadzenColumn Size="12" SizeMD="midias.Count() == 2 ? 6 : midias.Count() == 3 ? 4 : midias.Count() == 4 ? 3 : 2" SizeSM="6" SizeXS="6" SizeXX="6" Style="display: inline-grid; justify-content: center; align-items: center">
+                <RadzenCard Class="rz-border-radius-3 text-center card" alt="card" data-nome="@(midias.IndexOf(m))" id="@(m.MidiaPrimariaId)" @onclick="(args) => FlipCard(m.MidiaPrimariaId)" data-descoberto="false">
+                    <RadzenImage class="frente" Path="@($"/Midia/GetMidia?id={m.MidiaPrimariaId}")" alt="card" />
+                    <RadzenImage class="verso" Path="/images/interrogacao.png" alt="card" />
+                </RadzenCard>
+            </RadzenColumn>
+            <RadzenColumn Size="12" SizeMD="midias.Count() == 2 ? 6 : midias.Count() == 3 ? 4 : midias.Count() == 4 ? 3 : 2" SizeSM="6" SizeXS="6" SizeXX="6" Style="display: inline-grid; justify-content: center; align-items: center">
+                <RadzenCard Class="rz-border-radius-3 text-center card" data-nome="@(midias.IndexOf(m))" id="@(m.MidiaSecundariaId)" @onclick="(args) => FlipCard(m.MidiaSecundariaId)" data-descoberto="false">
+                    <RadzenImage class="frente" Path="@($"/Midia/GetMidia?id={m.MidiaSecundariaId}")" alt="card" />
+                    <RadzenImage class="verso" Path="/images/interrogacao.png" alt="card" />
+                </RadzenCard>
+            </RadzenColumn>
+        }
+    </RadzenRow>
+</RadzenStack>
+
+@code {
+
+    [Parameter]
+    public List<JogoDaMemoriaMidia> midias { get; set; } = new List<JogoDaMemoriaMidia>();
+
+    [Parameter]
+    public Jogo jogo { get; set; } = new Jogo();
+
+    bool lockBoard = false;
+
+    bool hasFlippedCard = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await PopupInicia();
+        }
+    }
+
+    public async Task PopupInicia()
+    {
+        await DialogService.OpenAsync("", ds =>
+        @<RadzenStack JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center">
+            <RadzenText Text="@jogo.Nome" TextStyle="TextStyle.DisplayH6" Style="font-family: 'Zeyada', cursive !important; font-weight: 600" />
+            <RadzenButton Icon="play_arrow" ButtonStyle="ButtonStyle.Success" Text="Iniciar" Click="IniciaJogo" />
+        </RadzenStack>, new DialogOptions() { Width = "450px", Height = "auto", Resizable = false, Draggable = true, ShowClose = false, ShowTitle = false });
+    }
+
+    public async void IniciaJogo()
+    {
+        DialogService.Close();
+        await JS.InvokeVoidAsync("iniciaJogo");
+    }
+
+    public async void JogarNovamente()
+    {
+        await JS.InvokeVoidAsync("recarregaTela");
+    }
+
+    public async void FlipCard(Guid id)
+    {
+        await JS.InvokeVoidAsync("flipCard", id);
+        var contador = await JS.InvokeAsync<int>("getWinContador");
+        var tempo = await JS.InvokeAsync<double>("getTempo");
+
+        if (contador == midias.Count())
+        {
+            await DialogService.OpenAsync("", ds =>
+            @<RadzenStack JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center">
+                <h1>Fim de Jogo!</h1>
+                <p>Você encontrou todos os pares com</p>
+                <h2>@(contador) movimentos</h2>
+                <RadzenRow Gap="2rem" Class="rz-p-0 rz-p-lg-4" JustifyContent="JustifyContent.Center">
+                    <RadzenButton Icon="play_arrow" ButtonStyle="ButtonStyle.Primary" Text="Jogar Novamente" Click="JogarNovamente" />
+                    <RadzenButton Icon="emoji_events" ButtonStyle="ButtonStyle.Warning" Text="Ranking" Click="PopupRanking" />
+                </RadzenRow>
+            </RadzenStack>, new DialogOptions() { Width = "800px", Height = "auto", Resizable = false, Draggable = true, ShowClose = false, ShowTitle = false });
+        }
+    }
+
+    public async void PopupRanking()
+    {
+        DialogService.Close();
+        await DialogService.OpenAsync($"Ranking - {jogo.Nome}", ds =>
+        @<RadzenStack JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center">
+            <RadzenRow Gap="2rem" Class="rz-p-0 rz-p-lg-4">
+                <PopupJogoRanking Jogo="jogo" />
+            </RadzenRow>
+            <RadzenRow Gap="2rem" Class="rz-p-0 rz-p-lg-4" JustifyContent="JustifyContent.Center">
+                <RadzenButton Icon="play_arrow" ButtonStyle="ButtonStyle.Primary" Text="Jogar Novamente" Click="JogarNovamente" />
+            </RadzenRow>
+        </RadzenStack>, new DialogOptions() { Width = "800px", Height = "auto", Resizable = false, Draggable = false });
+    }
+
+}

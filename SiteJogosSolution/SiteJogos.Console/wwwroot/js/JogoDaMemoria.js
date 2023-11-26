@@ -1,56 +1,4 @@
-﻿//Deck
-let deck = [
-    {
-        id: 1,
-        name: "Sapo",
-        color: "#84CFFA",
-        imagem: "https://image.flaticon.com/icons/svg/3069/3069170.svg",
-        descricao: ["descricao 1", "descricao 2", "descricao 3"],
-        virado: true,
-    },
-    {
-        id: 2,
-        name: "Vaca",
-        color: "#FA8484",
-        imagem: "https://image.flaticon.com/icons/svg/3069/3069162.svg",
-        descricao: ["descricao 1", "descricao 2", "descricao 3"],
-        virado: true,
-    },
-    {
-        id: 3,
-        name: "Canguru",
-        color: "#E984FA",
-        imagem: "https://image.flaticon.com/icons/svg/3069/3069163.svg",
-        descricao: ["descricao 1", "descricao 2", "descricao 3"],
-        virado: true,
-    },
-    {
-        id: 4,
-        name: "Leão",
-        color: "#84FAAC",
-        imagem: "https://image.flaticon.com/icons/svg/3069/3069169.svg",
-        descricao: ["descricao 1", "descricao 2", "descricao 3"],
-        virado: true,
-    },
-    {
-        id: 5,
-        name: "Pássaro",
-        color: "#8684FA",
-        imagem: "https://image.flaticon.com/icons/svg/3069/3069186.svg",
-        descricao: ["descricao 1", "descricao 2", "descricao 3"],
-        virado: true,
-    },
-    {
-        id: 6,
-        name: "Elefante",
-        color: "#F7FA84",
-        imagem: "https://image.flaticon.com/icons/svg/3069/3069224.svg",
-        descricao: ["descricao 1", "descricao 2", "descricao 3"],
-        virado: true,
-    },
-];
-
-var cards = document.querySelectorAll('.card');
+﻿var cards = [];
 
 let hasFlippedCard = false;
 let lockBoard = false;
@@ -58,59 +6,71 @@ let firstCard, secondCard;
 let movements = 0;
 let winContador = 0;
 
-function flipCard() {
-    //this.classList.toggle('flip');
-    if (lockBoard) return;
-    if (this === firstCard) return;
+//Contadores de Tempo
+let minute = 0;
+let second = 0;
+let millisecond = 0;
+let cron;
 
-    this.classList.add('flip');
+function flipCard(id) {
+
+    let carta = document.getElementById(id);
+
+    if (carta.dataset.descoberto == 'true') return;
+
+    //carta.classList.toggle('flip');
+
+    if (lockBoard) return;
+    if (carta === firstCard) return;
+
+    carta.classList.add('flip');
 
     if (!hasFlippedCard) {
         hasFlippedCard = true;
-        firstCard = this;
+        firstCard = carta;
         return;
     }
 
-    console.log(winContador)
-
-    secondCard = this;
+    secondCard = carta;
 
     checkForMatch();
 }
 
 //Conferindo se é igual
 
+function mostraIcone(certo) {
+    let icone = ".icone" + (certo ? 'Certo' : 'Errado');
+    $(icone).removeClass("d-none").addClass("animate__animated animate__bounceIn").addClass("animate__bounceOut");
+    setTimeout(function () {
+        $(icone).addClass("d-none").removeClass("animate__animated animate__bounceIn animate__bounceOut");
+    }, 1000);
+}
+
 function checkForMatch() {
-    if (firstCard.dataset.nome !== secondCard.dataset.nome) {
-        movements++;
-    }
-    //document.getElementById("movimentos").innerHTML = `${movements}`;
-    //document.getElementById("movimentos2").innerHTML = `${movements}`;
+    movements++;
+    document.getElementById("erros").innerHTML = `${movements}`;
 
     if (firstCard.dataset.nome === secondCard.dataset.nome) {
         winContador++;
+        mostraIcone(true);
         disableCards();
-        //ALTERAÇÃO* Confere se o "winContador" é igual a "6", que é o número máximo de vitórias que pode haver no jogo!
+
         if (winContador == (cards.length / 2)) {
-            setTimeout(() => {
-                document.querySelector('#vitoria').style.display = 'block'
-                document.querySelector('#movimentosvitoria').innerHTML = movements
-            }, 1000);
+            clearInterval(cron);
+            insereScore();
         }
-        //FIM-ALTERAÇÃO*
+
         return;
     }
 
-
     unflipCards();
-
-    console.log(movements);
-
 }
 
 //Desabilitando o clique nas cartas viradas
 
 function disableCards() {
+    firstCard.dataset.descoberto = 'true';
+    secondCard.dataset.descoberto = 'true';
     firstCard.removeEventListener('click', flipCard);
     secondCard.removeEventListener('click', flipCard);
 
@@ -121,13 +81,11 @@ function disableCards() {
 
 function unflipCards() {
     lockBoard = true;
-
+    mostraIcone(false);
     setTimeout(() => {
         firstCard.classList.remove('flip');
         secondCard.classList.remove('flip');
-
         resetBoard();
-
     }, 1500);
 }
 
@@ -138,18 +96,36 @@ function resetBoard() {
 
 //Embaralhando cartas (IIFE) Vai ser executada assim que for lida
 
-(function shuffle() {
-    cards.forEach(card => {
-        let ramdomPos = Math.floor(Math.random() * 12);
-        card.style.order = ramdomPos;
-    });
-})();
+function getWinContador() {
+    return winContador;
+}
 
-$(document).ready(function () {
+function getTempo() {
+    return (minute * 60) + second + (millisecond / 1000);
+}
+
+function iniciaJogo() {
     cards = document.querySelectorAll('.card');
-    cards.forEach(card => card.addEventListener('click', flipCard));
-    cards.forEach(card => {
-        let ramdomPos = Math.floor(Math.random() * 12);
+    document.querySelectorAll('.rz-col-12').forEach(card => {
+        let ramdomPos = Math.floor(Math.random() * cards.length);
         card.style.order = ramdomPos;
     });
-});
+    cron = setInterval(() => { timer(); }, 10);
+}
+
+function timer() {
+    if ((millisecond += 10) == 1000) {
+        millisecond = 0;
+        second++;
+    }
+    if (second == 60) {
+        second = 0;
+        minute++;
+    }
+    document.getElementById('minute').innerText = returnData(minute);
+    document.getElementById('second').innerText = returnData(second);
+}
+
+function returnData(input) {
+    return input >= 10 ? input : `0${input}`
+}

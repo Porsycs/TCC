@@ -13,6 +13,10 @@ namespace SiteJogos.Core.Entities
     {
         public string Nome { get; set; }
 
+        public bool Aleatorio { get; set; }
+
+        public int? LimiteTempo { get; set; }
+
         public EnumTemplate Template { get; set; }
 
         public enum EnumTemplate
@@ -21,7 +25,7 @@ namespace SiteJogos.Core.Entities
             JogoDaMemoria = 0,
 
             [Description("Forca")]
-            Forca = 1,
+            Quiz = 1,
         }
 
         [NotMapped]
@@ -44,7 +48,7 @@ namespace SiteJogos.Core.Entities
                 switch(Template)
                 {
                     case EnumTemplate.JogoDaMemoria: return "view_module";
-                    case EnumTemplate.Forca: return "table_lamp";
+                    case EnumTemplate.Quiz: return "quiz";
                     default: return "";
                 }
             }

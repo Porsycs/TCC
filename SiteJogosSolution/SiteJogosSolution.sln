@@ -16,7 +16,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SiteJogos.Core", "SiteJogos
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - Test", "3 - Test", "{B444477E-4E93-4F91-BE07-16E6534C1E46}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test\Test.csproj", "{DFAE288F-B87A-484E-9D14-185A7CE4979D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test\Test.csproj", "{DFAE288F-B87A-484E-9D14-185A7CE4979D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
