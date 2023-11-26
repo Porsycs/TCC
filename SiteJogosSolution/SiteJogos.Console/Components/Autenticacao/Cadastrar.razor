@@ -2,63 +2,58 @@
 @inject HttpClient httpClient;
 @inject NotificationService notificationService;
 
-<RadzenRow JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" Gap="0" Class="rz-my-12 rz-mx-auto rz-border-radius-6 rz-shadow-10" Style="width: 100%; max-width: 90vw; height: 80vh;overflow: hidden; margin: 0 !important">
-    <RadzenColumn Size="12" SizeMD="6" SizeSM="0" class="painel">
-        <RadzenCard Class="rz-shadow-0 rz-border-radius-0 rz-text-align-center rz-p-12" Style="height: 100%; background: no-repeat url('/images/piratacontrato3.png'); background-size: cover; background-position: center;">
-        </RadzenCard>
-    </RadzenColumn>
+
+<RadzenText TextStyle="TextStyle.DisplayH4" TextAlign="TextAlign.Center" TagName="TagName.H2" Class="rz-mb-6">
+    Embarque nessa aventura em apenas alguns passos!
+</RadzenText>
+<RadzenColumn JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" Gap="0" Class="rz-my-12 rz-mx-auto rz-border-radius-6 rz-shadow-10 rz-mob" Style="background:white;width: 30%; max-width: 90vw; height: auto; overflow: hidden; margin: 0">
     <RadzenColumn Size="12" SizeMD="6" SizeSM="12">
         <RadzenCard Class="rz-shadow-0 rz-border-radius-0 rz-p-12">
-            <RadzenText TextStyle="TextStyle.DisplayH5" TagName="TagName.H2" Class="rz-mb-6">
-                Embarque nessa aventura em apenas alguns passos!
-            </RadzenText>
-            <RadzenText TextStyle="TextStyle.DisplayH6" TagName="TagName.H2" Class="rz-mb-6">
-                Digite os dados a seguir
-            </RadzenText>
             <RadzenTemplateForm TItem="FormCadastroViewModel" Data=@model Submit=@OnSubmit>
-                <RadzenFieldset Text="Cadastro">
-                    <RadzenStack Gap="1rem" Class="rz-p-4 rz-p-md-12" Style="padding: 0 !important">
-                        <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
-                            <RadzenColumn Size="12" SizeMD="12">
-                                <RadzenLabel Text="Nome" />
-                                <RadzenTextBox Name="SenhaAtual" @bind-Value=@model.Nome Style="display: block; width: 100%" />
-                                <RadzenRequiredValidator Component="SenhaAtual" Text="Preencha o Nome" Popup="true" Style="position: absolute" />
-                            </RadzenColumn>
-                        </RadzenRow>
-                        <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
-                            <RadzenColumn Size="12" SizeMD="12">
-                                <RadzenLabel Text="E-mail" />
-                                <RadzenTextBox Name="Email" @bind-Value=@model.Email Style="display: block; width: 100%" />
-                                <RadzenRequiredValidator Component="SenhaAtual" Text="Preencha o E-mail" Popup="true" Style="position: absolute" />
-                            </RadzenColumn>
-                        </RadzenRow>
-                        <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
-                            <RadzenColumn Size="12" SizeMD="6">
-                                <RadzenLabel Text="Senha" />
-                                <RadzenPassword Name="Senha" @bind-Value=@model.Senha Style="display: block; width: 100%" />
-                                <RadzenRequiredValidator Component="Senha" Text="Insira a Senha" Popup="true" Style="position: absolute" />
-                            </RadzenColumn>
-                            <RadzenColumn Size="12" SizeMD="6">
-                                <RadzenLabel Text="Repetir Senha" />
-                                <RadzenPassword Name="ConfirmaSenha" @bind-Value=@model.ConfirmaSenha Style="display: block; width: 100%" />
-                                <RadzenRequiredValidator Component="ConfirmaSenha" Text="Insira a Confirmação de Senha" Popup="true" Style="position: absolute" />
-                                <RadzenCompareValidator Visible=@(!string.IsNullOrEmpty(model.ConfirmaSenha)) Value=@model.Senha Component="ConfirmaSenha" Text="As senhas devem ser iguais" Popup=true Style="position: absolute" />
-                            </RadzenColumn>
-                        </RadzenRow>
-                        <RadzenRow AlignItems="AlignItems.Center" Class="rz-mt-4">
-                            @*<RadzenColumn Size="12" SizeMD="6" Style="text-align:center">
-                                <RadzenButton ButtonStyle="ButtonStyle.Danger" Text="Voltar" Click="retornaHome"></RadzenButton>
-                            </RadzenColumn>*@
-                            <RadzenColumn Size="12" SizeMD="12" Style="text-align:center">
-                                <RadzenButton ButtonType="ButtonType.Submit" Text="Cadastrar"></RadzenButton>
-                            </RadzenColumn>
-                        </RadzenRow>
-                    </RadzenStack>
-                </RadzenFieldset>
+                <RadzenStack Gap="1rem" Class="rz-p-4 rz-p-md-12" Style="padding: 0 !important">
+                        <RadzenFormField Text="Nome" Variant="@variant">
+                            <ChildContent>
+                                <RadzenTextBox @bind-Value="@model.Nome" />
+                            </ChildContent>
+                        </RadzenFormField>
+                    <RadzenFormField Text="E-mail" Variant="@variant">
+                        <ChildContent>
+                            <RadzenTextBox @bind-Value="@model.Email" />
+                        </ChildContent>
+                    </RadzenFormField>
+                    <RadzenFormField Text="Senha" Variant="@variant">
+                        <ChildContent>
+                            <RadzenTextBox @bind-Value="@model.Senha" Visible="@(!password)" />
+                            <RadzenPassword @bind-Value="@model.Senha" Visible="@password" />
+                        </ChildContent>
+                        <End>
+                            <RadzenButton Icon="@(password ? "visibility" : "visibility_off")" Click="TogglePassword" Variant="Variant.Text" Size="ButtonSize.Small" />
+                        </End>
+                    </RadzenFormField>
+                    <RadzenFormField Text="Confirmar Senha" Variant="@variant">
+                        <ChildContent>
+                            <RadzenTextBox @bind-Value="@model.ConfirmaSenha" Visible="@(!confirmPassword)" />
+                            <RadzenPassword @bind-Value="@model.ConfirmaSenha" Visible="@confirmPassword" />
+                        </ChildContent>
+                        <End>
+                            <RadzenButton Icon="@(confirmPassword ? "visibility" : "visibility_off")" Click="ToggleConfirmPassword" Variant="Variant.Text" Size="ButtonSize.Small" />
+                        </End>
+                    </RadzenFormField>
+                    <RadzenRow AlignItems="AlignItems.Center" Class="rz-mt-4">
+                        <RadzenColumn Size="12" SizeMD="12" Style="text-align:center">
+                            <RadzenButton ButtonType="ButtonType.Submit" Class="button-primary" Text="Aceite e Cadastre-se"></RadzenButton>
+                        </RadzenColumn>
+                    </RadzenRow>
+                    <RadzenText Class="or">ou</RadzenText>
+                    <RadzenButton Click="@(args=> retornaLogin())" Class="button-secondary">
+                        <RadzenIcon Icon="account_circle" Style="color:black; padding-right:1rem"></RadzenIcon>
+                        Acessar
+                    </RadzenButton>
+                </RadzenStack>
             </RadzenTemplateForm>
         </RadzenCard>
     </RadzenColumn>
-</RadzenRow>
+</RadzenColumn>
 
 @code {
 
@@ -87,4 +82,82 @@
     {
         await JsRuntime.InvokeVoidAsync("redirecionaTela", "/Login");
     }
+
+    string value = "";
+    bool password = true;
+    bool confirmPassword = true;
+    Variant variant = Variant.Outlined;
+
+    void TogglePassword()
+    {
+        password = !password;
+    }
+
+    void ToggleConfirmPassword()
+    {
+        confirmPassword = !confirmPassword;
+    }
 }
+
+
+<style>
+    .button-primary {
+        background: var(--rz-primary) !important;
+        width: 100% !important;
+        color: white !important;
+        box-shadow: none !important;
+        border: 1px solid black;
+        border-radius: 28px !important;
+    }
+
+        .button-primary:hover {
+            background: #dddddd !important;
+            border: 1.5px solid black
+        }
+
+    .or {
+        position: relative;
+        width: 300px;
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+    }
+
+        .or::before,
+        .or::after {
+            position: absolute;
+            width: 130px;
+            height: 1px;
+            top: 24px;
+            background-color: #aaa;
+            content: '';
+        }
+
+        .or::before {
+            left: 0;
+        }
+
+        .or::after {
+            right: 0;
+        }
+
+    .button-secondary {
+        background: white !important;
+        width: 100% !important;
+        color: grey !important;
+        box-shadow: none !important;
+        border: 1px solid black;
+        border-radius: 28px !important;
+    }
+
+        .button-secondary:hover {
+            background: #dddddd !important;
+            border: 1.5px solid black
+        }
+
+    @@media only screen and (max-width: 600px) {
+        .rz-mob {
+            width: 100% !important
+        }
+    }
+</style>
