@@ -39,6 +39,27 @@
         return retorno;
     }
 
+        function realizaLoginGoogle(args) {
+            var retorno = null
+            $.ajax({
+                method: 'POST',
+                url: "@(Url.Action("LoginGoogle", "Autenticacao"))",
+                data: args,
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+                    retorno = data;
+                },
+                error: function (e) {
+                    return {
+                        Sucesso: false,
+                        Mensagem: retorno.Mensagem
+                    };
+                }
+            });
+            return retorno;
+        }
+
     function recuperaSenha(model) {
         var retorno = null
         $.ajax({

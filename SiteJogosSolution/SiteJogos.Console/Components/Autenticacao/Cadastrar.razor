@@ -49,6 +49,10 @@
                         <RadzenIcon Icon="account_circle" Style="color:black; padding-right:1rem"></RadzenIcon>
                         Acessar
                     </RadzenButton>
+                    <RadzenButton class="button-secondary" Click="@(args => LoginGoogle())">
+                        <RadzenImage Style="width:5%" src="https://www.svgrepo.com/show/475656/google-color.svg" alt="google logo"></RadzenImage>
+                        <span>Login with Google</span>
+                    </RadzenButton>
                 </RadzenStack>
             </RadzenTemplateForm>
         </RadzenCard>
@@ -81,6 +85,11 @@
     async void retornaLogin()
     {
         await JsRuntime.InvokeVoidAsync("redirecionaTela", "/Login");
+    }
+
+    async void LoginGoogle()
+    {
+        await JsRuntime.InvokeVoidAsync("redirecionaTela", "/GoogleLogin");
     }
 
     string value = "";
