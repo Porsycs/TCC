@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,16 +45,13 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.LoginPath = new PathString("/Login");
 });
 
-//builder.Services.AddAuthentication(options =>
-//{
-//    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-//    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
-//}).AddCookie().AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
-//{
-//    options.ClientId = configuration["Authentication:Google:ClientId"];
-//    options.ClientSecret = configuration["Authentication:Google:ClientSecret"];
-//    options.ClaimActions.MapJsonKey("urn:google:picture", "picture", "url");
-//});
+builder.Services.AddAuthentication().AddGoogle(googleOptions =>
+{
+    googleOptions.ClientId = configuration["Authentication:Google:ClientId"];
+    googleOptions.ClientSecret = configuration["Authentication:Google:ClientSecret"];
+    googleOptions.ClaimActions.MapJsonKey("urn:google:picture", "picture", "url");
+});
+
 
 builder.Services.AddAuthorization(auth =>
 {
