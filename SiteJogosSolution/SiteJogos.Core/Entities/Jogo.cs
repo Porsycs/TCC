@@ -24,7 +24,7 @@ namespace SiteJogos.Core.Entities
             [Description("Jogo da Memória")]
             JogoDaMemoria = 0,
 
-            [Description("Forca")]
+            [Description("Quiz")]
             Quiz = 1,
         }
 

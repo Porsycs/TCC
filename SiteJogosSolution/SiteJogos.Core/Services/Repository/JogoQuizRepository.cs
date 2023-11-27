@@ -17,7 +17,7 @@ namespace SiteJogos.Core.Services.Repository
 
         public IEnumerable<JogoQuiz> GetByJogoId(Guid jogoId)
         {
-            return _dbContext.JogoQuizzes.Where(w => !w.Excluido && w.JogoId == jogoId).ToList();
+            return _dbContext.JogoQuizzes.Where(w => !w.Excluido && w.JogoId == jogoId).OrderBy(o => o.Ordem).ToList();
         }
     }
 }

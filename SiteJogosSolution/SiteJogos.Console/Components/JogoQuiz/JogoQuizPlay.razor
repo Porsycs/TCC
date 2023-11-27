@@ -1,0 +1,160 @@
+﻿@inject DialogService DialogService;
+@inject IJSRuntime JS;
+
+<RadzenNotification />
+<RadzenDialog />
+<RadzenContextMenu />
+<RadzenTooltip />
+
+<style>
+
+    .resposta {
+        border-radius: 30px;
+        border: 1px solid #ccc;
+        cursor: pointer;
+    }
+
+    .resposta > div {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        padding-left: 2rem;
+        padding-right: 2rem;
+        white-space: break-spaces;
+    }
+
+    .ordem {
+        height: 5rem;
+        width: 5rem;
+        background-color: #ff9800;
+        border-radius: 50%;
+        justify-content: center;
+        display: flex;
+        align-items: center;
+        font-size: 1.5rem;
+        border: 3px solid black;
+        position: relative;
+        bottom: 3rem;
+    }
+
+    .resposta:hover {
+        background-color: #ccc;
+    }
+
+    .rz-dialog {
+        height: auto !important;
+        top: auto !important;
+    }
+
+    @@media (max-width: 768px) {
+        .rz-dialog:not(.rz-dialog-confirm):not(.rz-dialog-alert) {
+            top: auto !important;
+        }
+    }
+
+</style>
+
+@foreach (var q in quiz)
+{
+    <RadzenCard id="@(q.Id)" data-resposta="@(q.RespostaCerta)" Class="@("quiz rz-shadow-10 rz-border-radius-6 " + (quiz.IndexOf(q) != 0 ? "d-none" : ""))" Style="max-width: 1000px; padding: 0; border: 3px solid black; width:100%">
+        <RadzenStack AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Style="background-color: var(--rz-primary); border-radius: 1.3rem 1.3rem 0 0;">
+            <div style="position:fixed">
+                <div class="ordem">@(quiz.IndexOf(q) + 1)/@(quiz.Count)</div>
+            </div>
+            <RadzenRow Style="margin-top: 2rem">
+                <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center" TagName="TagName.H2" Class="rz-mb-6 rz-mt-6" Style="color:#fff">@(q.Pergunta)</RadzenText>
+            </RadzenRow>
+        </RadzenStack>
+        <RadzenStack AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Style="padding: 2rem">
+            <RadzenRow Style="width: 100%">
+                <RadzenColumn Size="12" SizeMD="6" class="resposta" @onclick="(args) => SelecionaResposta(1)">
+                    <div>A. @(q.Resposta1)</div>
+                </RadzenColumn>
+                <RadzenColumn Size="12" SizeMD="6" class="resposta" @onclick="(args) => SelecionaResposta(2)">
+                    <div>B. @(q.Resposta2)</div>
+                </RadzenColumn>
+            </RadzenRow>
+            <RadzenRow Style="width: 100%">
+                <RadzenColumn Size="12" SizeMD="6" Visible="!string.IsNullOrEmpty(q.Resposta3)" class="resposta" @onclick="(args) => SelecionaResposta(3)">
+                    <div>C. @(q.Resposta3)</div>
+                </RadzenColumn>
+                <RadzenColumn Size="12" SizeMD="6" Visible="!string.IsNullOrEmpty(q.Resposta4)" class="resposta" @onclick="(args) => SelecionaResposta(4)">
+                    <div>D. @(q.Resposta4)</div>
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenStack>
+    </RadzenCard>
+}
+
+@code {
+
+    [Parameter]
+    public List<JogoQuiz> quiz { get; set; } = new List<JogoQuiz>();
+
+    [Parameter]
+    public Jogo jogo { get; set; } = new Jogo();
+
+    public int Ordem = 1;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await PopupInicia();
+        }
+    }
+
+    public async void SelecionaResposta(int num)
+    {
+        await JS.InvokeVoidAsync("selecionaResposta", num);
+        var ordem = await JS.InvokeAsync<int>("getOrdem");
+        var acertos = await JS.InvokeAsync<int>("getAcertos");
+        if(ordem == quiz.Count)
+        {
+            await DialogService.OpenAsync("", ds =>
+            @<RadzenStack JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center">
+                <h1>Fim de Jogo!</h1>
+                <p>Você acertou </p>
+                <h2>@(acertos) questões</h2>
+                <RadzenRow Gap="2rem" Class="rz-p-0 rz-p-lg-4" JustifyContent="JustifyContent.Center">
+                    <RadzenButton Icon="play_arrow" ButtonStyle="ButtonStyle.Primary" Text="Jogar Novamente" Click="JogarNovamente" />
+                    <RadzenButton Icon="emoji_events" ButtonStyle="ButtonStyle.Warning" Text="Ranking" Click="PopupRanking" />
+                </RadzenRow>
+            </RadzenStack>, new DialogOptions() { Width = "800px", Height = "auto", Resizable = false, Draggable = false, ShowClose = false, ShowTitle = false });
+        }
+    }
+
+    public async Task PopupInicia()
+    {
+        await DialogService.OpenAsync("", ds =>
+        @<RadzenStack JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center">
+            <RadzenText Text="@jogo.Nome" TextStyle="TextStyle.DisplayH6" Style="font-family: 'Zeyada', cursive !important; font-weight: 600" />
+            <RadzenButton Icon="play_arrow" ButtonStyle="ButtonStyle.Success" Text="Iniciar" Click="IniciaJogo" />
+        </RadzenStack>, new DialogOptions() { Width = "450px", Height = "auto", Resizable = false, Draggable = false, ShowClose = false, ShowTitle = false });
+    }
+
+    public async void IniciaJogo()
+    {
+        DialogService.Close();
+        await JS.InvokeVoidAsync("iniciaJogo");
+    }
+
+    public async void JogarNovamente()
+    {
+        await JS.InvokeVoidAsync("recarregaTela");
+    }
+
+    public async void PopupRanking()
+    {
+        DialogService.Close();
+        await DialogService.OpenAsync($"Ranking - {jogo.Nome}", ds =>
+        @<RadzenStack JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center">
+            <RadzenRow Gap="2rem" Class="rz-p-0 rz-p-lg-4">
+                <PopupJogoRanking Jogo="jogo" />
+            </RadzenRow>
+            <RadzenRow Gap="2rem" Class="rz-p-0 rz-p-lg-4" JustifyContent="JustifyContent.Center">
+                <RadzenButton Icon="play_arrow" ButtonStyle="ButtonStyle.Primary" Text="Jogar Novamente" Click="JogarNovamente" />
+            </RadzenRow>
+        </RadzenStack>, new DialogOptions() { Width = "800px", Height = "auto", Resizable = false, Draggable = false, ShowClose = false });
+    }
+
+}

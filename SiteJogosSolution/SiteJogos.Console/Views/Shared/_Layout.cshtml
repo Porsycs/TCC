@@ -49,6 +49,16 @@
         .components-reconnect-show, .components-reconnect-failed, .components-reconnect-rejected, .components-reconnect-modal {
             display: none;
         }
+
+        @@media (max-width: 768px) {
+            .rz-dialog:not(.rz-dialog-confirm):not(.rz-dialog-alert) {
+                top: auto !important;
+            }
+        }
+
+        .rz-dialog {
+            height: auto !important;
+        }
     </style>
 
 </head>

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SiteJogos.Core.Entities;
@@ -23,6 +24,7 @@ namespace SiteJogos.Console.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public object GetByJogoId(Guid jogoId)
         {
             try
@@ -34,6 +36,16 @@ namespace SiteJogos.Console.Controllers
                 {
                     var ordem = 1;
                     ranking = ranking.OrderBy(o => o.Pontuacao).ThenBy(tb => tb.Tempo).ToList();
+                    ranking.ForEach(fe =>
+                    {
+                        fe.Ordem = ordem;
+                        ordem++;
+                    });
+                }
+                else if (jogo.Template == Jogo.EnumTemplate.Quiz)
+                {
+                    var ordem = 1;
+                    ranking = ranking.OrderByDescending(o => o.Pontuacao).ThenBy(tb => tb.Tempo).ToList();
                     ranking.ForEach(fe =>
                     {
                         fe.Ordem = ordem;

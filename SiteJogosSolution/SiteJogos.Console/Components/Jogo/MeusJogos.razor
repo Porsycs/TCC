@@ -175,7 +175,7 @@
                 <RadzenButton ButtonStyle="ButtonStyle.Warning" Text="Limpar Ranking" Click="(args) => LimparRanking(jogo)" />
                 <RadzenButton ButtonStyle="ButtonStyle.Primary" Text="Fechar" Click="(args) => DialogService.Close()" />
             </RadzenRow>
-        </RadzenStack>, new DialogOptions() { Width = "800px", Height = "auto", Resizable = false, Draggable = true, ShowClose = true });
+        </RadzenStack>, new DialogOptions() { Width = "800px", Height = "auto", Resizable = false, Draggable = false, ShowClose = true });
     }
 
     async Task LimparRanking(Jogo jogo)
@@ -204,7 +204,7 @@
             <RadzenRow Gap="2rem" Class="rz-p-0 rz-p-lg-4" JustifyContent="JustifyContent.Center">
                 <RadzenButton ButtonStyle="ButtonStyle.Primary" Text="Continuar" Click='(args) => JS.InvokeVoidAsync("redirecionaTela", "/NovoJogo?template=" + (int)TemplateSelecionado)' />
             </RadzenRow>
-        </RadzenStack>, new DialogOptions() { Width = "450px", Height = "auto", Resizable = false, Draggable = true, ShowClose = true });
+        </RadzenStack>, new DialogOptions() { Width = "450px", Height = "auto", Resizable = false, Draggable = false, ShowClose = true });
     }
 
     void Editar(Jogo jogo)

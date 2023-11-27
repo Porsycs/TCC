@@ -3,8 +3,13 @@
 
 <style>
 
-    .rz-dialog {
-        height: auto !important;
+    .rz-cell-data {
+        white-space: normal !important;
+    }
+
+    .rz-frozen-cell > .rz-cell-data {
+        white-space: nowrap !important;
+        text-align: left !important;
     }
 
 </style>
@@ -23,7 +28,7 @@
                             </RadzenColumn>
                         </RadzenRow>
                         <RadzenRow AlignItems="AlignItems.Center">
-                            <RadzenColumn Size="12" SizeMD="6">
+                            <RadzenColumn Size="12" SizeMD="12">
                                 <RadzenLabel Text="Ordem das Questões" />
                                 <RadzenRadioButtonList @bind-Value=@jogo.Aleatorio TValue="bool" class="mb-5">
                                     <Items>
@@ -32,7 +37,7 @@
                                     </Items>
                                 </RadzenRadioButtonList>
                             </RadzenColumn>
-                            <RadzenColumn Size="12" SizeMD="6">
+                            @*<RadzenColumn Size="12" SizeMD="6">
                                 <RadzenLabel Text="Limite de Tempo (segundos)" />
                                 <RadzenRow AlignItems="AlignItems.Center">
                                     <RadzenColumn Size="12" SizeMD="6">
@@ -47,7 +52,7 @@
                                         <RadzenNumeric Name="LimiteTempo" TValue="int?" Disabled="!limiteTempo" ShowUpDown="true" @bind-Value=@jogo.LimiteTempo Min="1" AutoComplete="false" Style="display: block; width: 100%" />
                                     </RadzenColumn>
                                 </RadzenRow>
-                            </RadzenColumn>
+                            </RadzenColumn>*@
                         </RadzenRow>
                     </RadzenStack>
                 </RadzenFieldset>
@@ -67,16 +72,19 @@
                                         <RadzenButton Text="Adicionar Questão" Click=@(() => ExibePopupInsereQuiz()) />
                                     </HeaderTemplate>
                                     <Columns>
+                                        <RadzenDataGridColumn TItem="JogoQuiz" Context="Id" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Frozen="false" Width="150px" Resizable="false">
+                                            <Template Context="Id">
+                                                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Click="(args => DeletaQuiz(Id))" title="Remover" />
+                                                <RadzenButton Visible="@(quiz.IndexOf(Id) != 0)" ButtonStyle="ButtonStyle.Light" Icon="arrow_upward" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Click="(args => MoveAcima(Id))" title="Mover para Cima" />
+                                                <RadzenButton Visible="@(quiz.IndexOf(Id) + 1 != quiz.Count)" ButtonStyle="ButtonStyle.Light" Icon="arrow_downward" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Click="(args => MoveAbaixo(Id))" title="Mover para Baixo" />
+                                            </Template>
+                                        </RadzenDataGridColumn>
+                                        <RadzenDataGridColumn TItem="JogoQuiz" Property="Ordem" Title="Ordem" />
                                         <RadzenDataGridColumn TItem="JogoQuiz" Property="Pergunta" Title="Pergunta" />
                                         <RadzenDataGridColumn TItem="JogoQuiz" Property="Resposta1" Title="Resposta A" />
                                         <RadzenDataGridColumn TItem="JogoQuiz" Property="Resposta2" Title="Resposta B" />
                                         <RadzenDataGridColumn TItem="JogoQuiz" Property="Resposta3" Title="Resposta C" />
                                         <RadzenDataGridColumn TItem="JogoQuiz" Property="Resposta4" Title="Resposta D" />
-                                        <RadzenDataGridColumn TItem="JogoQuiz" Context="Id" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Frozen="true" Width="4rem" Resizable="false">
-                                            <Template Context="Id">
-                                                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Click="(args => DeletaQuiz(Id))" class="my-1 ms-1" />
-                                            </Template>
-                                        </RadzenDataGridColumn>
                                     </Columns>
                                 </RadzenDataGrid>
                             </RadzenColumn>
@@ -120,9 +128,40 @@
         await DialogService.OpenAsync<PopupJogoQuiz>("Adicionar Quiz", new Dictionary<string, object>() { { "jogoQuiz", this } }, new DialogOptions() { Width = "1000px", Height = "auto", Resizable = false, Draggable = false });
     }
 
+    public void ReodernaQuiz()
+    {
+        var ordem = 1;
+        foreach(var q in quiz)
+        {
+            q.Ordem = ordem;
+            ordem++;
+        }
+    }
+
+    public void MoveAcima(JogoQuiz quizAtual)
+    {
+        var ordem = quiz.IndexOf(quizAtual);
+        var quizAcima = quiz[ordem - 1];
+        quiz[ordem] = quizAcima;
+        quiz[ordem - 1] = quizAtual;
+        ReodernaQuiz();
+        grid.Reload();
+    }
+
+    public void MoveAbaixo(JogoQuiz quizAtual)
+    {
+        var ordem = quiz.IndexOf(quizAtual);
+        var quizAcima = quiz[ordem + 1];
+        quiz[ordem] = quizAcima;
+        quiz[ordem + 1] = quizAtual;
+        ReodernaQuiz();
+        grid.Reload();
+    }
+
     void DeletaQuiz(JogoQuiz item)
     {
         quiz.Remove(item);
+        ReodernaQuiz();
         grid.Reload();
     }
 

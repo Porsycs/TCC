@@ -106,7 +106,7 @@ function getTempo() {
 
 function iniciaJogo() {
     cards = document.querySelectorAll('.card');
-    document.querySelectorAll('.rz-col-12').forEach(card => {
+    document.querySelectorAll('.rz-col-6').forEach(card => {
         let ramdomPos = Math.floor(Math.random() * cards.length);
         card.style.order = ramdomPos;
     });

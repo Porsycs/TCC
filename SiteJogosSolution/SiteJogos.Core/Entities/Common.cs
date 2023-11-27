@@ -50,6 +50,25 @@ namespace SiteJogos.Core.Entities
             return zeros + numero;
         }
 
+        public static List<T> EmbaralharLista<T>(List<T> lista)
+        {
+            var random = new Random();
+            int n = lista.Count;
+
+            for (int i = n - 1; i > 0; i--)
+            {
+                // Escolha um índice aleatório menor ou igual a i
+                int j = random.Next(0, i + 1);
+
+                // Troque os elementos nos índices i e j
+                T temp = lista[i];
+                lista[i] = lista[j];
+                lista[j] = temp;
+            }
+
+            return lista;
+        }
+
         public static string GetEnumDescription(Enum? value)
         {
             if(value == null) return string.Empty;

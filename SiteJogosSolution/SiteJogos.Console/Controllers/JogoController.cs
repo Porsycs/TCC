@@ -120,6 +120,16 @@ namespace SiteJogos.Console.Controllers
                     ViewData["Midias"] = _jogoDaMemoriaMidiaRepository.GetByJogoId(jogo.Id).ToList(); 
                     return View("~/Views/Jogo/JogoDaMemoria.cshtml", jogo);
                 }
+                else if (jogo.Template == Jogo.EnumTemplate.Quiz)
+                {
+                    var quiz = _jogoQuizRepository.GetByJogoId(jogo.Id).ToList();
+                    if (jogo.Aleatorio)
+                    {
+                        quiz = Common.EmbaralharLista(quiz);
+                    }
+                    ViewData["Quiz"] = quiz;
+                    return View("~/Views/Jogo/JogoQuiz.cshtml", jogo);
+                }
 
                 throw new Exception();
             }

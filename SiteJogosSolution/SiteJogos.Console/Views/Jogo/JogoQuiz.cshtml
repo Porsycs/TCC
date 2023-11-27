@@ -1,0 +1,191 @@
+﻿@model Jogo
+@{
+    Layout = "";
+    var quiz = (List<JogoQuiz>)ViewBag.Quiz;
+    var jogador = Context.Request.Cookies["NomeJogador"];
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="https://image.flaticon.com/icons/svg/3132/3132772.svg" type="image/x-icon" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="_content/Radzen.Blazor/css/material-base.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet" />
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .corpo {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height:calc(100vh - 12rem);
+        }
+
+        .iconeCerto {
+            position: absolute;
+            top: calc(50vh - 5rem);
+            left: calc(50vw - 5rem);
+            color: green;
+            background-color: white;
+            border-radius: 50%;
+            font-size: 10rem;
+            z-index: 1000;
+        }
+
+        .iconeErrado {
+            position: absolute;
+            top: calc(50vh - 5rem);
+            left: calc(50vw - 5rem);
+            color: red;
+            background-color: white;
+            border-radius: 50%;
+            font-size: 10rem;
+            z-index: 1000;
+        }
+
+        .d-none {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body style="width: 100vw; height: 100vh; padding: 2rem; font-family: 'Zeyada', cursive !important; background-color: #3A3A3A; margin: 0;">
+    <h1 style="color: #fff; text-align:center">@Model.Nome</h1>
+    <i class="rzi iconeCerto d-none">check_circle</i>
+    <i class="rzi iconeErrado d-none">cancel</i>
+    <div class="corpo">
+        <component type="typeof(SiteJogos.Console.Components.JogoQuiz.JogoQuizPlay)" render-mode="Server" param-jogo="Model" param-quiz="quiz" />
+    </div>
+
+    <div style="color: #fff"><span id="minute">00</span>:<span id="second">00</span> | Acertos: <span id="acertos">0</span></div>
+
+    <script>
+
+        //Pontuação
+        let quiz = [];
+        let quizAtual;
+        let acertos = 0;
+        let ordem = 0;
+        let block = false;
+
+        //Contadores de Tempo
+        let minute = 0;
+        let second = 0;
+        let millisecond = 0;
+        let cron;
+
+        function iniciaJogo() {
+            quiz = document.querySelectorAll('.quiz');
+            quizAtual = quiz[0];
+            cron = setInterval(() => { timer(); }, 10);
+        }
+
+        function selecionaResposta(num) {
+            if (block) {
+                return;
+            }
+
+            block = true;
+            let respostaCerta = quizAtual.dataset.resposta;
+            mostraIcone(num == respostaCerta);
+            if (num == respostaCerta) {
+                acertos++;
+                document.getElementById('acertos').innerText = acertos;
+            }
+            alteraQuiz();
+            block = false;
+        }
+
+        function alteraQuiz() {
+            ordem++;
+            if (ordem == quiz.length) {
+                clearInterval(cron);
+                insereScore();
+            }
+            else {
+                let quizAnterior = quizAtual;
+                quizAtual = quiz[ordem];
+                $("#" + quizAnterior.id).removeClass("animate__animated animate__backInRight").addClass("animate__animated animate__backOutLeft");
+                setTimeout(function () {
+                    $("#" + quizAnterior.id).addClass("d-none")
+                    $("#" + quizAtual.id).addClass("animate__animated animate__backInRight").removeClass("d-none");
+                }, 800);
+            }
+        }
+
+        function mostraIcone(certo) {
+            let icone = ".icone" + (certo ? 'Certo' : 'Errado');
+            $(icone).removeClass("d-none").addClass("animate__animated animate__bounceIn").addClass("animate__bounceOut");
+            setTimeout(function () {
+                $(icone).addClass("d-none").removeClass("animate__animated animate__bounceIn animate__bounceOut");
+            }, 1000);
+        }
+
+        function timer() {
+            if ((millisecond += 10) == 1000) {
+                millisecond = 0;
+                second++;
+            }
+            if (second == 60) {
+                second = 0;
+                minute++;
+            }
+            document.getElementById('minute').innerText = returnData(minute);
+            document.getElementById('second').innerText = returnData(second);
+        }
+
+        function returnData(input) {
+            return input >= 10 ? input : `0${input}`
+        }
+
+        function getTempo() {
+            return (minute * 60) + second + (millisecond / 1000);
+        }
+
+        function getOrdem() {
+            return ordem;
+        }
+
+        function getAcertos() {
+            return acertos;
+        }
+
+        function insereScore() {
+            let score = {
+                JogoId: "@(Model.Id)",
+                Jogador: "@(jogador)",
+                Pontuacao: acertos,
+                Tempo: getTempo()
+            }
+            $.ajax({
+                method: "POST",
+                url: "@(Url.Action("Post", "JogoRanking"))",
+                data: { values: JSON.stringify(score) },
+                dataType: 'json',
+                async: true,
+                success: function (data) {
+                },
+                error: function (e) {
+                }
+            });
+        }
+    </script>
+
+    <script src="_framework/blazor.server.js"></script>
+    <script src="_content/Radzen.Blazor/Radzen.Blazor.js" asp-append-version="true"></script>
+</body>
+</html>
