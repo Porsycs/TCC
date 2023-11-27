@@ -11,6 +11,7 @@ using System.Dynamic;
 using System.Globalization;
 using System.Reflection;
 using System.Resources;
+using static QRCoder.PayloadGenerator;
 
 namespace SiteJogos.Console.Controllers
 {
@@ -31,7 +32,7 @@ namespace SiteJogos.Console.Controllers
         [AllowAnonymous]
         public IActionResult Login()
         {
-            if(_userManager.GetUserAsync(User).Result != null)
+            if (_userManager.GetUserAsync(User).Result != null)
             {
                 return RedirectToAction("Index", "Home");
             }
@@ -191,13 +192,13 @@ namespace SiteJogos.Console.Controllers
                             Mensagem = "Usuário cadastrado com sucesso!"
                         };
                     }
-                    
-                    
+
+
                     else
                     {
                         var listaErros = new List<string>();
                         foreach (var erro in result.Errors.ToList())
-                        {   
+                        {
                             listaErros.Add(erro.Description);
                         }
                         var erroMensagem = string.Join(";", listaErros);
@@ -234,42 +235,75 @@ namespace SiteJogos.Console.Controllers
         }
 
         [HttpPost]
-        public RetornoViewModel RecuperarSenha(AutenticacaoViewModel model)
+        public async Task<IActionResult> RecuperarSenha(AutenticacaoViewModel model)
         {
             try
             {
                 if (model.Login != null)
                 {
+                    var user = _usuarioRepository.GetAll().FirstOrDefault(w => w.UserName.ToLower() == model.Login.ToLower()) ?? throw new Exception();
+                    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
-                    var emailEnviado = _usuarioRepository.EmailRecuperaSenha(model.Login);
+                    if (string.IsNullOrEmpty(token))
+                        throw new Exception();
 
-                    if (emailEnviado) {
-                        return new RetornoViewModel
+                    var forgotPasswordLink = Url.Action("ResetPassword", "Autenticacao", new { token, email = model.Login }, Request.Scheme);
+
+                    var result = await _usuarioRepository.EmailRecuperaSenha(model.Login, user, token, forgotPasswordLink);
+
+                    if (result)
+                    {
+                        return StatusCode(StatusCodes.Status200OK, new RetornoViewModel
                         {
                             Sucesso = true,
                             Codigo = "success",
                             Titulo = "Sucesso!",
                             Mensagem = "Se o email estiver cadastrado você recebera as instruções nele em breve!"
-                        };
+                        });
                     }
+
                     else
-                        throw new Exception("Ocorreu um erro ao enviar o email!");
+                    {
+                        return StatusCode(StatusCodes.Status200OK, new RetornoViewModel
+                        {
+                            Sucesso = false,
+                            Codigo = "warning",
+                            Titulo = "Atenção!",
+                            Mensagem = "Algo deu errado!"
+                        });
+                    }
                 }
-
                 else
-                    throw new Exception("Preencha o campo email!");
-            }
-
-            catch(Exception e)
-            {
-                return new RetornoViewModel
                 {
-                    Sucesso = false,
-                    Codigo = "warning",
-                    Titulo = "Atenção!",
-                    Mensagem = e.Message ?? "Algo deu errado"
-                };
+                    return StatusCode(StatusCodes.Status400BadRequest, new RetornoViewModel
+                    {
+                        Sucesso = false,
+                        Codigo = "warning",
+                        Titulo = "Atenção!",
+                        Mensagem = "Campo email deve ser preenchido!"
+                    });
+                }
             }
+            catch
+            {
+                return StatusCode(StatusCodes.Status200OK, new RetornoViewModel
+                {
+                    Sucesso = true,
+                    Codigo = "success",
+                    Titulo = "Sucesso!",
+                    Mensagem = "Se o email estiver cadastrado você recebera as instruções nele em breve!"
+                });
+            }
+        }
+
+        [HttpGet("reset-password")]
+        public async Task<IActionResult> ResetPassword(string token, string email)
+        {
+            var model = new ResetPasswordViewModel { Token = token, Email = email };
+            return Ok(new
+            {
+                model
+            });
         }
     }
 }

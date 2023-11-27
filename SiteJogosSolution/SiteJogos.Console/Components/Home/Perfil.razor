@@ -36,7 +36,7 @@
 </RadzenStack>
 
 <div style="display: flex; justify-content: center; width: 100%">
-    <RadzenTemplateForm TItem="Usuario" Data="@usuario" Submit=@OnSubmit Style="margin-top: 1.5rem; border-radius: 25px; width: 100%; max-width: 35rem; background-color: var(--rz-header-background-color); color: var(--rz-header-color)">
+    <RadzenTemplateForm TItem="Usuario" Data="@usuario" Submit=@OnSubmit Style="margin-top: 1.5rem; border-radius: 25px; width: 100%; max-width: 35rem; background-color: white; color: var(--rz-header-color)" class="rz-my-12 rz-mx-auto rz-border-radius-6 rz-shadow-10">
         <RadzenFieldset Style="border: none; border-radius: 0px">
             <RadzenStack Gap="1rem" Class="rz-p-4 rz-p-md-12" Style="padding: 0 !important">
                 <RadzenRow AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" RowGap="0.25rem">
@@ -48,24 +48,19 @@
                         <RadzenGravatar Email="@(usuario.Email)" class="icone" Visible="@mostraAvatar" />
                     </RadzenColumn>
                 </RadzenRow>
-                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem" Style="margin-top: 2rem">
-                    <RadzenColumn Size="12" SizeMD="12">
-                        <RadzenLabel Text="Nome" />
-                        <RadzenTextBox Name="Nome" @bind-Value=@usuario.Nome Style="display: block; width: 100%" MaxLength="100" AutoComplete="false" />
-                        <RadzenRequiredValidator Component="Nome" Text="Nome é de Preenchimento Obrigatório" Popup="true" Style="position: absolute" />
-                    </RadzenColumn>
-                </RadzenRow>
-                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
-                    <RadzenColumn Size="12" SizeMD="12">
-                        <RadzenLabel Text="E-mail" />
-                        <RadzenTextBox Name="Email" @bind-Value=@usuario.Email Style="display: block; width: 100%" MaxLength="100" AutoComplete="false" />
-                        <RadzenRequiredValidator Component="Email" Text="E-mail é de Preenchimento Obrigatório" Popup="true" Style="position: absolute" />
-                        <RadzenEmailValidator Component="Email" Text="Insira um e-mail válido" Popup="true" Style="position: absolute" />
-                    </RadzenColumn>
-                </RadzenRow>
+                <RadzenFormField Text="Nome">
+                    <ChildContent>
+                        <RadzenTextBox @bind-Value="@usuario.Nome" />
+                    </ChildContent>
+                </RadzenFormField>
+                <RadzenFormField Text="E-mail">
+                    <ChildContent>
+                        <RadzenTextBox @bind-Value="@usuario.Email" />
+                    </ChildContent>
+                </RadzenFormField>
                 <RadzenRow AlignItems="AlignItems.Center" Class="rz-mt-4">
                     <RadzenColumn Size="12" SizeMD="12" Style="text-align:center">
-                        <RadzenButton ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Success" Text="Salvar"></RadzenButton>
+                        <RadzenButton ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Success" Text="Salvar" class="button-primary"></RadzenButton>
                     </RadzenColumn>
                 </RadzenRow>
             </RadzenStack>
@@ -126,3 +121,21 @@
         }
     }
 }
+
+
+<style>
+    .button-primary {
+        background: var(--rz-primary) !important;
+        width: 50% !important;
+        color: white !important;
+        box-shadow: none !important;
+        border: 1px solid black;
+        border-radius: 28px !important;
+    }
+
+        .button-primary:hover {
+            background: #dddddd !important;
+            border: 1.5px solid black;
+            color:black !important
+        }
+</style>

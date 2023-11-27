@@ -15,7 +15,7 @@ namespace SiteJogos.Core.Services.Interface
         void InsertOrReplace(Usuario usuario);
         void Delete(Guid id);
         bool VerificaUsuarios(Guid Id, string email);
-        bool EmailRecuperaSenha(string email);
+        Task<bool> EmailRecuperaSenha(string email, Usuario usuario, string token, string link);
         Usuario LoginGoogle(IList<GoogleClaims> claims);
     }
 }
