@@ -51,7 +51,7 @@
 
 <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween" AlignItems="AlignItems.Center">
     <RadzenLabel><h4>Meus Jogos</h4></RadzenLabel>
-    <RadzenButton Text="+ Novo Jogo" ButtonStyle="ButtonStyle.Secondary" Click="RedirecionaNovoJogo" />
+    <RadzenButton Text="+ Novo Jogo" ButtonStyle="ButtonStyle.Secondary" Click="(args) => RedirecionaNovoJogo()" />
 </RadzenStack>
 
 <RadzenTabs TabPosition="@TabPosition.TopRight" RenderMode="TabRenderMode.Server" Style="margin-top: 1rem" Change="AtualizaDados">
@@ -111,6 +111,8 @@
     int count;
     bool isLoading;
 
+    List<Jogo.EnumTemplate> Templates = Enum.GetValues(typeof(Jogo.EnumTemplate)).Cast<Jogo.EnumTemplate>().ToList();
+    Jogo.EnumTemplate TemplateSelecionado = Jogo.EnumTemplate.JogoDaMemoria;
 
     protected override async Task OnInitializedAsync()
     {
@@ -191,9 +193,18 @@
         }
     }
 
-    void RedirecionaNovoJogo()
+    async Task RedirecionaNovoJogo()
     {
-        JS.InvokeVoidAsync("redirecionaTela", "/NovoJogo");
+        await DialogService.OpenAsync($"Adicionar Jogo", ds =>
+        @<RadzenStack JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center">
+            <RadzenRow Gap="2rem" Class="rz-p-0 rz-p-lg-4">
+                <RadzenLabel Text="Selecione o Template do Novo Jogo" />
+                <RadzenDropDown @bind-Value=@TemplateSelecionado Data=@Templates Style="width: 100%; max-width: 400px;" />
+            </RadzenRow>
+            <RadzenRow Gap="2rem" Class="rz-p-0 rz-p-lg-4" JustifyContent="JustifyContent.Center">
+                <RadzenButton ButtonStyle="ButtonStyle.Primary" Text="Continuar" Click='(args) => JS.InvokeVoidAsync("redirecionaTela", "/NovoJogo?template=" + (int)TemplateSelecionado)' />
+            </RadzenRow>
+        </RadzenStack>, new DialogOptions() { Width = "450px", Height = "auto", Resizable = false, Draggable = true, ShowClose = true });
     }
 
     void Editar(Jogo jogo)

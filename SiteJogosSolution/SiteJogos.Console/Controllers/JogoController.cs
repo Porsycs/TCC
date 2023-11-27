@@ -17,13 +17,15 @@ namespace SiteJogos.Console.Controllers
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly IJogoRepository _jogoRepository;
         private readonly IJogoDaMemoriaMidiaRepository _jogoDaMemoriaMidiaRepository;
+        private readonly IJogoQuizRepository _jogoQuizRepository;
 
-        public JogoController(UserManager<Usuario> userManager, IUsuarioRepository usuarioRepository, IJogoRepository jogoRepository, IJogoDaMemoriaMidiaRepository jogoDaMemoriaMidiaRepository)
+        public JogoController(UserManager<Usuario> userManager, IUsuarioRepository usuarioRepository, IJogoRepository jogoRepository, IJogoDaMemoriaMidiaRepository jogoDaMemoriaMidiaRepository, IJogoQuizRepository jogoQuizRepository)
         {
             _userManager = userManager;
             _usuarioRepository = usuarioRepository;
             _jogoRepository = jogoRepository;
             _jogoDaMemoriaMidiaRepository = jogoDaMemoriaMidiaRepository;
+            _jogoQuizRepository = jogoQuizRepository;
         }
 
         [HttpGet]
@@ -181,6 +183,10 @@ namespace SiteJogos.Console.Controllers
                 {
                     ViewData["Midias"] = _jogoDaMemoriaMidiaRepository.GetByJogoId(jogo.Id, true).ToList();
                 }
+                else if(jogo.Template == Jogo.EnumTemplate.Quiz)
+                {
+                    ViewData["Quiz"] = _jogoQuizRepository.GetByJogoId(jogo.Id);
+                }
                 return View("~/Views/Jogo/NovoJogo.cshtml", jogo);
             }
             catch (Exception e)
@@ -206,6 +212,23 @@ namespace SiteJogos.Console.Controllers
                 f.MidiaSecundaria.UsuarioInclusaoId = _userManager.GetUserAsync(User).Result.Id;
             });
             return _jogoRepository.InsereJogoDaMemoria(Jogo, Midias);
+        }
+
+        [HttpPost]
+        public RetornoViewModel InsereJogoQuiz(string jogo, string quiz)
+        {
+            var Jogo = new Jogo();
+            var jogoQuiz = new List<JogoQuiz>();
+
+            JsonConvert.PopulateObject(jogo, Jogo);
+            JsonConvert.PopulateObject(quiz, jogoQuiz);
+
+            Jogo.UsuarioInclusaoId = _userManager.GetUserAsync(User).Result.Id;
+            jogoQuiz.ForEach(f =>
+            {
+                f.UsuarioInclusaoId = _userManager.GetUserAsync(User).Result.Id;
+            });
+            return _jogoRepository.InsereJogoQuiz(Jogo, jogoQuiz);
         }
     }
 }

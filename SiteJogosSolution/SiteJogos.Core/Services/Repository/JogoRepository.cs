@@ -78,5 +78,62 @@ namespace SiteJogos.Core.Services.Repository
                 };
             }
         }
+
+        public RetornoViewModel InsereJogoQuiz(Jogo jogo, List<JogoQuiz> quiz)
+        {
+            try
+            {
+                var jogoExistente = _dbContext.Jogos.AsNoTracking().Any(f => f.Id == jogo.Id);
+                if (!jogoExistente)
+                {
+                    _dbContext.Jogos.Add(jogo);
+                }
+                else
+                {
+                    jogo.Alteracao = DateTime.Now;
+                    _dbContext.Jogos.Update(jogo);
+                }
+
+                var quizExistentes = _dbContext.JogoQuizzes.AsNoTracking().Where(w => quiz.Select(s => s.Id).Contains(w.Id)).ToList();
+                foreach (var m in quiz)
+                {
+                    m.Jogo = null;
+                    if (!quizExistentes.Any(a => a.Id == m.Id))
+                    {
+                        _dbContext.JogoQuizzes.Add(m);
+                    }
+                    else
+                    {
+                        _dbContext.JogoQuizzes.Update(m);
+                    }
+                }
+
+
+                var midiasOriginais = _dbContext.JogoQuizzes.Where(w => w.JogoId == jogo.Id && !w.Excluido).ToList();
+
+                foreach (var m in midiasOriginais.Where(w => !quiz.Any(a => a.Id == w.Id)).ToList())
+                {
+                    m.Excluido = true;
+                    m.Alteracao = DateTime.Now;
+                    _dbContext.JogoQuizzes.Update(m);
+                }
+
+                _dbContext.SaveChanges();
+
+                return new RetornoViewModel()
+                {
+                    Sucesso = true,
+                    Mensagem = jogoExistente ? "Jogo atualizado com sucesso!" : "Jogo inserido com sucesso!"
+                };
+            }
+            catch (Exception e)
+            {
+                return new RetornoViewModel()
+                {
+                    Sucesso = false,
+                    Mensagem = "Erro: " + e.Message
+                };
+            }
+        }
     }
 }

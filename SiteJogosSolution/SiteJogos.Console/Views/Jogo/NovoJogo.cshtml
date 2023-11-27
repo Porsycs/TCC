@@ -5,7 +5,11 @@
 
 <component type="typeof(SiteJogos.Console.Components.Jogo.Criar)" render-mode="Server" param-Existe="ViewBag.Existe" />
 
-@if(Model.Template == Jogo.EnumTemplate.JogoDaMemoria)
+@if (Model.Template == Jogo.EnumTemplate.JogoDaMemoria)
 {
-    <component type="typeof(SiteJogos.Console.Components.Jogo.JogoDaMemoria)" render-mode="Server" param-jogo="Model" param-midias="ViewBag.Midias" />
+    <component type="typeof(SiteJogos.Console.Components.Jogo.JogoDaMemoria)" render-mode="Server" param-jogo="Model" param-midias="ViewBag.Midias ?? new List<JogoDaMemoriaMidia>()" />
+}
+else if (Model.Template == Jogo.EnumTemplate.Quiz)
+{
+    <component type="typeof(SiteJogos.Console.Components.Jogo.JogoQuizEdit)" render-mode="Server" param-jogo="Model" param-limiteTempo="Model.LimiteTempo.HasValue" param-quiz="ViewBag.Quiz ?? new List<JogoQuiz>()" />
 }

@@ -1,0 +1,110 @@
+﻿@inject IJSRuntime JS;
+@inject DialogService DialogService;
+
+<RadzenTemplateForm TItem="JogoQuiz" Data=@quiz Submit="OnSubmit">
+    <RadzenFieldset Text="Pergunta">
+        <RadzenRow>
+            <RadzenColumn Size="12" SizeMD="12">
+                <RadzenTextBox Name="Pergunta" @bind-Value=@quiz.Pergunta AutoComplete="false" Style="display: block; width: 100%" />
+                <RadzenRequiredValidator Component="Pergunta" Text="Pergunta é Obrigatório" Popup=true Style="position: absolute" />
+            </RadzenColumn>
+        </RadzenRow>
+    </RadzenFieldset>
+    <RadzenFieldset Text="Respostas">
+        <RadzenRow>
+            <RadzenColumn Size="12" SizeMD="6">
+                <RadzenLabel Text="Qtd. Respostas" />
+                <RadzenDropDown @bind-Value=@QuantidadeRespostas Data=@ListaQuantidadeRespostas Change="AlteraQuantidadeRespostas" Style="width: 100%;" />
+            </RadzenColumn>
+            <RadzenColumn Size="12" SizeMD="6">
+                <RadzenLabel Text="Resposta Correta" />
+                <RadzenDropDown Name="RespostaCorreta" @bind-Value=@AlternativaCorreta Data=@ListaAlternativasCorretas Style="width: 100%;" />
+                <RadzenRequiredValidator Component="RespostaCorreta" Text="Resposta Correta é Obrigatório" Popup=true Style="position: absolute" />
+            </RadzenColumn>
+        </RadzenRow>
+        <RadzenRow Class="rz-mt-4">
+            <RadzenColumn Size="12" SizeMD="12">
+                <RadzenLabel Text="Resposta A" />
+                <RadzenTextBox Name="Resposta1" @bind-Value=@quiz.Resposta1 AutoComplete="false" Style="display: block; width: 100%" />
+                <RadzenRequiredValidator Component="Resposta1" Text="Resposta A é Obrigatório" Popup=true Style="position: absolute" />
+            </RadzenColumn>
+        </RadzenRow>
+        <RadzenRow Class="rz-mt-4">
+            <RadzenColumn Size="12" SizeMD="12">
+                <RadzenLabel Text="Resposta B" />
+                <RadzenTextBox Name="Resposta2" @bind-Value=@quiz.Resposta2 AutoComplete="false" Style="display: block; width: 100%" />
+                <RadzenRequiredValidator Component="Resposta2" Text="Resposta B é Obrigatório" Popup=true Style="position: absolute" />
+            </RadzenColumn>
+        </RadzenRow>
+        <RadzenRow Class="rz-mt-4" Visible="QuantidadeRespostas >= 3">
+            <RadzenColumn Size="12" SizeMD="12">
+                <RadzenLabel Text="Resposta C" />
+                <RadzenTextBox Name="Resposta3" @bind-Value=@quiz.Resposta3 AutoComplete="false" Style="display: block; width: 100%" />
+                <RadzenRequiredValidator Component="Resposta3" Text="Resposta C é Obrigatório" Popup=true Style="position: absolute" />
+            </RadzenColumn>
+        </RadzenRow>
+        <RadzenRow Class="rz-mt-4" Visible="QuantidadeRespostas >= 4">
+            <RadzenColumn Size="12" SizeMD="12">
+                <RadzenLabel Text="Resposta D" />
+                <RadzenTextBox Name="Resposta4" @bind-Value=@quiz.Resposta4 AutoComplete="false" Style="display: block; width: 100%" />
+                <RadzenRequiredValidator Component="Resposta4" Text="Resposta D é Obrigatório" Popup=true Style="position: absolute" />
+            </RadzenColumn>
+        </RadzenRow>
+    </RadzenFieldset>
+    <RadzenRow AlignItems="AlignItems.Center" Class="rz-mt-4">
+        <RadzenColumn Size="12" SizeMD="12" Style="text-align:center">
+            <RadzenButton ButtonType="ButtonType.Button" ButtonStyle="ButtonStyle.Danger" Text="Cancelar" Click="EscondePopup"></RadzenButton>
+            <RadzenButton ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Success" Text="Salvar"></RadzenButton>
+        </RadzenColumn>
+    </RadzenRow>
+</RadzenTemplateForm>
+
+@code {
+
+    [Parameter]
+    public Components.Jogo.JogoQuizEdit jogoQuiz { get; set; }
+
+    public JogoQuiz quiz { get; set; } = new JogoQuiz();
+
+    public List<int> ListaQuantidadeRespostas = new List<int>() { 2, 3, 4 };
+
+    public List<string> ListaAlternativasCorretas = new List<string> { "A", "B" };
+
+    public string AlternativaCorreta { get; set; } = "";
+
+    public int QuantidadeRespostas = 2;
+
+    void AlteraQuantidadeRespostas()
+    {
+        AlternativaCorreta = "";
+        ListaAlternativasCorretas = new List<string> { "A", "B" };
+        if(QuantidadeRespostas >= 3)
+        {
+            ListaAlternativasCorretas.Add("C");
+        }
+        if(QuantidadeRespostas >= 4)
+        {
+            ListaAlternativasCorretas.Add("D");
+        }
+    }
+
+    void EscondePopup()
+    {
+        DialogService.Close();
+    }
+
+    async void OnSubmit()
+    {
+        quiz.JogoId = jogoQuiz.jogo.Id;
+        quiz.RespostaCerta = AlternativaCorreta == "A" ? 1 : AlternativaCorreta == "B" ? 2 : AlternativaCorreta == "C" ? 3 : 4;
+
+        quiz.Resposta3 = QuantidadeRespostas >= 3 ? quiz.Resposta3 : null;
+        quiz.Resposta4 = QuantidadeRespostas >= 4 ? quiz.Resposta4 : null;
+
+        jogoQuiz.quiz.Add(quiz);
+        jogoQuiz.grid.Reset(true);
+        jogoQuiz.Atualiza();
+
+        EscondePopup();
+    }
+}

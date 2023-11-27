@@ -13,5 +13,6 @@ namespace SiteJogos.Core.Services.Interface
         IEnumerable<Jogo> GetByUsuarioId(Guid usuarioId);
 
         RetornoViewModel InsereJogoDaMemoria(Jogo jogo, List<JogoDaMemoriaMidia> midias);
+        RetornoViewModel InsereJogoQuiz(Jogo jogo, List<JogoQuiz> quiz);
     }
 }
