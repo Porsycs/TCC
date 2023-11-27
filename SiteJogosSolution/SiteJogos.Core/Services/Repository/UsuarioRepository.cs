@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Identity;
 using System.Buffers.Text;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SiteJogos.Core.Migrations;
+using Midia = SiteJogos.Core.Entities.Midia;
 
 namespace SiteJogos.Core.Services.Repository
 {
@@ -172,13 +174,37 @@ namespace SiteJogos.Core.Services.Repository
                 var usuarioCadastrado = _dbContext.Usuarios.FirstOrDefault(f => f.UserName == email);
                 if (usuarioCadastrado != null)
                 {
+                    var midiaAtualizada = _dbContext.Midias.FirstOrDefault(f => f.Id == usuarioCadastrado.MidiaId);
+                    string base64Data = UrlToBase64Async(foto);
+
+                    if (midiaAtualizada == null)
+                    {
+                        var midia = new Midia()
+                        {
+                            UsuarioInclusaoId = _dbContext.Usuarios.First().Id,
+                            Arquivo = Convert.FromBase64String(base64Data),
+                            Nome = "Foto.jpg",
+                            Url = foto,
+                        };
+                        _midiaRepository.Insert(midia);
+                        usuarioCadastrado.MidiaId = midia.Id;
+
+                        _dbContext.SaveChanges();
+                    }
+                    else
+                    {
+                        midiaAtualizada.Arquivo = Convert.FromBase64String(base64Data);
+                        midiaAtualizada.Url = foto;
+                    }
+                    _dbContext.SaveChanges();
+
+
                     return usuarioCadastrado;
                 }
 
                 else
                 {
-                    string url = foto;
-                    string base64Data = UrlToBase64Async(url);
+                    string base64Data = UrlToBase64Async(foto);
                     Midia midia = null;
                     if (!string.IsNullOrEmpty(base64Data))
                     {

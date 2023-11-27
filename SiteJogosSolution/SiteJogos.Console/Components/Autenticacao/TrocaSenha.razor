@@ -28,7 +28,7 @@
             </RadzenRow>
             <RadzenRow AlignItems="AlignItems.Center" Class="rz-mt-4">
                 <RadzenColumn Size="12" SizeMD="12" Style="text-align:center">
-                    <RadzenButton ButtonType="ButtonType.Submit" Text="Salvar Senha"></RadzenButton>
+                    <RadzenButton class="button-primary" ButtonType="ButtonType.Submit" Text="Salvar"></RadzenButton>
                 </RadzenColumn>
             </RadzenRow>
         </RadzenStack>
@@ -49,3 +49,21 @@
         await Js.InvokeVoidAsync("notifica", retorno.Sucesso ? "" : "Erro", retorno.Mensagem, retorno.Sucesso);
     }
 }
+
+
+<style>
+    .button-primary {
+        background: var(--rz-primary) !important;
+        width: 50% !important;
+        color: white !important;
+        box-shadow: none !important;
+        border: 1px solid black;
+        border-radius: 28px !important;
+    }
+
+        .button-primary:hover {
+            background: #dddddd !important;
+            border: 1.5px solid black;
+            color: black !important;
+        }
+</style>
