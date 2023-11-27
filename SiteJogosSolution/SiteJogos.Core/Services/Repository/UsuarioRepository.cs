@@ -9,6 +9,8 @@ using System.Text.RegularExpressions;
 using SiteJogos.Core.Entities.ViewModel;
 using Microsoft.AspNetCore.Identity;
 using System.Buffers.Text;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace SiteJogos.Core.Services.Repository
 {
@@ -95,14 +97,13 @@ namespace SiteJogos.Core.Services.Repository
             return Regex.IsMatch(email, emailPattern);
         }
 
-        public bool EmailRecuperaSenha(string email)
+        public async Task<bool> EmailRecuperaSenha(string email, Usuario usuario, string token, string link)
         {
 
             if (!IsValidEmail(email))
-                throw new Exception("Email em formato inválido!");
+                return false;
 
-            var usuarioCadastro = GetAll().Where(w => w.UserName.ToLower() == email.ToLower());
-            if (!usuarioCadastro.Any())
+            if (usuario == null)
                 return true;
 
             dynamic dados = DadosEmail();
@@ -117,7 +118,8 @@ namespace SiteJogos.Core.Services.Repository
                 mailMessage.From = new MailAddress(dados.smtpUsername);
                 mailMessage.To.Add(email);
                 mailMessage.Subject = "Recuperação de senha";
-                mailMessage.Body = $"Email de recuperação de senha teste para: {email}";
+                mailMessage.Body = $"Clique no link abaixo para trocar sua senha: " +
+                    $"{link}";
 
                 try
                 {
