@@ -6,6 +6,10 @@ using Microsoft.EntityFrameworkCore;
 using SiteJogos.Core.Services.Interface;
 using SiteJogos.Core.Services.Repository;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,10 +45,19 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.LoginPath = new PathString("/Login");
 });
 
+builder.Services.AddAuthentication().AddGoogle(googleOptions =>
+{
+    googleOptions.ClientId = configuration["Authentication:Google:ClientId"];
+    googleOptions.ClientSecret = configuration["Authentication:Google:ClientSecret"];
+    googleOptions.ClaimActions.MapJsonKey("urn:google:picture", "picture", "url");
+});
+
+
 builder.Services.AddAuthorization(auth =>
 {
     auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build());
 });
+
 
 #region Interfaces
 builder.Services.AddSingleton(typeof(ICommonRepository<>), typeof(CommonRepository<>));

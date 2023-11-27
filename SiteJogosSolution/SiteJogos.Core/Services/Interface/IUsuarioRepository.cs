@@ -1,4 +1,5 @@
 ﻿using SiteJogos.Core.Entities;
+using SiteJogos.Core.Entities.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +16,6 @@ namespace SiteJogos.Core.Services.Interface
         void Delete(Guid id);
         bool VerificaUsuarios(Guid Id, string email);
         bool EmailRecuperaSenha(string email);
+        Usuario LoginGoogle(IList<GoogleClaims> claims);
     }
 }

@@ -1,9 +1,13 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SiteJogos.Core.Entities;
 using SiteJogos.Core.Entities.ViewModel;
 using SiteJogos.Core.Services.Interface;
+using System.Dynamic;
 using System.Globalization;
 using System.Reflection;
 using System.Resources;
@@ -34,6 +38,35 @@ namespace SiteJogos.Console.Controllers
             return View();
         }
 
+        [Route("GoogleLogin")]
+        public async Task GoogleLogin()
+        {
+            await HttpContext.ChallengeAsync(GoogleDefaults.AuthenticationScheme, new AuthenticationProperties()
+            {
+                RedirectUri = Url.Action("GoogleResponse")
+            });
+        }
+
+        [Route("GoogleResponse")]
+        public async Task<IActionResult> GoogleResponse()
+        {
+            var result = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
+
+            var claims = result?.Principal?.Identities?.FirstOrDefault()?.Claims.Select(claim => new GoogleClaims
+            {
+                Issuer = claim.Issuer,
+                OriginalIssuer = claim.OriginalIssuer,
+                Type = claim.Type,
+                Value = claim.Value
+            }).ToList();
+
+            var usuario = _usuarioRepository.LoginGoogle(claims);
+            await _signInManager.SignInAsync(usuario, true);
+
+            return RedirectToAction("Index", "Home");
+
+        }
+
         [Route("/Cadastrar")]
         [AllowAnonymous]
         public IActionResult Cadastrar()
@@ -56,7 +89,7 @@ namespace SiteJogos.Console.Controllers
                     var user = _userManager.FindByNameAsync(model.Login).Result;
 
                     // Verifica se o usuário existe
-                    if (user == null || user.Excluido) throw new Exception("Usuário ou Senha Inválidos");
+                    if (user == null || user.Excluido) throw new Exception("Usuário não encontrado");
 
                     var result = _signInManager.PasswordSignInAsync(model.Login, model.Senha, model.Lembrar, lockoutOnFailure: false).Result;
 
