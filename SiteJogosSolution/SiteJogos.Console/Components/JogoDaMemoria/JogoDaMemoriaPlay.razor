@@ -144,11 +144,12 @@
 
         if (contador == midias.Count())
         {
+            var movements = await JS.InvokeAsync<int>("getMovements");
             await DialogService.OpenAsync("", ds =>
             @<RadzenStack JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center">
                 <h1>Fim de Jogo!</h1>
                 <p>Você encontrou todos os pares com</p>
-                <h2>@(contador) movimentos</h2>
+                <h2>@(movements) movimentos</h2>
                 <RadzenRow Gap="2rem" Class="rz-p-0 rz-p-lg-4" JustifyContent="JustifyContent.Center">
                     <RadzenButton Icon="play_arrow" ButtonStyle="ButtonStyle.Primary" Text="Jogar Novamente" Click="JogarNovamente" />
                     <RadzenButton Icon="emoji_events" ButtonStyle="ButtonStyle.Warning" Text="Ranking" Click="PopupRanking" />

@@ -100,6 +100,10 @@ function getWinContador() {
     return winContador;
 }
 
+function getMovements() {
+    return movements;
+}
+
 function getTempo() {
     return (minute * 60) + second + (millisecond / 1000);
 }

@@ -157,7 +157,10 @@
         {
             var retorno = await JS.InvokeAsync<RetornoViewModel>("getDados", "/Jogo/Delete", new { key = jogo.Id }, "DELETE");
             await JS.InvokeVoidAsync("notifica", retorno.Sucesso ? "" : "Erro", retorno.Mensagem, retorno.Sucesso);
-            grid.ResetLoadData();
+            if(grid != null)
+            {
+                grid.ResetLoadData();
+            }
             if (retorno.Sucesso)
                 await JS.InvokeVoidAsync("recarregaTela");
         }
