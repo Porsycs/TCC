@@ -78,7 +78,7 @@ namespace SiteJogos.Console.Controllers
             var qrCodeData = qrGenerator.CreateQrCode($"http://oficialhistoriando.azurewebsites.net/Play?id={jogo.Id}", QRCodeGenerator.ECCLevel.Q);
             using var qrCode = new QRCode(qrCodeData);
             using var stream = new MemoryStream();
-            var qrCodeImage = qrCode.GetGraphic(7);
+            var qrCodeImage = qrCode.GetGraphic(6);
             qrCodeImage.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
             jogo.Base64QrCode = Convert.ToBase64String(stream.ToArray());
 
