@@ -11,6 +11,11 @@
         color: #fff !important;
     }
 
+    .rz-widget-content {
+        border-radius: 25px;
+        margin-top: 1.5rem;
+    }
+
 </style>
 
 <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween" AlignItems="AlignItems.Center">
@@ -24,77 +29,85 @@
 <RadzenSteps Style="margin-top: 1.5rem" NextText="Próximo" PreviousText="Anterior">
     <Steps>
         <RadzenStepsItem Text="Login">
-            <section>
-                <div style="display:flex; align-items: center;">
-                    <h1>1. Login</h1>
-                </div>
-                <div style="align-items: center; justify-content:center; display:flex;">
-                    <div>
-                        <h4>
-                            Para começar a criar seus jogos, você deve primeiro <a href="/Login">acessar</a> nosso site.
-                        </h4>
-                        <h4>
-                            Caso você ainda não tenha uma conta, você pode se cadastrar <a href="/Cadastrar">clicando aqui</a>. Não se preocupe,
-                            nosso cadastro é simples e fácil e com apenas alguns
-                            poucos passos você já estará conosco!
-                        </h4>
-                        <h4>Com a conta em mãos e logado, podemos ir para nossa próxima etapa!</h4>
+            <RadzenCard class="rz-border-radius-6 rz-shadow-10" Style="border-radius: 25px">
+                <section>
+                    <div style="display:flex; align-items: center;">
+                        <h1>1. Login</h1>
                     </div>
-                    <img src="/images/Tutorial/Login.jpg" style="height:25rem" />
-                </div>
-            </section>
+                    <div style="align-items: center; justify-content:center; display:flex;">
+                        <div>
+                            <h4>
+                                Para começar a criar seus jogos, você deve primeiro <a href="/Login">acessar</a> nosso site.
+                            </h4>
+                            <h4>
+                                Caso você ainda não tenha uma conta, você pode se cadastrar <a href="/Cadastrar">clicando aqui</a>. Não se preocupe,
+                                nosso cadastro é simples e fácil e com apenas alguns
+                                poucos passos você já estará conosco!
+                            </h4>
+                            <h4>Com a conta em mãos e logado, podemos ir para nossa próxima etapa!</h4>
+                        </div>
+                        <img src="/images/Tutorial/Login.jpg" style="height:25rem" />
+                    </div>
+                </section>
+            </RadzenCard>
         </RadzenStepsItem>
         <RadzenStepsItem Text="Novo Jogo">
-            <section>
-                <div style="display:flex; align-items: center;">
-                    <h1>2. Novo Jogo</h1>
-                </div>
-                <div style="align-items: center; justify-content:center; display:flex;">
-                    <div>
-                        <h4>Ao estar logado, no topo, irá aparecer a opção <a href="/MeusJogos">Meus Jogos</a>, que ao clicá-la o redirecionará a tela de seus jogos</h4>
-                        <h4>Na tela é exibida a lista de jogos que você já criou e um botão para novos jogos.</h4>
-                        <h4>Cada jogo é criado de uma forma diferente, mas não se preocupe, todos as criações são intuitivas e fáceis, sendo a única limitação sua imaginação!</h4>
-                        <h4>Ao pressionar o botão de <span style="color: var(--rz-secondary)">+Novo Jogo</span>, irá aparecer um Pop-up onde poderá escolher qual tipo de jogo você irá criar</h4>
+            <RadzenCard class="rz-border-radius-6 rz-shadow-10" Style="border-radius: 25px">
+                <section>
+                    <div style="display:flex; align-items: center;">
+                        <h1>2. Novo Jogo</h1>
                     </div>
-                    <div style="display: flex; justify-content: space-between">
-                        <img src="/images/Tutorial/MeusJogos.jpg" style="height:25rem; margin-right: 1rem" />
-                        <img src="/images/Tutorial/PopupNovoJogo.jpg" style="height:25rem;" />
+                    <div style="align-items: center; justify-content:center; display:flex;">
+                        <div>
+                            <h4>Ao estar logado, no topo, irá aparecer a opção <a href="/MeusJogos">Meus Jogos</a>, que ao clicá-la o redirecionará a tela de seus jogos</h4>
+                            <h4>Na tela é exibida a lista de jogos que você já criou e um botão para novos jogos.</h4>
+                            <h4>Cada jogo é criado de uma forma diferente, mas não se preocupe, todos as criações são intuitivas e fáceis, sendo a única limitação sua imaginação!</h4>
+                            <h4>Ao pressionar o botão de <span style="color: var(--rz-secondary)">+Novo Jogo</span>, irá aparecer um Pop-up onde poderá escolher qual tipo de jogo você irá criar</h4>
+                        </div>
+                        <div style="display: flex; justify-content: space-between">
+                            <img src="/images/Tutorial/MeusJogos.jpg" style="height:25rem; margin-right: 1rem" />
+                            <img src="/images/Tutorial/PopupNovoJogo.jpg" style="height:25rem;" />
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            </RadzenCard>
         </RadzenStepsItem>
         <RadzenStepsItem Text="Personalizando Jogo">
-            <section>
-                <div style="display:flex; align-items: center;">
-                    <h1>3. Personalizando Jogo</h1>
-                </div>
-                <div style="align-items: center; justify-content:center; display:flex;">
-                    <div>
-                        <h4>Ao selecionar o modelo do Jogo, você será redirecionado em uma tela onde você irá personalizar seu novo jogo</h4>
-                        <h4>Preencha todos os campos obrigatórios e recheie o contúdo do jogo do jeito que quiser!</h4>
-                        <h4>Em seguida aperte em salvar</h4>
+            <RadzenCard class="rz-border-radius-6 rz-shadow-10" Style="border-radius: 25px">
+                <section>
+                    <div style="display:flex; align-items: center;">
+                        <h1>3. Personalizando Jogo</h1>
                     </div>
-                    <div>
-                        <img src="/images/Tutorial/NovoJogo.jpg" style="height:25rem;" />
+                    <div style="align-items: center; justify-content:center; display:flex;">
+                        <div>
+                            <h4>Ao selecionar o modelo do Jogo, você será redirecionado em uma tela onde você irá personalizar seu novo jogo</h4>
+                            <h4>Preencha todos os campos obrigatórios e recheie o contúdo do jogo do jeito que quiser!</h4>
+                            <h4>Em seguida aperte em salvar</h4>
+                        </div>
+                        <div>
+                            <img src="/images/Tutorial/NovoJogo.jpg" style="height:25rem;" />
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            </RadzenCard>
         </RadzenStepsItem>
         <RadzenStepsItem Text="Jogo Criado">
-            <section>
-                <div style="display:flex; align-items: center;">
-                    <h1>4. Jogo Criado</h1>
-                </div>
-                <div style="align-items: center; justify-content:center; display:flex;">
-                    <div>
-                        <h4>Pronto!</h4>
-                        <h4>Agora com o jogo criado você poderá fazer várias ações como editar ou jogar o jogo criado, ver a pontuação, compartilhar com outras pessoas, etc.</h4>
+            <RadzenCard class="rz-border-radius-6 rz-shadow-10" Style="border-radius: 25px">
+                <section>
+                    <div style="display:flex; align-items: center;">
+                        <h1>4. Jogo Criado</h1>
                     </div>
-                    <div>
-                        <img src="/images/Tutorial/JogoCriado.jpg" style="height:25rem;" />
+                    <div style="align-items: center; justify-content:center; display:flex;">
+                        <div>
+                            <h4>Pronto!</h4>
+                            <h4>Agora com o jogo criado você poderá fazer várias ações como editar ou jogar o jogo criado, ver a pontuação, compartilhar com outras pessoas, etc.</h4>
+                        </div>
+                        <div>
+                            <img src="/images/Tutorial/JogoCriado.jpg" style="height:25rem;" />
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            </RadzenCard>
         </RadzenStepsItem>
     </Steps>
 </RadzenSteps>
