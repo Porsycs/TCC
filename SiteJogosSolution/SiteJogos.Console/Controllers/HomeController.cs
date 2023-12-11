@@ -46,6 +46,13 @@ namespace SiteJogos.Console.Controllers
             return View(_userManager.GetUserAsync(User).Result);
         }
 
+        [Route("/Tutorial")]
+        [AllowAnonymous]
+        public IActionResult Tutorial()
+        {
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();
